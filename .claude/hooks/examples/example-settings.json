@@ -1,0 +1,107 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run .claude/implementations/hooks/smart-context-injector.py",
+            "timeout": 5,
+            "description": "Analyzes prompts and loads relevant code context"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/implementations/hooks/branch-context-loader.sh",
+            "timeout": 3,
+            "description": "Loads context based on current git branch"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run .claude/implementations/hooks/dependency-impact-analyzer.py",
+            "timeout": 5,
+            "description": "Shows what depends on code before editing"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run .claude/implementations/hooks/database-query-analyzer.py",
+            "timeout": 3,
+            "description": "Analyzes SQL queries for performance issues"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run .claude/implementations/hooks/similar-code-finder.py",
+            "timeout": 5,
+            "description": "Finds similar patterns after edits"
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/implementations/hooks/smart-test-runner.sh",
+            "timeout": 30,
+            "description": "Runs affected tests intelligently"
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/implementations/hooks/incremental-type-checker.sh",
+            "timeout": 10,
+            "description": "Type checks changed files only"
+          },
+          {
+            "type": "command",
+            "command": "uv run .claude/implementations/hooks/performance-regression-detector.py",
+            "timeout": 15,
+            "description": "Detects performance regressions"
+          },
+          {
+            "type": "command",
+            "command": "uv run .claude/implementations/hooks/code-narrator.py",
+            "timeout": 3,
+            "description": "Generates plain English explanations"
+          },
+          {
+            "type": "command",
+            "command": "uv run .claude/implementations/hooks/smart-import-organizer.py",
+            "timeout": 3,
+            "description": "Organizes and cleans imports"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run .claude/implementations/hooks/coverage-gap-finder.py",
+            "timeout": 10,
+            "description": "Shows uncovered code in changed files"
+          }
+        ]
+      }
+    ]
+  }
+}
