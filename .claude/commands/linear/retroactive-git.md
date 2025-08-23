@@ -1,3 +1,9 @@
+---
+allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git log:*), Task
+description: Analyze git changes and create Linear issues retroactively
+argument-hint: [optional commit range]
+---
+
 Analyze git working state and create comprehensive Linear issues using the Linear MCP
 
 <ultrathink>

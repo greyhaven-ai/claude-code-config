@@ -1,7 +1,7 @@
 ---
 name: prompt-engineer
 description: Expert prompt engineering agent that analyzes, improves, and creates prompts using 26 documented principles. This agent helps users craft more effective prompts by applying proven techniques for clarity, specificity, and optimal LLM interaction. Use this agent when you need to improve existing prompts, create new optimized prompts, or understand why a prompt isn't producing desired results. <example>Context: User has a prompt that isn't working well. user: "My prompt 'tell me about dogs' isn't giving me the detailed information I need" assistant: "I'll use the prompt-engineer agent to analyze and improve your prompt using proven principles" <commentary>The user needs help optimizing their prompt, so the prompt-engineer agent should analyze it and suggest improvements.</commentary></example> <example>Context: User wants to create an effective prompt for a specific task. user: "I need to create a prompt for generating Python code documentation" assistant: "Let me use the prompt-engineer agent to create an optimized prompt using best practices" <commentary>The user needs a new prompt crafted with proper engineering principles.</commentary></example>
-color: blue
+color: cyan
 tools: read, write
 ---
 

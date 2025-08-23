@@ -1,353 +1,466 @@
 #!/usr/bin/env -S uv run --quiet --script
 # /// script
-# dependencies = ["pygments"]
+# dependencies = []
 # ///
-"""
-Subagent Context Preparer Hook
-==============================
-Type: PreToolUse (Task)
-Description: Prepares optimal context for subagent tasks
 
-This hook analyzes the task description and injects relevant context
-to help subagents complete their work independently and correctly.
+"""
+Subagent Context Preparer - Prepare optimal context for subagent execution
+
+Detects when a subagent is about to be invoked and prepares relevant context
+to enhance subagent performance. Runs on PreToolUse with Task matcher.
 """
 
-import json
 import sys
-import re
+import json
+import os
 import subprocess
 from pathlib import Path
-from typing import Dict, List, Optional, Set
-
+from typing import Dict, List, Optional
 
 class SubagentContextPreparer:
-    def __init__(self, project_dir: str, task_description: str):
-        self.project_dir = Path(project_dir)
-        self.task = task_description.lower()
-        self.context_items = []
+    def __init__(self):
+        self.project_dir = os.environ.get('CLAUDE_PROJECT_DIR', '.')
+        self.context_dir = Path(self.project_dir) / '.claude' / 'context'
+        self.context_dir.mkdir(parents=True, exist_ok=True)
         
-    def detect_task_type(self) -> Dict[str, bool]:
-        """Detect what type of task the subagent will perform"""
-        return {
-            'research': any(word in self.task for word in ['research', 'find', 'search', 'analyze', 'investigate']),
-            'implementation': any(word in self.task for word in ['implement', 'create', 'build', 'add', 'write']),
-            'refactoring': any(word in self.task for word in ['refactor', 'optimize', 'improve', 'clean', 'reorganize']),
-            'testing': any(word in self.task for word in ['test', 'spec', 'coverage', 'unit test', 'integration']),
-            'debugging': any(word in self.task for word in ['debug', 'fix', 'bug', 'error', 'issue']),
-            'documentation': any(word in self.task for word in ['document', 'docs', 'readme', 'comment', 'explain']),
-            'review': any(word in self.task for word in ['review', 'check', 'validate', 'verify', 'audit']),
+        # Define context requirements for each subagent
+        self.subagent_contexts = {
+            'tdd-python-implementer': self.prepare_tdd_context,
+            'security-orchestrator': self.prepare_security_context,
+            'code-synthesis-analyzer': self.prepare_analysis_context,
+            'git-diff-documentation-agent': self.prepare_git_context,
+            'tech-docs-maintainer': self.prepare_docs_context,
+            'code-clarity-refactorer': self.prepare_refactor_context,
+            'web-docs-researcher': self.prepare_research_context,
+            'bug-issue-creator': self.prepare_issue_context
         }
     
-    def get_project_structure_context(self) -> Optional[str]:
-        """Provide project structure overview"""
-        context = ["=== Project Structure Overview ==="]
-        
-        # Get main directories
-        important_dirs = []
-        for pattern in ['src', 'lib', 'app', 'components', 'pages', 'api', 'tests', 'docs']:
-            dir_path = self.project_dir / pattern
-            if dir_path.exists() and dir_path.is_dir():
-                important_dirs.append(pattern)
-        
-        if important_dirs:
-            context.append(f"Key directories: {', '.join(important_dirs)}")
-        
-        # Detect project type
-        project_types = []
-        if (self.project_dir / 'package.json').exists():
-            project_types.append('Node.js/JavaScript')
-        if (self.project_dir / 'pyproject.toml').exists() or (self.project_dir / 'setup.py').exists():
-            project_types.append('Python')
-        if (self.project_dir / 'go.mod').exists():
-            project_types.append('Go')
-        if (self.project_dir / 'Cargo.toml').exists():
-            project_types.append('Rust')
-        
-        if project_types:
-            context.append(f"Project type: {', '.join(project_types)}")
-        
-        # Get file count by extension
-        extensions = {}
-        for ext in ['.py', '.js', '.ts', '.jsx', '.tsx', '.go', '.rs', '.java']:
-            count = len(list(self.project_dir.rglob(f'*{ext}')))
-            if count > 0:
-                extensions[ext] = count
-        
-        if extensions:
-            context.append("File distribution:")
-            for ext, count in sorted(extensions.items(), key=lambda x: x[1], reverse=True)[:5]:
-                context.append(f"  {ext}: {count} files")
-        
-        return "\n".join(context) if len(context) > 1 else None
-    
-    def get_coding_standards(self) -> Optional[str]:
-        """Extract coding standards from config files"""
-        context = ["=== Coding Standards ==="]
-        found_standards = False
-        
-        # Check for linter configs
-        if (self.project_dir / 'pyproject.toml').exists():
-            try:
-                with open(self.project_dir / 'pyproject.toml', 'r') as f:
-                    content = f.read()
-                    if '[tool.ruff]' in content:
-                        context.append("Python: Using ruff (see pyproject.toml)")
-                        # Extract key settings
-                        if 'line-length' in content:
-                            match = re.search(r'line-length\s*=\s*(\d+)', content)
-                            if match:
-                                context.append(f"  - Line length: {match.group(1)}")
-                        found_standards = True
-            except:
-                pass
-        
-        if (self.project_dir / 'eslint.config.js').exists() or (self.project_dir / '.eslintrc.js').exists():
-            context.append("JavaScript: Using ESLint (see eslint config)")
-            found_standards = True
-        
-        if (self.project_dir / '.prettierrc').exists() or (self.project_dir / 'prettier.config.js').exists():
-            context.append("Formatting: Using Prettier")
-            found_standards = True
-        
-        # Check for editor config
-        if (self.project_dir / '.editorconfig').exists():
-            context.append("Editor: Using .editorconfig")
-            found_standards = True
-        
-        return "\n".join(context) if found_standards else None
-    
-    def get_similar_implementations(self) -> Optional[str]:
-        """Find similar implementations in the codebase"""
-        context = ["=== Similar Implementations ==="]
-        
-        # Extract key terms from task
-        key_terms = re.findall(r'\b[A-Z][a-z]+|[a-z]+', self.task)
-        key_terms = [term for term in key_terms if len(term) > 3 and term not in 
-                    ['that', 'this', 'with', 'from', 'into', 'have', 'been', 'will']]
-        
-        if not key_terms:
-            return None
-        
-        # Search for files containing these terms
-        similar_files = set()
-        for term in key_terms[:3]:  # Limit to first 3 terms
-            try:
-                result = subprocess.run(
-                    ['grep', '-l', '-r', '-i', term, str(self.project_dir),
-                     '--include=*.py', '--include=*.js', '--include=*.ts'],
-                    capture_output=True, text=True, timeout=2
-                )
-                if result.stdout:
-                    files = result.stdout.strip().split('\n')[:5]
-                    similar_files.update(files)
-            except:
-                pass
-        
-        if similar_files:
-            context.append("Files with potentially similar logic:")
-            for file in list(similar_files)[:5]:
-                try:
-                    relative_path = Path(file).relative_to(self.project_dir)
-                    context.append(f"  - {relative_path}")
-                except:
-                    pass
-            
-            return "\n".join(context)
-        
-        return None
-    
-    def get_test_examples(self) -> Optional[str]:
-        """Provide test examples if task involves testing"""
-        context = ["=== Test Examples ==="]
-        
-        # Find existing test files
-        test_files = []
-        for pattern in ['**/*.test.*', '**/*.spec.*', '**/test_*.py']:
-            test_files.extend(self.project_dir.glob(pattern))
-        
-        if not test_files:
-            return None
-        
-        # Get a sample test file structure
-        sample_test = test_files[0]
-        context.append(f"Example test structure from {sample_test.name}:")
-        
+    def run_command(self, cmd: List[str]) -> Optional[str]:
+        """Run a command and return output"""
         try:
-            with open(sample_test, 'r') as f:
-                lines = f.readlines()[:30]  # First 30 lines
-                
-            # Extract test structure
-            for line in lines:
-                if any(pattern in line for pattern in ['describe(', 'it(', 'test(', 'def test_', 'class Test']):
-                    context.append(f"  {line.strip()[:60]}...")
-        except:
-            pass
-        
-        return "\n".join(context) if len(context) > 1 else None
-    
-    def get_recent_patterns(self) -> Optional[str]:
-        """Get recently used patterns from git history"""
-        context = ["=== Recent Code Patterns ==="]
-        
-        try:
-            # Get files changed in last 10 commits
             result = subprocess.run(
-                ['git', 'log', '--name-only', '--pretty=format:', '-10'],
-                capture_output=True, text=True, cwd=self.project_dir
+                cmd,
+                capture_output=True,
+                text=True,
+                cwd=self.project_dir,
+                timeout=5
             )
-            
-            if result.stdout:
-                changed_files = [f for f in result.stdout.strip().split('\n') if f]
-                file_types = {}
-                for file in changed_files:
-                    ext = Path(file).suffix
-                    if ext:
-                        file_types[ext] = file_types.get(ext, 0) + 1
-                
-                if file_types:
-                    context.append("Recently modified file types:")
-                    for ext, count in sorted(file_types.items(), key=lambda x: x[1], reverse=True)[:5]:
-                        context.append(f"  {ext}: {count} changes")
-                    
-                    return "\n".join(context)
+            if result.returncode == 0:
+                return result.stdout.strip()
         except:
             pass
-        
         return None
     
-    def get_performance_guidelines(self) -> Optional[str]:
-        """Provide performance guidelines if relevant"""
-        task_type = self.detect_task_type()
+    def prepare_tdd_context(self) -> Dict:
+        """Prepare context for TDD Python implementer"""
+        context = {
+            'test_framework': self.detect_test_framework(),
+            'test_directory': self.find_test_directory(),
+            'coverage_config': self.find_coverage_config(),
+            'python_version': self.run_command(['python', '--version']),
+            'existing_tests': self.count_existing_tests()
+        }
         
-        if not (task_type['implementation'] or task_type['refactoring']):
-            return None
+        # Write context file for subagent
+        context_file = self.context_dir / 'tdd-context.json'
+        with open(context_file, 'w') as f:
+            json.dump(context, f, indent=2)
         
-        context = ["=== Performance Guidelines ==="]
-        
-        # Language-specific guidelines
-        if (self.project_dir / 'package.json').exists():
-            context.extend([
-                "JavaScript/TypeScript:",
-                "  - Prefer async/await over callbacks",
-                "  - Use appropriate data structures (Map/Set vs Object)",
-                "  - Minimize bundle size for frontend code",
-                "  - Consider memoization for expensive computations"
-            ])
-        
-        if (self.project_dir / 'pyproject.toml').exists():
-            context.extend([
-                "Python:",
-                "  - Use generators for large datasets",
-                "  - Prefer list comprehensions over loops where readable",
-                "  - Consider using dataclasses or Pydantic for data models",
-                "  - Profile before optimizing"
-            ])
-        
-        return "\n".join(context) if len(context) > 1 else None
+        return context
     
-    def prepare_context(self) -> str:
-        """Prepare complete context for subagent"""
-        task_type = self.detect_task_type()
-        contexts = []
+    def prepare_security_context(self) -> Dict:
+        """Prepare context for security orchestrator"""
+        context = {
+            'dependencies': self.get_dependencies(),
+            'exposed_ports': self.find_exposed_ports(),
+            'auth_files': self.find_auth_files(),
+            'sensitive_patterns': self.find_sensitive_patterns(),
+            'security_tools': self.detect_security_tools()
+        }
         
-        # Always provide project structure
-        project_context = self.get_project_structure_context()
-        if project_context:
-            contexts.append(project_context)
+        context_file = self.context_dir / 'security-context.json'
+        with open(context_file, 'w') as f:
+            json.dump(context, f, indent=2)
         
-        # Always provide coding standards
-        standards = self.get_coding_standards()
-        if standards:
-            contexts.append(standards)
+        return context
+    
+    def prepare_analysis_context(self) -> Dict:
+        """Prepare context for code synthesis analyzer"""
+        context = {
+            'recent_changes': self.get_recent_changes(),
+            'code_metrics': self.calculate_code_metrics(),
+            'dependencies': self.get_dependencies(),
+            'test_coverage': self.get_test_coverage()
+        }
         
-        # Task-specific context
-        if task_type['implementation'] or task_type['refactoring']:
-            similar = self.get_similar_implementations()
-            if similar:
-                contexts.append(similar)
+        context_file = self.context_dir / 'analysis-context.json'
+        with open(context_file, 'w') as f:
+            json.dump(context, f, indent=2)
+        
+        return context
+    
+    def prepare_git_context(self) -> Dict:
+        """Prepare context for git diff documentation"""
+        context = {
+            'branch_name': self.run_command(['git', 'branch', '--show-current']),
+            'uncommitted_files': self.run_command(['git', 'status', '--porcelain']),
+            'recent_commits': self.run_command(['git', 'log', '--oneline', '-10']),
+            'remote_url': self.run_command(['git', 'remote', 'get-url', 'origin'])
+        }
+        
+        context_file = self.context_dir / 'git-context.json'
+        with open(context_file, 'w') as f:
+            json.dump(context, f, indent=2)
+        
+        return context
+    
+    def prepare_docs_context(self) -> Dict:
+        """Prepare context for documentation maintainer"""
+        context = {
+            'doc_files': self.find_documentation_files(),
+            'readme_exists': os.path.exists(Path(self.project_dir) / 'README.md'),
+            'api_endpoints': self.find_api_endpoints(),
+            'doc_format': self.detect_doc_format()
+        }
+        
+        context_file = self.context_dir / 'docs-context.json'
+        with open(context_file, 'w') as f:
+            json.dump(context, f, indent=2)
+        
+        return context
+    
+    def prepare_refactor_context(self) -> Dict:
+        """Prepare context for code clarity refactorer"""
+        context = {
+            'code_style': self.detect_code_style(),
+            'linting_config': self.find_linting_config(),
+            'complexity_metrics': self.calculate_complexity(),
+            'duplicate_code': self.find_duplicate_patterns()
+        }
+        
+        context_file = self.context_dir / 'refactor-context.json'
+        with open(context_file, 'w') as f:
+            json.dump(context, f, indent=2)
+        
+        return context
+    
+    def prepare_research_context(self) -> Dict:
+        """Prepare context for web docs researcher"""
+        context = {
+            'project_type': self.detect_project_type(),
+            'main_technologies': self.detect_technologies(),
+            'external_apis': self.find_external_apis(),
+            'research_history': self.load_research_history()
+        }
+        
+        context_file = self.context_dir / 'research-context.json'
+        with open(context_file, 'w') as f:
+            json.dump(context, f, indent=2)
+        
+        return context
+    
+    def prepare_issue_context(self) -> Dict:
+        """Prepare context for bug issue creator"""
+        context = {
+            'repo_name': self.get_repo_name(),
+            'issue_template': self.find_issue_template(),
+            'labels': self.get_available_labels(),
+            'recent_issues': self.get_recent_issues()
+        }
+        
+        context_file = self.context_dir / 'issue-context.json'
+        with open(context_file, 'w') as f:
+            json.dump(context, f, indent=2)
+        
+        return context
+    
+    # Helper methods
+    def detect_test_framework(self) -> str:
+        """Detect which test framework is in use"""
+        if os.path.exists(Path(self.project_dir) / 'pytest.ini'):
+            return 'pytest'
+        if os.path.exists(Path(self.project_dir) / 'setup.cfg'):
+            with open(Path(self.project_dir) / 'setup.cfg') as f:
+                if 'pytest' in f.read():
+                    return 'pytest'
+        return 'unittest'
+    
+    def find_test_directory(self) -> str:
+        """Find the test directory"""
+        for test_dir in ['tests', 'test', 'spec', 'tests_']:
+            if os.path.exists(Path(self.project_dir) / test_dir):
+                return test_dir
+        return 'tests'
+    
+    def find_coverage_config(self) -> Optional[str]:
+        """Find coverage configuration"""
+        for config in ['.coveragerc', 'setup.cfg', 'pyproject.toml']:
+            if os.path.exists(Path(self.project_dir) / config):
+                return config
+        return None
+    
+    def count_existing_tests(self) -> int:
+        """Count existing test files"""
+        count = 0
+        for pattern in ['test_*.py', '*_test.py', '*_spec.py']:
+            count += len(list(Path(self.project_dir).rglob(pattern)))
+        return count
+    
+    def get_dependencies(self) -> List[str]:
+        """Get project dependencies"""
+        deps = []
+        if os.path.exists(Path(self.project_dir) / 'requirements.txt'):
+            with open(Path(self.project_dir) / 'requirements.txt') as f:
+                deps.extend([line.strip() for line in f if line.strip() and not line.startswith('#')])
+        if os.path.exists(Path(self.project_dir) / 'package.json'):
+            deps.append('JavaScript dependencies present')
+        return deps[:20]  # Limit to prevent context explosion
+    
+    def find_exposed_ports(self) -> List[str]:
+        """Find potentially exposed ports in configuration"""
+        ports = []
+        # This is a simplified check - real implementation would be more thorough
+        for file in Path(self.project_dir).rglob('*.yml'):
+            try:
+                with open(file) as f:
+                    content = f.read()
+                    if 'port' in content.lower():
+                        ports.append(str(file))
+            except:
+                pass
+        return ports[:10]
+    
+    def find_auth_files(self) -> List[str]:
+        """Find authentication-related files"""
+        auth_patterns = ['*auth*', '*login*', '*session*', '*token*', '*jwt*']
+        auth_files = []
+        for pattern in auth_patterns:
+            auth_files.extend([str(f) for f in Path(self.project_dir).rglob(pattern)])
+        return auth_files[:10]
+    
+    def find_sensitive_patterns(self) -> Dict:
+        """Find potentially sensitive patterns"""
+        return {
+            'has_env_files': len(list(Path(self.project_dir).glob('.env*'))) > 0,
+            'has_secrets': len(list(Path(self.project_dir).rglob('*secret*'))) > 0,
+            'has_keys': len(list(Path(self.project_dir).rglob('*key*'))) > 0
+        }
+    
+    def detect_security_tools(self) -> List[str]:
+        """Detect security tools in use"""
+        tools = []
+        tool_files = {
+            'bandit': '.bandit',
+            'safety': '.safety-policy.json',
+            'snyk': '.snyk'
+        }
+        for tool, file in tool_files.items():
+            if os.path.exists(Path(self.project_dir) / file):
+                tools.append(tool)
+        return tools
+    
+    def get_recent_changes(self) -> List[str]:
+        """Get recent file changes"""
+        changes = self.run_command(['git', 'diff', '--name-only', 'HEAD~5..HEAD'])
+        if changes:
+            return changes.split('\n')[:20]
+        return []
+    
+    def calculate_code_metrics(self) -> Dict:
+        """Calculate basic code metrics"""
+        metrics = {
+            'python_files': len(list(Path(self.project_dir).rglob('*.py'))),
+            'js_files': len(list(Path(self.project_dir).rglob('*.js'))),
+            'total_lines': 0
+        }
+        return metrics
+    
+    def get_test_coverage(self) -> Optional[str]:
+        """Get test coverage if available"""
+        coverage_file = Path(self.project_dir) / '.coverage'
+        if coverage_file.exists():
+            return "Coverage data available"
+        return None
+    
+    def find_documentation_files(self) -> List[str]:
+        """Find documentation files"""
+        doc_files = []
+        for pattern in ['*.md', '*.rst', '*.txt']:
+            doc_files.extend([str(f) for f in Path(self.project_dir).rglob(pattern)])
+        return doc_files[:20]
+    
+    def find_api_endpoints(self) -> List[str]:
+        """Find API endpoint definitions"""
+        # Simplified - real implementation would parse actual routes
+        endpoints = []
+        for file in Path(self.project_dir).rglob('*.py'):
+            try:
+                with open(file) as f:
+                    content = f.read()
+                    if '@app.route' in content or '@router' in content:
+                        endpoints.append(str(file))
+            except:
+                pass
+        return endpoints[:10]
+    
+    def detect_doc_format(self) -> str:
+        """Detect documentation format"""
+        if len(list(Path(self.project_dir).rglob('*.rst'))) > 0:
+            return 'reStructuredText'
+        return 'Markdown'
+    
+    def detect_code_style(self) -> str:
+        """Detect code style configuration"""
+        if os.path.exists(Path(self.project_dir) / '.black'):
+            return 'black'
+        if os.path.exists(Path(self.project_dir) / '.flake8'):
+            return 'flake8'
+        if os.path.exists(Path(self.project_dir) / 'ruff.toml'):
+            return 'ruff'
+        return 'none'
+    
+    def find_linting_config(self) -> List[str]:
+        """Find linting configuration files"""
+        configs = []
+        for config in ['.flake8', '.pylintrc', 'ruff.toml', '.eslintrc', '.prettierrc']:
+            if os.path.exists(Path(self.project_dir) / config):
+                configs.append(config)
+        return configs
+    
+    def calculate_complexity(self) -> Dict:
+        """Calculate code complexity metrics"""
+        # Simplified version
+        return {
+            'needs_analysis': True,
+            'files_to_check': len(list(Path(self.project_dir).rglob('*.py')))
+        }
+    
+    def find_duplicate_patterns(self) -> Dict:
+        """Find potential duplicate code patterns"""
+        return {
+            'analysis_needed': True,
+            'common_patterns': []
+        }
+    
+    def detect_project_type(self) -> str:
+        """Detect project type"""
+        if os.path.exists(Path(self.project_dir) / 'package.json'):
+            return 'JavaScript/Node.js'
+        if os.path.exists(Path(self.project_dir) / 'pyproject.toml'):
+            return 'Python'
+        if os.path.exists(Path(self.project_dir) / 'Cargo.toml'):
+            return 'Rust'
+        return 'Unknown'
+    
+    def detect_technologies(self) -> List[str]:
+        """Detect main technologies"""
+        tech = []
+        file_checks = {
+            'React': 'package.json',
+            'Django': 'manage.py',
+            'Flask': 'app.py',
+            'FastAPI': 'main.py'
+        }
+        for name, file in file_checks.items():
+            if os.path.exists(Path(self.project_dir) / file):
+                tech.append(name)
+        return tech
+    
+    def find_external_apis(self) -> List[str]:
+        """Find references to external APIs"""
+        # Simplified version
+        return []
+    
+    def load_research_history(self) -> List[str]:
+        """Load previous research topics"""
+        history_file = self.context_dir / 'research-history.json'
+        if history_file.exists():
+            try:
+                with open(history_file) as f:
+                    return json.load(f)
+            except:
+                pass
+        return []
+    
+    def get_repo_name(self) -> Optional[str]:
+        """Get repository name from git remote"""
+        remote = self.run_command(['git', 'remote', 'get-url', 'origin'])
+        if remote:
+            # Extract repo name from URL
+            if '/' in remote:
+                return remote.rstrip('.git').split('/')[-1]
+        return None
+    
+    def find_issue_template(self) -> Optional[str]:
+        """Find issue template"""
+        template_paths = [
+            '.github/ISSUE_TEMPLATE',
+            '.github/issue_template.md',
+            'ISSUE_TEMPLATE.md'
+        ]
+        for path in template_paths:
+            if os.path.exists(Path(self.project_dir) / path):
+                return path
+        return None
+    
+    def get_available_labels(self) -> List[str]:
+        """Get available GitHub labels (simplified)"""
+        return ['bug', 'enhancement', 'documentation', 'help wanted', 'question']
+    
+    def get_recent_issues(self) -> List[str]:
+        """Get recent issues (would need GitHub API in real implementation)"""
+        return []
+    
+    def process(self, data: Dict) -> Dict:
+        """Process the PreToolUse event for Task tool"""
+        tool = data.get('tool')
+        if tool != 'Task':
+            return {"decision": "allow"}
+        
+        params = data.get('params', {})
+        subagent_type = params.get('subagent_type')
+        
+        if not subagent_type:
+            return {"decision": "allow"}
+        
+        # Prepare context for the specific subagent
+        preparer = self.subagent_contexts.get(subagent_type)
+        if preparer:
+            context = preparer()
             
-            perf = self.get_performance_guidelines()
-            if perf:
-                contexts.append(perf)
+            return {
+                "decision": "allow",
+                "output": f"🎯 Prepared context for {subagent_type} subagent\n" +
+                         f"   Context saved to: .claude/context/",
+                "hookSpecificOutput": {
+                    "subagent": subagent_type,
+                    "contextPrepared": True,
+                    "context": context
+                }
+            }
         
-        if task_type['testing']:
-            test_examples = self.get_test_examples()
-            if test_examples:
-                contexts.append(test_examples)
-        
-        # Recent patterns for any task
-        patterns = self.get_recent_patterns()
-        if patterns:
-            contexts.append(patterns)
-        
-        # Add task-specific tips
-        contexts.append("=== Task Guidelines ===")
-        if task_type['research']:
-            contexts.append("Research task: Be thorough and provide sources for findings")
-        if task_type['implementation']:
-            contexts.append("Implementation task: Follow existing patterns and test your code")
-        if task_type['testing']:
-            contexts.append("Testing task: Aim for comprehensive coverage including edge cases")
-        if task_type['debugging']:
-            contexts.append("Debugging task: Identify root cause, not just symptoms")
-        if task_type['documentation']:
-            contexts.append("Documentation task: Be clear, concise, and include examples")
-        
-        return "\n\n".join(contexts)
-
+        return {"decision": "allow"}
 
 def main():
     try:
-        input_data = json.load(sys.stdin)
-    except json.JSONDecodeError:
-        sys.exit(1)
-    
-    tool_name = input_data.get('tool_name', '')
-    
-    # Only process Task tool calls
-    if tool_name != 'Task':
+        # Read input from stdin
+        input_data = json.loads(sys.stdin.read())
+        
+        # Process the event
+        preparer = SubagentContextPreparer()
+        result = preparer.process(input_data)
+        
+        # Output result
+        print(json.dumps(result))
         sys.exit(0)
-    
-    tool_input = input_data.get('tool_input', {})
-    task_description = tool_input.get('prompt', '')
-    project_dir = input_data.get('cwd', '.')
-    
-    if not task_description:
+        
+    except Exception as e:
+        error_response = {
+            "decision": "allow",
+            "error": f"Context preparer error: {str(e)}"
+        }
+        print(json.dumps(error_response))
         sys.exit(0)
-    
-    preparer = SubagentContextPreparer(project_dir, task_description)
-    context = preparer.prepare_context()
-    
-    # Inject context into the task description
-    enhanced_prompt = f"""[Subagent Context]
-{context}
-
-[Original Task]
-{task_description}
-
-Remember to:
-1. Follow the project's coding standards
-2. Use similar implementations as reference
-3. Test your changes if implementing code
-4. Update documentation if needed
-5. Consider performance implications"""
-    
-    # Modify the tool input to include enhanced context
-    tool_input['prompt'] = enhanced_prompt
-    
-    # Auto-approve with enhanced context
-    output = {
-        "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
-            "permissionDecision": "allow",
-            "permissionDecisionReason": "Task enhanced with project context"
-        },
-        "suppressOutput": True
-    }
-    
-    print(json.dumps(output))
-    sys.exit(0)
-
 
 if __name__ == "__main__":
     main()

@@ -59,7 +59,7 @@ Claude: *edits password_reset.py*
 → PostToolUse triggers multiple hooks in parallel:
   → code-linter.sh: Runs ruff, fixes issues
   → auto-formatter.sh: Applies black formatting
-  → smart-test-runner.sh: Runs test_password_reset.py
+  → test-runner.sh: Runs test_password_reset.py
 
 Subagent: "Email service integrated"
 → SubagentStop triggers → subagent-work-validator.py
@@ -104,10 +104,10 @@ Claude: *completes edit*
   1. code-linter.sh → Lints with ruff/eslint
   2. auto-formatter.sh → Formats code
   3. incremental-type-checker.sh → Checks types
-  4. smart-import-organizer.py → Organizes imports
+  4. import-organizer.py → Organizes imports
   5. test-data-generator.py → Creates test fixtures
   6. similar-code-finder.py → Finds duplicate patterns
-  7. smart-test-runner.sh → Runs affected tests
+  7. test-runner.sh → Runs affected tests
   8. coverage-gap-finder.py → Identifies untested code
   9. performance-regression-detector.py → Checks performance
 

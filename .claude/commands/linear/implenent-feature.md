@@ -1,3 +1,9 @@
+---
+allowed-tools: Read, Write, Edit, MultiEdit, Bash, Task
+description: Execute complete feature implementation workflow
+argument-hint: [feature description or Linear issue ID]
+---
+
 Execute complete feature workflow for: $ARGUMENTS
 
 <ultrathink>

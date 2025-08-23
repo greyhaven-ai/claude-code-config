@@ -52,7 +52,7 @@ Claude sees: Enhanced context helping it understand the specific issue
 - `auto-formatter.sh` (PostToolUse) - Formats code automatically
 - `incremental-type-checker.sh` (PostToolUse) - Checks types
 - `security-validator.py` (PreToolUse) - Prevents security issues
-- `smart-test-runner.sh` (PostToolUse/Stop) - Runs affected tests
+- `test-runner.sh` (PostToolUse/Stop) - Runs affected tests
 
 **How it works:**
 1. Before edits, security validator checks for dangerous patterns
@@ -177,7 +177,7 @@ Multiple hooks building understanding:
 
 1. **PostToolUse(Write/Edit)**: Detect new functions
 2. **Auto-generate**: Test stubs with coverage-gap-finder
-3. **Run tests**: With smart-test-runner
+3. **Run tests**: With test-runner
 4. **Stop**: Block if coverage drops
 
 ### The "Subagent Army" Workflow
@@ -229,7 +229,7 @@ Multiple hooks building understanding:
       "matcher": "Edit|Write",
       "hooks": [
         {"type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/code-linter.sh"},
-        {"type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/smart-test-runner.sh"}
+        {"type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/test-runner.sh"}
       ]
     }],
     "Stop": [{

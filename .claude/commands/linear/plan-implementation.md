@@ -1,3 +1,9 @@
+---
+allowed-tools: Read, Bash(git status:*), Bash(git log:*), Task
+description: Create comprehensive implementation plan for a feature
+argument-hint: [feature description or requirements]
+---
+
 Create comprehensive implementation plan: $ARGUMENTS
 
 <ultrathink>

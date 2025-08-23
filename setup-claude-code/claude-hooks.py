@@ -109,7 +109,7 @@ class ClaudeHooksManager:
                 {
                     'event': 'PostToolUse',
                     'matcher': 'Edit|Write',
-                    'command': '$CLAUDE_PROJECT_DIR/.claude/hooks/bash/smart-test-runner.sh',
+                    'command': '$CLAUDE_PROJECT_DIR/.claude/hooks/bash/test-runner.sh',
                     'timeout': 60
                 },
                 {

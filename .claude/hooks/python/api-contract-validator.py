@@ -13,11 +13,12 @@ contracts, preventing breaking changes and maintaining consistency.
 """
 
 import json
-import sys
 import re
-import yaml
+import sys
 from pathlib import Path
 from typing import Dict, List, Optional
+
+import yaml
 from openapi_spec_validator import validate_spec
 from openapi_spec_validator.exceptions import OpenAPIValidationError
 

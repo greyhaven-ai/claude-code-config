@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/prompt-enhancer.py",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/prompt-enhancer.js",
             "timeout": 10
           }
         ]
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-context-preparer.py",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/subagent-context-preparer.js",
             "timeout": 10
           }
         ]
@@ -50,8 +50,28 @@
           },
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/smart-test-runner.sh",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/import-organizer.js",
+            "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/incremental-type-checker.js",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/test-runner.js",
             "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/coverage-gap-finder.js",
+            "timeout": 30
           }
         ]
       }
@@ -61,7 +81,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/work-completion-assistant.py",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/work-completion-assistant.js",
             "timeout": 20
           }
         ]
@@ -72,7 +92,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-work-validator.py",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/subagent-work-validator.js",
             "timeout": 15
           }
         ]

@@ -1,3 +1,9 @@
+---
+allowed-tools: Read, Write, Edit, Bash, Task
+description: Debug an issue systematically using scientific method
+argument-hint: [bug description or error message]
+---
+
 Debug systematically: $ARGUMENTS
 
 <ultrathink>

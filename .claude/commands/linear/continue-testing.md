@@ -1,3 +1,9 @@
+---
+allowed-tools: Read, Write, Edit, Bash, Task
+description: Continue testing implementation for a Linear issue
+argument-hint: [issue ID or feature description]
+---
+
 Continue testing for the following: $ARGUMENTS
 
 <ultrathink>

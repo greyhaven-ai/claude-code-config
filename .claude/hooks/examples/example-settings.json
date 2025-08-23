@@ -60,7 +60,7 @@
           },
           {
             "type": "command",
-            "command": "bash .claude/implementations/hooks/smart-test-runner.sh",
+            "command": "bash .claude/implementations/hooks/test-runner.sh",
             "timeout": 30,
             "description": "Runs affected tests intelligently"
           },
@@ -84,7 +84,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/implementations/hooks/smart-import-organizer.py",
+            "command": "uv run .claude/implementations/hooks/import-organizer.py",
             "timeout": 3,
             "description": "Organizes and cleans imports"
           }

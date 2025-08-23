@@ -11,6 +11,17 @@
         ]
       }
     ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/prompt-enhancer.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Task",
@@ -39,28 +50,8 @@
           },
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/javascript/smart-import-organizer.js",
-            "timeout": 15
-          },
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/javascript/incremental-type-checker.js",
-            "timeout": 30
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/javascript/smart-test-runner.js",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/test-runner.sh",
             "timeout": 60
-          },
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/javascript/coverage-gap-finder.js",
-            "timeout": 30
           }
         ]
       }
@@ -72,6 +63,17 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/work-completion-assistant.py",
             "timeout": 20
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-work-validator.py",
+            "timeout": 15
           }
         ]
       }

@@ -1,3 +1,9 @@
+---
+allowed-tools: Read, Bash(git status:*), Bash(git branch:*), Bash(git log:*)
+description: Prepare context for compaction when approaching token limits
+argument-hint: [task description or issue ID]
+---
+
 Prepare context for compaction: $ARGUMENTS
 
 <ultrathink>

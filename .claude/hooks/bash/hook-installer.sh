@@ -147,7 +147,7 @@ case "$install_type" in
     testing)
         echo "Installing testing hooks to $SETTINGS_FILE..."
         add_hook_to_settings "$SETTINGS_FILE" "PostToolUse" "Edit|Write" \
-            "\$CLAUDE_PROJECT_DIR/.claude/hooks/bash/smart-test-runner.sh" 60
+            "\$CLAUDE_PROJECT_DIR/.claude/hooks/bash/test-runner.sh" 60
         add_hook_to_settings "$SETTINGS_FILE" "PostToolUse" "Edit|Write" \
             "\$CLAUDE_PROJECT_DIR/.claude/hooks/python/coverage-gap-finder.py" 30
         echo "Testing hooks installed!"

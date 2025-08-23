@@ -48,6 +48,38 @@ When reacting to test failures:
 - Read the error message carefully
 - Identify if it's the expected failure or an unexpected one
 - Fix only what's necessary to address the failure
+
+## Hook Integration
+
+This subagent leverages the hook ecosystem for enhanced TDD workflow:
+
+### Pre-Tool Hooks
+- **subagent-context-preparer hook**: Automatically detects test framework (pytest, unittest) and test directory structure before you begin.
+- **test-framework-detector hook**: Provides information about existing test patterns and conventions in the project.
+
+### Post-Tool Hooks
+- **test-runner hook**: Automatically runs tests after each implementation to validate the red-green-refactor cycle.
+- **coverage-reporter hook**: Tracks test coverage improvements as you add new tests.
+- **post-edit-validator hook**: Ensures your code follows project conventions and standards.
+
+### TDD Cycle Integration
+1. **Red Phase**: Write failing test
+   - Hooks validate test syntax and structure
+   - Test-runner hook confirms test fails as expected
+2. **Green Phase**: Write minimal code
+   - Hooks check for over-engineering
+   - Test-runner validates all tests pass
+3. **Refactor Phase**: Improve code
+   - Hooks ensure refactoring doesn't break tests
+   - Coverage-reporter tracks maintained coverage
+
+### Hook Output Recognition
+When you see hook output like:
+```
+[Hook: test-framework] Detected pytest with fixtures in tests/
+[Hook: coverage] Current coverage: 85%, Target: 90%
+```
+Use this information to guide your TDD implementation and ensure you meet coverage targets.
 - Don't anticipate future requirements
 
 Code organization:

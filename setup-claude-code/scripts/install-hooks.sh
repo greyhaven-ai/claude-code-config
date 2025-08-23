@@ -132,7 +132,7 @@ EOF
           },
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/smart-test-runner.sh",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/test-runner.sh",
             "timeout": 60
           }
         ]
@@ -283,7 +283,7 @@ select_hooks_interactive() {
         ["prompt-enhancer.py"]="Enhance prompts with relevant context (UserPromptSubmit)"
         ["code-linter.sh"]="Run appropriate linters after edits (PostToolUse)"
         ["auto-formatter.sh"]="Format code automatically (PostToolUse)"
-        ["smart-test-runner.sh"]="Run affected tests (PostToolUse)"
+        ["test-runner.sh"]="Run affected tests (PostToolUse)"
         ["incremental-type-checker.sh"]="Check types incrementally (PostToolUse)"
         ["work-completion-assistant.py"]="Ensure work is complete (Stop)"
         ["subagent-context-preparer.py"]="Prepare context for subagents (PreToolUse:Task)"
@@ -297,7 +297,7 @@ select_hooks_interactive() {
         ["prompt-enhancer.py"]="UserPromptSubmit"
         ["code-linter.sh"]="PostToolUse"
         ["auto-formatter.sh"]="PostToolUse"
-        ["smart-test-runner.sh"]="PostToolUse"
+        ["test-runner.sh"]="PostToolUse"
         ["incremental-type-checker.sh"]="PostToolUse"
         ["work-completion-assistant.py"]="Stop"
         ["subagent-context-preparer.py"]="PreToolUse"
@@ -309,7 +309,7 @@ select_hooks_interactive() {
     declare -A hook_matchers=(
         ["code-linter.sh"]="Edit|Write|MultiEdit"
         ["auto-formatter.sh"]="Edit|Write|MultiEdit"
-        ["smart-test-runner.sh"]="Edit|Write"
+        ["test-runner.sh"]="Edit|Write"
         ["incremental-type-checker.sh"]="Edit|Write|MultiEdit"
         ["subagent-context-preparer.py"]="Task"
         ["security-validator.py"]="Edit|Write"

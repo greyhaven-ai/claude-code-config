@@ -1,3 +1,9 @@
+---
+allowed-tools: Read, Write, Edit, Bash, Task
+description: Continue debugging a Linear issue systematically
+argument-hint: [issue ID or bug description]
+---
+
 Continue debugging Linear issue: $ARGUMENTS
 
 <ultrathink>

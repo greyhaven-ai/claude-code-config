@@ -1,3 +1,9 @@
+---
+allowed-tools: WebSearch, WebFetch, Task
+description: Deep API research using Firecrawl MCP
+argument-hint: [API name or documentation URL]
+---
+
 Deep API research using Firecrawl MCP for: $ARGUMENTS
 
 <ultrathink>

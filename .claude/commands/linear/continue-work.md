@@ -1,3 +1,9 @@
+---
+allowed-tools: Read, Write, Edit, Bash, Task
+description: Continue work on a Linear issue or task
+argument-hint: [issue ID or description]
+---
+
 Continue work on the following: $ARGUMENTS
 
 <ultrathink>

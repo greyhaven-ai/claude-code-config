@@ -1,0 +1,237 @@
+{
+  "description": "Integrated hooks, commands, and subagents configuration for optimal Claude Code workflows",
+  "hooks": {
+    "SessionStart": [
+      {
+        "description": "Load branch context and project state at session start",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/branch-context-loader.sh"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/dependency-scanner.py"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "description": "Enhance prompts and suggest appropriate subagents",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/prompt-enhancer.py"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-router.py"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "description": "Prepare context for subagent execution",
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-context-preparer.py"
+          }
+        ]
+      },
+      {
+        "description": "Validate before file modifications",
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/code-guardian.py"
+          }
+        ]
+      },
+      {
+        "description": "Security check before bash commands",
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/security-validator.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "description": "Run tests after code modifications",
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/test-runner.sh"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/error-catcher.py"
+          }
+        ]
+      },
+      {
+        "description": "Track git changes",
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/git-change-tracker.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "description": "Process subagent results and orchestrate workflows",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-result-processor.py"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-orchestrator.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "description": "Validate work before stopping",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/work-completion-assistant.py"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "description": "Generate session summary and cleanup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/session-summarizer.py"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/cleanup.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "description": "Send notifications for important events",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/notification-handler.py"
+          }
+        ]
+      }
+    ]
+  },
+  "command_workflows": {
+    "development": {
+      "description": "Full development cycle with quality checks",
+      "subagents": [
+        "code-synthesis-analyzer",
+        "tdd-python-implementer",
+        "code-clarity-refactorer",
+        "git-diff-documentation-agent"
+      ],
+      "hooks": {
+        "pre": ["subagent-context-preparer"],
+        "post": ["subagent-result-processor", "subagent-orchestrator"],
+        "between": ["test-runner", "error-catcher"]
+      }
+    },
+    "security": {
+      "description": "Security audit and remediation workflow",
+      "subagents": [
+        "security-orchestrator",
+        "bug-issue-creator",
+        "tech-docs-maintainer"
+      ],
+      "hooks": {
+        "pre": ["security-context-loader"],
+        "post": ["security-result-processor", "issue-tracker"],
+        "alert": ["notification-handler"]
+      }
+    },
+    "documentation": {
+      "description": "Comprehensive documentation workflow",
+      "subagents": [
+        "git-diff-documentation-agent",
+        "tech-docs-maintainer",
+        "web-docs-researcher"
+      ],
+      "hooks": {
+        "pre": ["doc-context-loader"],
+        "post": ["doc-validator", "doc-publisher"]
+      }
+    },
+    "quality": {
+      "description": "Code quality improvement workflow",
+      "subagents": [
+        "code-synthesis-analyzer",
+        "code-clarity-refactorer",
+        "tdd-python-implementer"
+      ],
+      "hooks": {
+        "pre": ["quality-baseline"],
+        "post": ["quality-metrics", "test-coverage-reporter"]
+      }
+    }
+  },
+  "integration_rules": {
+    "subagent_auto_routing": {
+      "enabled": true,
+      "confidence_threshold": 0.5,
+      "description": "Automatically suggest subagents based on prompt analysis"
+    },
+    "workflow_detection": {
+      "enabled": true,
+      "description": "Detect and activate workflow patterns automatically"
+    },
+    "context_preservation": {
+      "enabled": true,
+      "description": "Preserve context between subagent invocations"
+    },
+    "result_processing": {
+      "enabled": true,
+      "save_results": true,
+      "generate_reports": true
+    },
+    "quality_gates": {
+      "enabled": true,
+      "block_on_test_failure": true,
+      "block_on_security_critical": true,
+      "block_on_incomplete_work": true
+    }
+  },
+  "performance_settings": {
+    "hook_timeout": 10000,
+    "parallel_execution": true,
+    "cache_context": true,
+    "max_workflow_depth": 5
+  },
+  "notifications": {
+    "on_subagent_complete": true,
+    "on_workflow_complete": true,
+    "on_security_finding": true,
+    "on_test_failure": true,
+    "on_quality_issue": true
+  }
+}

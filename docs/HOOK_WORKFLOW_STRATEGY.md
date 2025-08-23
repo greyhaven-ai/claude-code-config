@@ -113,7 +113,7 @@ This document outlines creative strategies for using Claude Code hooks to build 
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/smart-test-runner.sh"
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/test-runner.sh"
           }
         ]
       }

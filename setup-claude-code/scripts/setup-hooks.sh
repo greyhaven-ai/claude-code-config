@@ -149,7 +149,7 @@ if [ -z "$KEEP_EXISTING" ]; then
         "tools": ["Edit", "Write", "MultiEdit"]
       },
       {
-        "command": "$HOOKS_DIR/bash/smart-test-runner.sh",
+        "command": "$HOOKS_DIR/bash/test-runner.sh",
         "tools": ["Edit", "Write", "MultiEdit"]
       },
       {
@@ -165,7 +165,7 @@ if [ -z "$KEEP_EXISTING" ]; then
         "tools": ["Edit", "Write", "MultiEdit"]
       },
       {
-        "command": "$HOOKS_DIR/python/smart-import-organizer.py",
+        "command": "$HOOKS_DIR/python/import-organizer.py",
         "tools": ["Edit", "Write", "MultiEdit"]
       }
     ],

@@ -239,14 +239,14 @@ if [ "$INSTALL_HOOKS" = true ]; then
         
         # Determine which hooks to use based on project type
         if [ "$PROJECT_TYPE" = "javascript" ]; then
-            TEST_RUNNER="$HOOKS_DIR/javascript/smart-test-runner.js"
+            TEST_RUNNER="$HOOKS_DIR/javascript/test-runner.js"
             TYPE_CHECKER="$HOOKS_DIR/javascript/incremental-type-checker.js"
-            IMPORT_ORGANIZER="$HOOKS_DIR/javascript/smart-import-organizer.js"
+            IMPORT_ORGANIZER="$HOOKS_DIR/javascript/import-organizer.js"
             COVERAGE_FINDER="$HOOKS_DIR/javascript/coverage-gap-finder.js"
         else
-            TEST_RUNNER="$HOOKS_DIR/bash/smart-test-runner.sh"
+            TEST_RUNNER="$HOOKS_DIR/bash/test-runner.sh"
             TYPE_CHECKER="$HOOKS_DIR/bash/incremental-type-checker.sh"
-            IMPORT_ORGANIZER="$HOOKS_DIR/python/smart-import-organizer.py"
+            IMPORT_ORGANIZER="$HOOKS_DIR/python/import-organizer.py"
             COVERAGE_FINDER="$HOOKS_DIR/python/coverage-gap-finder.py"
         fi
         
