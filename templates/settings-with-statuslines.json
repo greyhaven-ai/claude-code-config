@@ -1,0 +1,87 @@
+{
+  "// Description": "Claude Code settings with various statusline configurations",
+  "// Instructions": "Choose one statusLine configuration and copy it to your .claude/settings.json",
+  
+  "// Option 1: Grey Haven Default": "Comprehensive statusline with git, cost, and productivity metrics",
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statuslines/grey-haven-default.sh",
+    "padding": 0
+  },
+  
+  "// Option 2: Tamagotchi": "Fun virtual pet that evolves with your coding activity",
+  "statusLine_tamagotchi": {
+    "type": "command",
+    "command": "~/.claude/statuslines/tamagotchi.sh",
+    "padding": 0
+  },
+  
+  "// Option 3: Productivity Dashboard": "Detailed productivity metrics and scoring",
+  "statusLine_productivity": {
+    "type": "command",
+    "command": "~/.claude/statuslines/productivity-dashboard.sh",
+    "padding": 0
+  },
+  
+  "// Option 4: Context Aware": "Adapts based on language, git workflow, and activity",
+  "statusLine_context": {
+    "type": "command",
+    "command": "~/.claude/statuslines/context-aware.sh",
+    "padding": 0
+  },
+  
+  "// Option 5: Minimalist": "Just the essentials - model and directory",
+  "statusLine_minimal": {
+    "type": "command",
+    "command": "~/.claude/statuslines/minimalist.sh",
+    "padding": 0
+  },
+  
+  "// Option 6: Inline Simple": "No script file needed - basic info",
+  "statusLine_inline_simple": {
+    "type": "command",
+    "command": "bash -c 'input=$(cat); echo \"[$(echo \"$input\" | jq -r \".model.display_name\")] 📁 $(basename $(echo \"$input\" | jq -r \".workspace.current_dir\"))\"'",
+    "padding": 0
+  },
+  
+  "// Option 7: Inline with Git": "No script file needed - includes git branch",
+  "statusLine_inline_git": {
+    "type": "command",
+    "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); DIR=$(basename $(echo \"$input\" | jq -r \".workspace.current_dir\")); BRANCH=$(git branch --show-current 2>/dev/null || echo \"\"); if [ -n \"$BRANCH\" ]; then BRANCH=\" | 🌿 $BRANCH\"; fi; echo \"[$MODEL] 📁 $DIR$BRANCH\"'",
+    "padding": 0
+  },
+  
+  "// Option 8: Inline with Cost": "No script file needed - shows session cost",
+  "statusLine_inline_cost": {
+    "type": "command",
+    "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); COST=$(echo \"$input\" | jq -r \".cost.total_cost_usd // 0\" | xargs printf \"%.4f\"); echo \"[$MODEL] 💰 \\$$COST\"'",
+    "padding": 0
+  },
+  
+  "// Option 9: Inline Colorful": "No script file needed - with ANSI colors",
+  "statusLine_inline_color": {
+    "type": "command",
+    "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); DIR=$(basename $(echo \"$input\" | jq -r \".workspace.current_dir\")); echo -e \"\\033[1;36m[$MODEL]\\033[0m \\033[1;33m📁 $DIR\\033[0m\"'",
+    "padding": 0
+  },
+  
+  "// Option 10: Inline Time-based": "Shows different emoji based on time of day",
+  "statusLine_inline_time": {
+    "type": "command",
+    "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); HOUR=$(date +%H); if [ $HOUR -ge 6 ] && [ $HOUR -lt 12 ]; then EMOJI=\"☕\"; elif [ $HOUR -ge 12 ] && [ $HOUR -lt 17 ]; then EMOJI=\"☀️\"; elif [ $HOUR -ge 17 ] && [ $HOUR -lt 21 ]; then EMOJI=\"🌅\"; else EMOJI=\"🌙\"; fi; echo \"$EMOJI [$MODEL] $(date +%H:%M)\"'",
+    "padding": 0
+  },
+  
+  "// Additional Settings": "Other Claude Code settings can be added here",
+  "hooks": {
+    "// Note": "Hook configurations would go here if using hooks"
+  },
+  
+  "// Experimental Features": "Advanced statusline features",
+  "statusLine_experimental": {
+    "// Weather Integration": "Requires internet and curl",
+    "type": "command",
+    "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); WEATHER=$(curl -s \"wttr.in/?format=%t\" 2>/dev/null | head -c 10 || echo \"?\"); echo \"[$MODEL] 🌡️ $WEATHER\"'",
+    "padding": 0
+  }
+}
