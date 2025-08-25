@@ -23,11 +23,8 @@ bun install -g @greyhaven/claude-code-config
 
 ### Homebrew (macOS/Linux)
 ```bash
-# Add the tap (first time only)
-brew tap grey-haven/tools
-
-# Install claude-config
-brew install claude-config
+# One-line install (no tap needed!)
+brew install greyhaven-ai/greyhaven/claude-config
 ```
 
 ## Installation Methods
@@ -61,14 +58,15 @@ npm update -g @greyhaven/claude-code-config
 For Homebrew users:
 
 ```bash
-# Add our tap
-brew tap grey-haven/tools
-
-# Install
-brew install claude-config
+# Install (one command!)
+brew install greyhaven-ai/greyhaven/claude-config
 
 # Update
 brew upgrade claude-config
+
+# Or if you prefer to tap first
+brew tap greyhaven-ai/greyhaven
+brew install claude-config
 ```
 
 **Advantages:**
