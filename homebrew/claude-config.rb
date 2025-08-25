@@ -1,10 +1,10 @@
 class ClaudeConfig < Formula
   desc "Comprehensive configuration manager for Claude Code"
-  homepage "https://github.com/grey-haven/grey-haven-claude-config"
-  url "https://github.com/grey-haven/grey-haven-claude-config/archive/v1.0.0.tar.gz"
-  sha256 "PLACEHOLDER_SHA256"  # Will be updated when creating release
+  homepage "https://github.com/greyhaven-ai/claude-code-config"
+  url "https://github.com/greyhaven-ai/claude-code-config/archive/v1.0.0.tar.gz"
+  sha256 "6091f0a196783414de152262ab69e9682ec533a6e9702d08ae21f0c9ee5a13cc"
   license "MIT"
-  head "https://github.com/grey-haven/grey-haven-claude-config.git", branch: "main"
+  head "https://github.com/greyhaven-ai/claude-code-config.git", branch: "main"
 
   depends_on "python@3.11"
   depends_on "git"
@@ -38,7 +38,7 @@ class ClaudeConfig < Formula
         claude-config update
       
       Documentation:
-        https://github.com/grey-haven/grey-haven-claude-config
+        https://github.com/greyhaven-ai/claude-code-config
     EOS
   end
 
