@@ -13,7 +13,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-REPO_URL="https://github.com/grey-haven/grey-haven-claude-config.git"
+REPO_URL="https://github.com/greyhaven-ai/claude-code-config.git"
 INSTALL_DIR="$HOME/.claude-config"
 BIN_DIR="$HOME/.local/bin"
 CONFIG_DIR="$HOME/.claude"

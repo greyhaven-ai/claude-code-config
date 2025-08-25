@@ -14,6 +14,9 @@ from typing import List, Optional
 import argparse
 from datetime import datetime
 
+# Version info
+VERSION = "1.0.1"
+
 # ANSI color codes for terminal output
 class Colors:
     BLUE = '\033[94m'
@@ -1104,6 +1107,13 @@ Examples:
   claude-config update                  # Update from repository (global install)
   claude-config sync                    # Sync with repository (global install)
         """
+    )
+    
+    # Add version argument
+    parser.add_argument(
+        '--version', '-v',
+        action='version',
+        version=f'claude-config version {VERSION}'
     )
     
     subparsers = parser.add_subparsers(dest='command', help='Available commands')

@@ -15,8 +15,15 @@ performance problems, and suggests optimizations like indexes.
 import json
 import sys
 import re
-import sqlparse
 from typing import List, Dict, Optional
+
+# Try to import sqlparse, but continue without it
+try:
+    import sqlparse
+    SQLPARSE_AVAILABLE = True
+except ImportError:
+    SQLPARSE_AVAILABLE = False
+    sqlparse = None
 
 
 def extract_sql_from_command(command: str) -> List[str]:
@@ -375,6 +382,11 @@ def check_for_n_plus_one(command: str, queries: List[str]) -> bool:
 
 def main():
     try:
+        # Check if sqlparse is available
+        if not SQLPARSE_AVAILABLE:
+            # Silently exit - don't disrupt workflow
+            sys.exit(0)
+            
         # Read hook data from stdin
         data = json.load(sys.stdin)
         tool_name = data.get("tool_name", "")

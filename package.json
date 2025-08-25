@@ -1,6 +1,6 @@
 {
   "name": "@greyhaven/claude-code-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Comprehensive configuration manager for Claude Code - manage presets, hooks, agents, and commands",
   "main": "lib/index.js",
   "bin": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/grey-haven/grey-haven-claude-config.git"
+    "url": "git+https://github.com/greyhaven-ai/claude-code-config.git"
   },
   "keywords": [
     "claude",
@@ -27,9 +27,9 @@
   "author": "Grey Haven Studio",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/grey-haven/grey-haven-claude-config/issues"
+    "url": "https://github.com/greyhaven-ai/claude-code-config/issues"
   },
-  "homepage": "https://github.com/grey-haven/grey-haven-claude-config#readme",
+  "homepage": "https://github.com/greyhaven-ai/claude-code-config#readme",
   "engines": {
     "node": ">=14.0.0"
   },

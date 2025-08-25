@@ -16,12 +16,17 @@ import json
 import sys
 import re
 from typing import List, Dict, Any
-from faker import Faker
 import random
 from datetime import datetime
 
-# Initialize Faker
-fake = Faker()
+# Try to import Faker, but continue without it
+try:
+    from faker import Faker
+    fake = Faker()
+    FAKER_AVAILABLE = True
+except ImportError:
+    FAKER_AVAILABLE = False
+    fake = None
 
 
 def detect_test_context(prompt: str) -> Dict[str, Any]:
@@ -314,6 +319,11 @@ def format_test_data(data: Any, language: str = "javascript") -> str:
 
 def main():
     try:
+        # Check if Faker is available
+        if not FAKER_AVAILABLE:
+            # Silently exit - don't disrupt workflow
+            sys.exit(0)
+            
         # Read hook data from stdin
         data = json.load(sys.stdin)
         prompt = data.get("prompt", "")

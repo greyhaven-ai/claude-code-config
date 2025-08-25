@@ -6,19 +6,30 @@ class ClaudeConfig < Formula
   license "MIT"
   head "https://github.com/greyhaven-ai/claude-code-config.git", branch: "main"
 
-  depends_on "python@3.11"
   depends_on "git"
 
   def install
     # Install all files to libexec
     libexec.install Dir["*"]
     
-    # Create wrapper script
+    # Create wrapper script that finds Python dynamically
     (bin/"claude-config").write <<~EOS
       #!/bin/bash
       export CLAUDE_CONFIG_GLOBAL=1
       export CLAUDE_CONFIG_HOME="#{libexec}"
-      exec "#{Formula["python@3.11"].opt_bin}/python3" "#{libexec}/claude-config" "$@"
+      
+      # Try to find Python 3 in common locations
+      if command -v python3 &> /dev/null; then
+        exec python3 "#{libexec}/claude-config" "$@"
+      elif command -v python &> /dev/null && python --version 2>&1 | grep -q "Python 3"; then
+        exec python "#{libexec}/claude-config" "$@"
+      elif command -v uv &> /dev/null; then
+        exec uv run python "#{libexec}/claude-config" "$@"
+      else
+        echo "Error: Python 3 is required but not found in PATH" >&2
+        echo "Please install Python 3 or uv to use claude-config" >&2
+        exit 1
+      fi
     EOS
     
     chmod 0755, bin/"claude-config"

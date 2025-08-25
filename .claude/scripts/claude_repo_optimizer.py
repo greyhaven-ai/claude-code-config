@@ -21,9 +21,12 @@ from typing import Dict, List, Any, Optional, Set
 
 try:
     import yaml  # pyyaml
-except Exception:
-    print("Requires PyYAML (pip install pyyaml)", file=sys.stderr)
-    raise
+    YAML_AVAILABLE = True
+except ImportError:
+    YAML_AVAILABLE = False
+    yaml = None
+    print("Warning: PyYAML not available. Some features will be limited.", file=sys.stderr)
+    print("Install with: pip install pyyaml", file=sys.stderr)
 
 
 # ---------- Helpers ----------
@@ -455,4 +458,8 @@ class RepoOptimizer:
 
 
 if __name__ == "__main__":
+    if not YAML_AVAILABLE:
+        print("Error: PyYAML is required for this script to run.", file=sys.stderr)
+        print("Install with: pip install pyyaml", file=sys.stderr)
+        sys.exit(1)
     RepoOptimizer().run()
