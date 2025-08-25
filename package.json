@@ -1,0 +1,51 @@
+{
+  "name": "@grey-haven/claude-config",
+  "version": "1.0.0",
+  "description": "Comprehensive configuration manager for Claude Code - manage presets, hooks, agents, and commands",
+  "main": "lib/index.js",
+  "bin": {
+    "claude-config": "./bin/claude-config.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grey-haven/grey-haven-claude-config.git"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "ai",
+    "configuration",
+    "cli",
+    "hooks",
+    "agents",
+    "developer-tools"
+  ],
+  "author": "Grey Haven Studio",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/grey-haven/grey-haven-claude-config/issues"
+  },
+  "homepage": "https://github.com/grey-haven/grey-haven-claude-config#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "preferGlobal": true,
+  "files": [
+    "bin/",
+    "scripts/",
+    "claude-config",
+    "setup-claude-code/",
+    "docs/cli/",
+    ".claude/hooks/",
+    "LICENSE",
+    "README-npm.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

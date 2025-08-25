@@ -1,0 +1,46 @@
+# Git files
+.git/
+.gitignore
+
+# Development files
+*.pyc
+__pycache__/
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Archive directories
+.archive/
+setup-claude-code/.archive/
+setup-claude-code/scripts/.archive/
+
+# Installation files not needed for npm
+install.sh
+homebrew/
+INSTALLATION.md
+
+# Local config files
+.claude/settings.local.json
+*.backup
+
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Documentation source files
+docs/drafts/
+*.draft.md
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

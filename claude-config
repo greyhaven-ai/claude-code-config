@@ -8,6 +8,7 @@ A unified tool for managing Claude Code configurations, hooks, agents, commands,
 import json
 import shutil
 import subprocess
+import os
 from pathlib import Path
 from typing import List, Optional
 import argparse
@@ -26,7 +27,14 @@ class ClaudeConfigManager:
     """Main configuration manager for Claude Code"""
     
     def __init__(self):
-        self.repo_dir = Path(__file__).parent
+        # Check if running from global installation
+        if os.environ.get('CLAUDE_CONFIG_GLOBAL'):
+            # Use the global installation directory
+            self.repo_dir = Path(os.environ.get('CLAUDE_CONFIG_HOME', Path.home() / '.claude-config'))
+        else:
+            # Use local directory
+            self.repo_dir = Path(__file__).parent
+            
         self.claude_dir = self.repo_dir / '.claude'
         self.setup_dir = self.repo_dir / 'setup-claude-code'
         self.templates_dir = self.repo_dir / 'templates'
@@ -808,6 +816,114 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
         else:
             self.print_warning("Claude Code directory not found")
 
+    def update(self) -> bool:
+        """Update claude-config from remote repository"""
+        self.print_header("Updating Claude Config")
+        
+        # Check if running from global installation
+        if not os.environ.get('CLAUDE_CONFIG_GLOBAL'):
+            self.print_warning("Update command is only available for global installations")
+            self.print_info("To install globally, run: ./install.sh")
+            return False
+        
+        try:
+            # Navigate to repository directory
+            os.chdir(self.repo_dir)
+            
+            # Get current branch
+            result = subprocess.run(['git', 'branch', '--show-current'], 
+                                  capture_output=True, text=True)
+            if result.returncode != 0:
+                self.print_error("Failed to determine current branch")
+                return False
+            
+            branch = result.stdout.strip()
+            self.print_info(f"Current branch: {branch}")
+            
+            # Check for uncommitted changes
+            result = subprocess.run(['git', 'status', '--porcelain'], 
+                                  capture_output=True, text=True)
+            if result.stdout.strip():
+                self.print_warning("Uncommitted changes detected in repository")
+                self.print_info("Stashing changes...")
+                subprocess.run(['git', 'stash'], capture_output=True)
+            
+            # Pull latest changes
+            self.print_info(f"Pulling latest changes from origin/{branch}...")
+            result = subprocess.run(['git', 'pull', 'origin', branch], 
+                                  capture_output=True, text=True)
+            
+            if result.returncode == 0:
+                self.print_success("Successfully updated claude-config!")
+                
+                # Show what was updated
+                if 'Already up to date' in result.stdout:
+                    self.print_info("Already running the latest version")
+                else:
+                    self.print_info("Updates applied:")
+                    # Show brief summary of changes
+                    result = subprocess.run(['git', 'log', '--oneline', '-5'], 
+                                          capture_output=True, text=True)
+                    for line in result.stdout.strip().split('\n')[:3]:
+                        print(f"  • {line}")
+                
+                return True
+            else:
+                self.print_error("Failed to update:")
+                print(result.stderr)
+                return False
+                
+        except Exception as e:
+            self.print_error(f"Update failed: {e}")
+            return False
+
+    def sync(self) -> bool:
+        """Sync configurations with remote repository"""
+        self.print_header("Syncing Configurations")
+        
+        # This is similar to update but also pushes local changes
+        if not os.environ.get('CLAUDE_CONFIG_GLOBAL'):
+            self.print_warning("Sync command is only available for global installations")
+            return False
+        
+        try:
+            os.chdir(self.repo_dir)
+            
+            # Check status
+            result = subprocess.run(['git', 'status', '--porcelain'], 
+                                  capture_output=True, text=True)
+            
+            if result.stdout.strip():
+                self.print_info("Local changes detected")
+                # Add and commit changes
+                subprocess.run(['git', 'add', '-A'], capture_output=True)
+                
+                commit_msg = f"chore: Auto-sync configurations - {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+                result = subprocess.run(['git', 'commit', '-m', commit_msg], 
+                                      capture_output=True, text=True)
+                
+                if result.returncode == 0:
+                    self.print_info("Committed local changes")
+            
+            # Pull then push
+            self.print_info("Syncing with remote repository...")
+            subprocess.run(['git', 'pull', '--rebase', 'origin', 'main'], 
+                         capture_output=True)
+            
+            result = subprocess.run(['git', 'push', 'origin', 'main'], 
+                                  capture_output=True, text=True)
+            
+            if result.returncode == 0:
+                self.print_success("Successfully synced configurations!")
+                return True
+            else:
+                self.print_error("Failed to sync")
+                return False
+                
+        except Exception as e:
+            self.print_error(f"Sync failed: {e}")
+            return False
+
 
 def main():
     """Main CLI entry point"""
@@ -827,6 +943,8 @@ Examples:
   claude-config doctor                  # Check system dependencies
   claude-config statusline tamagotchi   # Set up tamagotchi statusline
   claude-config import ./my-config.json # Import configuration file
+  claude-config update                  # Update from repository (global install)
+  claude-config sync                    # Sync with repository (global install)
         """
     )
     
@@ -897,6 +1015,12 @@ Examples:
     # Doctor command
     subparsers.add_parser('doctor', help='Check system for dependencies')
     
+    # Update command (for global installations)
+    subparsers.add_parser('update', help='Update claude-config from remote repository')
+    
+    # Sync command (for global installations)
+    subparsers.add_parser('sync', help='Sync configurations with remote repository')
+    
     args = parser.parse_args()
     
     # Create manager
@@ -931,6 +1055,10 @@ Examples:
         manager.list_hooks(args.location)
     elif args.command == 'doctor':
         manager.doctor()
+    elif args.command == 'update':
+        manager.update()
+    elif args.command == 'sync':
+        manager.sync()
     else:
         parser.print_help()
 
