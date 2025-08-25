@@ -8,17 +8,17 @@ Claude Config is a comprehensive configuration management tool for Claude Code. 
 
 ### NPM (Recommended - Easiest)
 ```bash
-npm install -g @grey-haven/claude-config
+npm install -g @greyhaven/claude-code-config
 ```
 
 ### Yarn
 ```bash
-yarn global add @grey-haven/claude-config
+yarn global add @greyhaven/claude-code-config
 ```
 
 ### Bun
 ```bash
-bun install -g @grey-haven/claude-config
+bun install -g @greyhaven/claude-code-config
 ```
 
 ### Homebrew (macOS/Linux)
@@ -38,7 +38,7 @@ The npm package is the easiest way to install and includes automatic updates:
 
 ```bash
 # Install globally
-npm install -g @grey-haven/claude-config
+npm install -g @greyhaven/claude-code-config
 
 # Verify installation
 claude-config --help
@@ -46,7 +46,7 @@ claude-config --help
 # Update to latest version
 claude-config self-update
 # or
-npm update -g @grey-haven/claude-config
+npm update -g @greyhaven/claude-code-config
 ```
 
 **Advantages:**

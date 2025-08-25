@@ -1,5 +1,5 @@
 {
-  "name": "@grey-haven/claude-config",
+  "name": "@greyhaven/claude-code-config",
   "version": "1.0.0",
   "description": "Comprehensive configuration manager for Claude Code - manage presets, hooks, agents, and commands",
   "main": "lib/index.js",

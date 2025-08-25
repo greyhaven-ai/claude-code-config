@@ -1,21 +1,21 @@
-# Claude Config
+# Claude Code Config
 
 > Comprehensive configuration manager for Claude Code - manage presets, hooks, agents, and commands
 
 ## Installation
 
 ```bash
-npm install -g @grey-haven/claude-config
+npm install -g @greyhaven/claude-code-config
 ```
 
 Or using yarn:
 ```bash
-yarn global add @grey-haven/claude-config
+yarn global add @greyhaven/claude-code-config
 ```
 
 Or using bun:
 ```bash
-bun install -g @grey-haven/claude-config
+bun install -g @greyhaven/claude-code-config
 ```
 
 ## Quick Start
@@ -145,7 +145,7 @@ Keep claude-config up to date:
 claude-config self-update
 
 # Or using npm
-npm update -g @grey-haven/claude-config
+npm update -g @greyhaven/claude-code-config
 ```
 
 ## Documentation

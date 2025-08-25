@@ -7,7 +7,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 
 // Colors for console output
 const colors = {
@@ -15,7 +14,7 @@ const colors = {
   bright: '\x1b[1m',
   green: '\x1b[32m',
   yellow: '\x1b[33m',
-  blue: '\xariable[34m',
+  blue: '\x1b[34m',
   cyan: '\x1b[36m'
 };
 
@@ -43,7 +42,7 @@ ${colors.yellow}Documentation:${colors.reset}
 
 ${colors.yellow}Updates:${colors.reset}
   ${colors.bright}claude-config self-update${colors.reset}         Update to latest version
-  ${colors.bright}npm update -g @grey-haven/claude-config${colors.reset}
+  ${colors.bright}npm update -g @greyhaven/claude-code-config${colors.reset}
 
 ${colors.cyan}═══════════════════════════════════════════════════════════${colors.reset}
 `);

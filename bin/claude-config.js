@@ -63,7 +63,7 @@ const args = process.argv.slice(2);
 // Special handling for update command
 if (args[0] === 'self-update') {
   console.log('Updating claude-config from npm...');
-  const npm = spawn('npm', ['update', '-g', '@grey-haven/claude-config'], {
+  const npm = spawn('npm', ['update', '-g', '@greyhaven/claude-code-config'], {
     stdio: 'inherit',
     shell: true
   });
@@ -73,7 +73,7 @@ if (args[0] === 'self-update') {
       console.log('Successfully updated claude-config!');
     } else {
       console.error('Update failed. Please try manually:');
-      console.error('  npm update -g @grey-haven/claude-config');
+      console.error('  npm update -g @greyhaven/claude-code-config');
     }
     process.exit(code);
   });
