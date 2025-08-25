@@ -1,0 +1,32 @@
+{
+  "name": "Minimal Configuration",
+  "description": "Essential hooks and basic statusline for lightweight setup",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Claude Code session started in $(pwd)'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'File modified: Check for issues'"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); DIR=$(basename $(echo \"$input\" | jq -r \".workspace.current_dir\")); echo \"[$MODEL] $DIR\"'",
+    "padding": 0
+  }
+}

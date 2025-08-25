@@ -1,0 +1,164 @@
+{
+  "agents": {
+    "bug-issue-creator": {
+      "description": "Analyzes bugs and creates comprehensive GitHub issues with context",
+      "category": "issue-management",
+      "capabilities": ["bug-analysis", "github-integration", "context-gathering"],
+      "tags": ["bugs", "github", "issue-tracking", "documentation"]
+    },
+    "code-clarity-refactorer": {
+      "description": "Analyzes code for clarity improvements and applies refactoring rules",
+      "category": "code-quality",
+      "capabilities": ["code-analysis", "refactoring", "clarity-improvements"],
+      "tags": ["refactoring", "code-quality", "clarity", "best-practices"]
+    },
+    "code-quality-analyzer": {
+      "description": "Comprehensive code quality analysis with metrics and recommendations",
+      "category": "code-quality",
+      "capabilities": ["quality-metrics", "static-analysis", "recommendations"],
+      "tags": ["quality", "analysis", "metrics", "linting"]
+    },
+    "code-synthesis-analyzer": {
+      "description": "Analyzes recent code changes to identify issues and inconsistencies",
+      "category": "code-review",
+      "capabilities": ["change-analysis", "issue-detection", "synthesis"],
+      "tags": ["review", "analysis", "changes", "synthesis"]
+    },
+    "git-diff-documentation-agent": {
+      "description": "Documents Git changes according to project guidelines",
+      "category": "documentation",
+      "capabilities": ["git-analysis", "change-documentation", "auto-documentation"],
+      "tags": ["git", "documentation", "changes", "automation"]
+    },
+    "memory-profiler": {
+      "description": "Profiles memory usage and identifies optimization opportunities",
+      "category": "performance",
+      "capabilities": ["memory-analysis", "profiling", "optimization"],
+      "tags": ["memory", "performance", "profiling", "optimization"]
+    },
+    "multi-agent-synthesis-orchestrator": {
+      "description": "Orchestrates multiple specialized agents for comprehensive research",
+      "category": "orchestration",
+      "capabilities": ["multi-agent", "synthesis", "coordination", "research"],
+      "tags": ["orchestration", "multi-agent", "research", "synthesis"]
+    },
+    "performance-optimizer": {
+      "description": "Analyzes and optimizes code performance bottlenecks",
+      "category": "performance",
+      "capabilities": ["performance-analysis", "optimization", "bottleneck-detection"],
+      "tags": ["performance", "optimization", "speed", "efficiency"]
+    },
+    "prompt-engineer": {
+      "description": "Analyzes and improves prompts using proven engineering principles",
+      "category": "ai-assistance",
+      "capabilities": ["prompt-analysis", "prompt-improvement", "best-practices"],
+      "tags": ["prompts", "ai", "engineering", "optimization"]
+    },
+    "react-tanstack-tester": {
+      "description": "Specialized testing for React and TanStack applications",
+      "category": "testing",
+      "capabilities": ["react-testing", "tanstack-testing", "component-testing"],
+      "tags": ["react", "tanstack", "testing", "frontend"]
+    },
+    "security-analyzer": {
+      "description": "Performs security analysis and vulnerability detection",
+      "category": "security",
+      "capabilities": ["vulnerability-detection", "security-analysis", "threat-assessment"],
+      "tags": ["security", "vulnerability", "analysis", "threats"]
+    },
+    "security-orchestrator": {
+      "description": "Orchestrates comprehensive security investigation workflow",
+      "category": "security",
+      "capabilities": ["security-orchestration", "investigation", "reporting"],
+      "tags": ["security", "orchestration", "investigation", "audit"]
+    },
+    "tdd-python": {
+      "description": "Test-driven development implementation for Python projects",
+      "category": "tdd",
+      "capabilities": ["tdd-implementation", "python", "test-first"],
+      "tags": ["tdd", "python", "testing", "red-green-refactor"]
+    },
+    "tdd-python-implementer": {
+      "description": "Implements Python code following strict TDD methodology",
+      "category": "tdd",
+      "capabilities": ["tdd-implementation", "python", "systematic-testing"],
+      "tags": ["tdd", "python", "implementation", "testing"]
+    },
+    "tdd-typescript": {
+      "description": "Test-driven development implementation for TypeScript projects",
+      "category": "tdd",
+      "capabilities": ["tdd-implementation", "typescript", "test-first"],
+      "tags": ["tdd", "typescript", "testing", "javascript"]
+    },
+    "tech-docs-maintainer": {
+      "description": "Updates and maintains technical documentation across codebase",
+      "category": "documentation",
+      "capabilities": ["documentation-update", "maintenance", "consistency"],
+      "tags": ["documentation", "maintenance", "technical-writing", "consistency"]
+    },
+    "tech-docs-orchestrator": {
+      "description": "Orchestrates comprehensive documentation updates",
+      "category": "documentation",
+      "capabilities": ["documentation-orchestration", "multi-file", "consistency"],
+      "tags": ["documentation", "orchestration", "comprehensive", "updates"]
+    },
+    "test-generator": {
+      "description": "Automatically generates comprehensive test suites",
+      "category": "testing",
+      "capabilities": ["test-generation", "coverage-analysis", "edge-cases"],
+      "tags": ["testing", "generation", "automation", "coverage"]
+    },
+    "web-docs-researcher": {
+      "description": "Searches and synthesizes information from official documentation",
+      "category": "research",
+      "capabilities": ["web-search", "documentation-research", "synthesis"],
+      "tags": ["research", "documentation", "web", "learning"]
+    }
+  },
+  "categories": {
+    "issue-management": {
+      "description": "Issue tracking and bug management agents",
+      "icon": "🐛"
+    },
+    "code-quality": {
+      "description": "Code quality analysis and improvement agents",
+      "icon": "✨"
+    },
+    "code-review": {
+      "description": "Code review and change analysis agents",
+      "icon": "👁️"
+    },
+    "documentation": {
+      "description": "Documentation generation and maintenance agents",
+      "icon": "📝"
+    },
+    "performance": {
+      "description": "Performance analysis and optimization agents",
+      "icon": "⚡"
+    },
+    "orchestration": {
+      "description": "Multi-agent coordination and orchestration",
+      "icon": "🎭"
+    },
+    "ai-assistance": {
+      "description": "AI and prompt engineering assistants",
+      "icon": "🤖"
+    },
+    "testing": {
+      "description": "Test generation and execution agents",
+      "icon": "🧪"
+    },
+    "security": {
+      "description": "Security analysis and vulnerability detection",
+      "icon": "🔒"
+    },
+    "tdd": {
+      "description": "Test-driven development agents",
+      "icon": "🔴"
+    },
+    "research": {
+      "description": "Research and information gathering agents",
+      "icon": "🔍"
+    }
+  }
+}

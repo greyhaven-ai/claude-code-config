@@ -1,0 +1,61 @@
+{
+  "name": "Code Quality Focus",
+  "description": "Using existing quality-focused hooks and agents from this repo",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/dependency-impact-analyzer.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/similar-code-finder.py"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/import-organizer.py"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/coverage-gap-finder.py"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/prompt-enhancer.py"
+          }
+        ]
+      }
+    ]
+  },
+  "agents": [
+    "code-quality-analyzer",
+    "memory-profiler",
+    "performance-optimizer"
+  ],
+  "commands": [
+    "/quality-pipeline",
+    "/refactor-clarity",
+    "/performance-optimize-chain"
+  ],
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statuslines/productivity-dashboard.sh",
+    "padding": 0
+  }
+}

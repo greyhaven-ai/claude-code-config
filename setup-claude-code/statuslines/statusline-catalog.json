@@ -1,0 +1,137 @@
+{
+  "description": "Complete catalog of statusline configurations for Claude Code",
+  "instructions": "Use 'claude-config statusline <name>' to apply any of these configurations",
+  
+  "statuslines": {
+    "minimal": {
+      "description": "Minimal statusline with just model and directory",
+      "command": "bash -c 'input=$(cat); echo \"[$(echo \"$input\" | jq -r \".model.display_name\")] $(basename $(echo \"$input\" | jq -r \".workspace.current_dir\"))\"'",
+      "tags": ["simple", "clean"]
+    },
+    
+    "grey-haven-default": {
+      "description": "Comprehensive statusline with git, cost, and productivity metrics",
+      "command": "~/.claude/statuslines/grey-haven-default.sh",
+      "tags": ["comprehensive", "recommended", "git", "cost"]
+    },
+    
+    "tamagotchi": {
+      "description": "Fun virtual pet that evolves with your coding activity",
+      "command": "~/.claude/statuslines/tamagotchi.sh",
+      "tags": ["fun", "interactive", "gamification"]
+    },
+    
+    "productivity-dashboard": {
+      "description": "Detailed productivity metrics and scoring",
+      "command": "~/.claude/statuslines/productivity-dashboard.sh",
+      "tags": ["metrics", "productivity", "detailed"]
+    },
+    
+    "context-aware": {
+      "description": "Adapts based on language, git workflow, and activity",
+      "command": "~/.claude/statuslines/context-aware.sh",
+      "tags": ["smart", "adaptive", "context"]
+    },
+    
+    "git-aware": {
+      "description": "Shows model, directory, and git branch",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); DIR=$(basename $(echo \"$input\" | jq -r \".workspace.current_dir\")); BRANCH=$(git branch --show-current 2>/dev/null || echo \"\"); if [ -n \"$BRANCH\" ]; then BRANCH=\" | 🌿 $BRANCH\"; fi; echo \"[$MODEL] 📁 $DIR$BRANCH\"'",
+      "tags": ["git", "branch", "simple"]
+    },
+    
+    "cost-tracker": {
+      "description": "Shows model, cost, and session duration",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); COST=$(echo \"$input\" | jq -r \".cost.total_cost_usd // 0\" | xargs printf \"%.4f\"); DURATION=$(echo \"$input\" | jq -r \".cost.total_duration_ms // 0\"); MINUTES=$((DURATION / 60000)); SECONDS=$(((DURATION % 60000) / 1000)); echo \"[$MODEL] 💰 \\$$COST | ⏱️ ${MINUTES}m ${SECONDS}s\"'",
+      "tags": ["cost", "time", "tracking"]
+    },
+    
+    "development": {
+      "description": "Shows model, git status, lines changed, and directory",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); DIR=$(basename $(echo \"$input\" | jq -r \".workspace.current_dir\")); ADDED=$(echo \"$input\" | jq -r \".cost.total_lines_added // 0\"); REMOVED=$(echo \"$input\" | jq -r \".cost.total_lines_removed // 0\"); BRANCH=$(git branch --show-current 2>/dev/null || echo \"no-git\"); echo \"[$MODEL] 🌿 $BRANCH | 📁 $DIR | +$ADDED/-$REMOVED\"'",
+      "tags": ["development", "git", "changes"]
+    },
+    
+    "colorful": {
+      "description": "Colorful statusline with ANSI codes",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); DIR=$(basename $(echo \"$input\" | jq -r \".workspace.current_dir\")); COST=$(echo \"$input\" | jq -r \".cost.total_cost_usd // 0\" | xargs printf \"%.4f\"); echo -e \"\\033[1;36m[$MODEL]\\033[0m \\033[1;33m📁 $DIR\\033[0m \\033[1;32m💰 \\$$COST\\033[0m\"'",
+      "tags": ["colorful", "ansi", "visual"]
+    },
+    
+    "performance": {
+      "description": "Shows API performance metrics",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); API_MS=$(echo \"$input\" | jq -r \".cost.total_api_duration_ms // 0\"); TOTAL_MS=$(echo \"$input\" | jq -r \".cost.total_duration_ms // 0\"); if [ \"$TOTAL_MS\" -gt 0 ]; then PERF=$((API_MS * 100 / TOTAL_MS)); else PERF=0; fi; echo \"[$MODEL] ⚡ API: ${API_MS}ms (${PERF}% of total)\"'",
+      "tags": ["performance", "api", "metrics"]
+    },
+    
+    "time-based": {
+      "description": "Shows different emoji based on time of day",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); HOUR=$(date +%H); if [ $HOUR -ge 6 ] && [ $HOUR -lt 12 ]; then EMOJI=\"☕\"; elif [ $HOUR -ge 12 ] && [ $HOUR -lt 17 ]; then EMOJI=\"☀️\"; elif [ $HOUR -ge 17 ] && [ $HOUR -lt 21 ]; then EMOJI=\"🌅\"; else EMOJI=\"🌙\"; fi; echo \"$EMOJI [$MODEL] $(date +%H:%M)\"'",
+      "tags": ["time", "emoji", "dynamic"]
+    },
+    
+    "environment": {
+      "description": "Shows different colors/emojis based on directory context",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); CWD=$(echo \"$input\" | jq -r \".workspace.current_dir\"); DIR=$(basename \"$CWD\"); if [[ \"$CWD\" == */production/* ]]; then ENV=\"🔴 PROD\"; elif [[ \"$CWD\" == */staging/* ]]; then ENV=\"🟡 STAGE\"; elif [[ \"$CWD\" == */test/* ]]; then ENV=\"🟢 TEST\"; else ENV=\"🔵 DEV\"; fi; echo \"[$MODEL] $ENV | 📁 $DIR\"'",
+      "tags": ["environment", "context", "safety"]
+    },
+    
+    "git-dirty": {
+      "description": "Shows git status with dirty/clean indicators",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); DIR=$(basename $(echo \"$input\" | jq -r \".workspace.current_dir\")); if git diff --quiet 2>/dev/null; then GIT=\"✅\"; else GIT=\"🔴\"; fi; BRANCH=$(git branch --show-current 2>/dev/null || echo \"no-git\"); echo \"[$MODEL] $GIT $BRANCH | 📁 $DIR\"'",
+      "tags": ["git", "status", "clean"]
+    },
+    
+    "compact": {
+      "description": "Compact view with all key information",
+      "command": "bash -c 'input=$(cat); M=$(echo \"$input\" | jq -r \".model.display_name\" | cut -c1-3); D=$(basename $(echo \"$input\" | jq -r \".workspace.current_dir\")); C=$(echo \"$input\" | jq -r \".cost.total_cost_usd // 0\" | xargs printf \"%.2f\"); B=$(git branch --show-current 2>/dev/null | cut -c1-10 || echo \"none\"); A=$(echo \"$input\" | jq -r \".cost.total_lines_added // 0\"); echo \"$M|$B|$D|+$A|\\$$C\"'",
+      "tags": ["compact", "condensed", "efficient"]
+    },
+    
+    "emoji-status": {
+      "description": "Uses emojis to convey status at a glance",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); COST=$(echo \"$input\" | jq -r \".cost.total_cost_usd // 0\"); if (( $(echo \"$COST > 1.0\" | bc -l) )); then COST_EMOJI=\"💸\"; elif (( $(echo \"$COST > 0.5\" | bc -l) )); then COST_EMOJI=\"💵\"; else COST_EMOJI=\"💰\"; fi; if git diff --quiet 2>/dev/null; then GIT_EMOJI=\"✨\"; else GIT_EMOJI=\"🚧\"; fi; echo \"[$MODEL] $GIT_EMOJI $COST_EMOJI\"'",
+      "tags": ["emoji", "visual", "status"]
+    },
+    
+    "progress-bar": {
+      "description": "Shows context usage as a progress bar",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); COST=$(echo \"$input\" | jq -r \".cost.total_cost_usd // 0\" | xargs printf \"%.2f\"); PCT=$(($(echo \"$COST * 20\" | bc | cut -d. -f1))); if [ $PCT -gt 100 ]; then PCT=100; fi; BAR=\"\"; for i in $(seq 1 10); do if [ $((i * 10)) -le $PCT ]; then BAR=\"${BAR}█\"; else BAR=\"${BAR}░\"; fi; done; echo \"[$MODEL] Context: [$BAR] \\$$COST\"'",
+      "tags": ["progress", "visual", "context"]
+    },
+    
+    "model-colors": {
+      "description": "Different colors for different models",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); DIR=$(basename $(echo \"$input\" | jq -r \".workspace.current_dir\")); case \"$MODEL\" in Opus) COLOR=\"\\033[95m\" EMOJI=\"🧠\";; Sonnet) COLOR=\"\\033[94m\" EMOJI=\"🎵\";; Haiku) COLOR=\"\\033[92m\" EMOJI=\"🍃\";; *) COLOR=\"\\033[90m\" EMOJI=\"🤖\";; esac; echo -e \"${COLOR}${EMOJI} $MODEL\\033[0m | 📁 $DIR\"'",
+      "tags": ["model", "colorful", "visual"]
+    },
+    
+    "productivity-metrics": {
+      "description": "Shows lines of code changed and productivity metrics",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); ADDED=$(echo \"$input\" | jq -r \".cost.total_lines_added // 0\"); REMOVED=$(echo \"$input\" | jq -r \".cost.total_lines_removed // 0\"); NET=$((ADDED - REMOVED)); COST=$(echo \"$input\" | jq -r \".cost.total_cost_usd // 0.0001\" | xargs printf \"%.4f\"); if [ \"$ADDED\" -gt 0 ]; then CPL=$(echo \"scale=4; $COST / $ADDED\" | bc); else CPL=\"0\"; fi; echo \"[$MODEL] 📊 +$ADDED/-$REMOVED (net: $NET) | \\$${CPL}/line\"'",
+      "tags": ["productivity", "metrics", "cost-per-line"]
+    },
+    
+    "bun-development": {
+      "description": "Statusline optimized for Bun runtime",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); echo \"🍞 [$MODEL] Bun Development\"'",
+      "tags": ["bun", "javascript", "typescript"]
+    },
+    
+    "grey-haven-branded": {
+      "description": "Custom Grey Haven Studio branded statusline",
+      "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); DIR=$(basename $(echo \"$input\" | jq -r \".workspace.current_dir\")); BRANCH=$(git branch --show-current 2>/dev/null || echo \"main\"); echo \"🏰 Grey Haven | [$MODEL] | 🌿 $BRANCH | 📁 $DIR\"'",
+      "tags": ["branded", "grey-haven", "custom"]
+    }
+  },
+  
+  "categories": {
+    "simple": ["minimal", "git-aware", "compact"],
+    "comprehensive": ["grey-haven-default", "productivity-dashboard", "context-aware"],
+    "fun": ["tamagotchi", "emoji-status", "time-based"],
+    "technical": ["performance", "productivity-metrics", "progress-bar"],
+    "visual": ["colorful", "model-colors", "emoji-status"],
+    "git-focused": ["git-aware", "git-dirty", "development"],
+    "cost-focused": ["cost-tracker", "productivity-metrics"],
+    "branded": ["grey-haven-branded", "bun-development"]
+  }
+}

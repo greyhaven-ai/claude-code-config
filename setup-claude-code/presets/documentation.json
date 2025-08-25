@@ -1,0 +1,54 @@
+{
+  "name": "Documentation Focus",
+  "description": "Auto-documentation fetching, generation, and maintenance using existing agents",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/context-injector.py"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/auto-documentation-fetcher.py"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/prompt-enhancer.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/code-narrator.py"
+          }
+        ]
+      }
+    ]
+  },
+  "agents": [
+    "tech-docs-maintainer",
+    "tech-docs-orchestrator",
+    "web-docs-researcher"
+  ],
+  "commands": [
+    "/quality-pipeline"
+  ],
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statuslines/grey-haven-default.sh",
+    "padding": 0
+  }
+}

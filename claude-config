@@ -1,0 +1,939 @@
+#!/usr/bin/env python3
+"""
+Claude Config CLI - Comprehensive configuration manager for Claude Code
+
+A unified tool for managing Claude Code configurations, hooks, agents, commands, and statuslines.
+"""
+
+import json
+import shutil
+import subprocess
+from pathlib import Path
+from typing import List, Optional
+import argparse
+from datetime import datetime
+
+# ANSI color codes for terminal output
+class Colors:
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    BOLD = '\033[1m'
+    END = '\033[0m'
+
+class ClaudeConfigManager:
+    """Main configuration manager for Claude Code"""
+    
+    def __init__(self):
+        self.repo_dir = Path(__file__).parent
+        self.claude_dir = self.repo_dir / '.claude'
+        self.setup_dir = self.repo_dir / 'setup-claude-code'
+        self.templates_dir = self.repo_dir / 'templates'
+        
+        # Configuration file paths
+        self.user_settings = Path.home() / '.claude' / 'settings.json'
+        self.project_settings = Path.cwd() / '.claude' / 'settings.json'
+        self.local_settings = Path.cwd() / '.claude' / 'settings.local.json'
+        
+        # Available presets
+        self.presets = {
+            'minimal': {
+                'name': 'Minimal',
+                'description': 'Essential hooks and configuration only',
+                'includes': ['basic-hooks', 'minimal-statusline']
+            },
+            'quality': {
+                'name': 'Quality Focused',
+                'description': 'Testing, linting, and code quality tools',
+                'includes': ['quality-hooks', 'test-agents', 'quality-commands']
+            },
+            'security': {
+                'name': 'Security First',
+                'description': 'Security validation and scanning',
+                'includes': ['security-hooks', 'security-agents', 'security-commands']
+            },
+            'tdd': {
+                'name': 'Test-Driven Development',
+                'description': 'TDD workflow with test enforcement',
+                'includes': ['tdd-hooks', 'tdd-agents', 'tdd-commands']
+            },
+            'performance': {
+                'name': 'Performance Optimized',
+                'description': 'Performance monitoring and optimization',
+                'includes': ['performance-hooks', 'performance-agents', 'performance-commands']
+            },
+            'full': {
+                'name': 'Full Featured',
+                'description': 'All available hooks, agents, and commands',
+                'includes': ['all-hooks', 'all-agents', 'all-commands', 'all-statuslines']
+            },
+            'team': {
+                'name': 'Team Collaboration',
+                'description': 'Shared team settings and workflows',
+                'includes': ['team-hooks', 'git-workflows', 'pr-automation']
+            }
+        }
+
+    def print_header(self, text: str):
+        """Print a formatted header"""
+        print(f"\n{Colors.BOLD}{Colors.BLUE}{'='*60}{Colors.END}")
+        print(f"{Colors.BOLD}{Colors.BLUE}{text.center(60)}{Colors.END}")
+        print(f"{Colors.BOLD}{Colors.BLUE}{'='*60}{Colors.END}\n")
+
+    def print_success(self, text: str):
+        """Print success message"""
+        print(f"{Colors.GREEN}✅ {text}{Colors.END}")
+
+    def print_warning(self, text: str):
+        """Print warning message"""
+        print(f"{Colors.YELLOW}⚠️  {text}{Colors.END}")
+
+    def print_error(self, text: str):
+        """Print error message"""
+        print(f"{Colors.RED}❌ {text}{Colors.END}")
+
+    def print_info(self, text: str):
+        """Print info message"""
+        print(f"{Colors.BLUE}ℹ️  {text}{Colors.END}")
+
+    def init(self, target_dir: Optional[Path] = None) -> bool:
+        """Initialize Claude Code configuration in a project"""
+        target = Path(target_dir) if target_dir else Path.cwd()
+        claude_dir = target / '.claude'
+        
+        self.print_header("Claude Code Configuration Initializer")
+        
+        # Check if already initialized
+        if claude_dir.exists():
+            self.print_warning(f"Claude configuration already exists at {claude_dir}")
+            response = input("Overwrite existing configuration? (y/n): ")
+            if response.lower() != 'y':
+                return False
+        
+        # Create directory structure
+        self.print_info("Creating .claude directory structure...")
+        directories = [
+            'hooks/python', 'hooks/bash', 'hooks/javascript',
+            'agents', 'commands', 'prompts', 'statuslines',
+            'documentation', 'templates'
+        ]
+        
+        for dir_path in directories:
+            (claude_dir / dir_path).mkdir(parents=True, exist_ok=True)
+        
+        # Create basic settings.json
+        settings = {
+            "hooks": {},
+            "statusLine": {
+                "type": "command",
+                "command": "~/.claude/statuslines/grey-haven-default.sh",
+                "padding": 0
+            }
+        }
+        
+        with open(claude_dir / 'settings.json', 'w') as f:
+            json.dump(settings, f, indent=2)
+        
+        # Create CLAUDE.md
+        claude_md = claude_dir / 'CLAUDE.md'
+        with open(claude_md, 'w') as f:
+            f.write(f"""# CLAUDE.md
+
+Project configuration for Claude Code initialized on {datetime.now().strftime('%Y-%m-%d')}
+
+## Project Overview
+[Describe your project here]
+
+## Development Guidelines
+[Add your guidelines here]
+
+## Important Context
+[Add important context for Claude here]
+""")
+        
+        self.print_success(f"Initialized Claude configuration at {claude_dir}")
+        return True
+
+    def setup_statusline(self, statusline_name: str, location: str = 'local') -> bool:
+        """Set up a specific statusline configuration"""
+        self.print_header("Statusline Setup")
+        
+        # Load statusline catalog
+        catalog_file = self.setup_dir / 'statuslines' / 'statusline-catalog.json'
+        if not catalog_file.exists():
+            self.print_error("Statusline catalog not found")
+            return False
+        
+        with open(catalog_file) as f:
+            catalog = json.load(f)
+        
+        statuslines = catalog.get('statuslines', {})
+        
+        if statusline_name not in statuslines:
+            self.print_error(f"Statusline '{statusline_name}' not found")
+            self.print_info("Available statuslines:")
+            for name in statuslines.keys():
+                print(f"  - {name}")
+            return False
+        
+        statusline = statuslines[statusline_name]
+        
+        # Determine target configuration file
+        if location == 'user':
+            target = self.user_settings
+        elif location == 'project':
+            target = self.project_settings
+        else:
+            target = self.local_settings
+        
+        # Load existing config or create new
+        config = {}
+        if target.exists():
+            with open(target) as f:
+                config = json.load(f)
+        
+        # Update statusLine configuration
+        config['statusLine'] = {
+            'type': 'command',
+            'command': statusline['command'],
+            'padding': 0
+        }
+        
+        # Save configuration
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with open(target, 'w') as f:
+            json.dump(config, f, indent=2)
+        
+        self.print_success(f"Applied statusline '{statusline_name}' to {target}")
+        self.print_info(f"Description: {statusline['description']}")
+        if 'tags' in statusline:
+            self.print_info(f"Tags: {', '.join(statusline['tags'])}")
+        
+        return True
+    
+    def add_hook(self, event: str, command: str, location: str = 'local', 
+                 matcher: Optional[str] = None, timeout: Optional[int] = None) -> bool:
+        """Add a single hook to configuration"""
+        # Determine target configuration file
+        if location == 'user':
+            target = self.user_settings
+        elif location == 'project':
+            target = self.project_settings
+        else:
+            target = self.local_settings
+        
+        # Load existing config or create new
+        config = {}
+        if target.exists():
+            with open(target) as f:
+                config = json.load(f)
+        
+        # Initialize hooks structure if needed
+        if 'hooks' not in config:
+            config['hooks'] = {}
+        if event not in config['hooks']:
+            config['hooks'][event] = []
+        
+        # Build hook configuration
+        hook_config = {
+            'hooks': [{
+                'type': 'command',
+                'command': command
+            }]
+        }
+        
+        if timeout:
+            hook_config['hooks'][0]['timeout'] = timeout
+        
+        # Add matcher for Pre/PostToolUse events
+        if matcher and event in ['PreToolUse', 'PostToolUse']:
+            hook_config['matcher'] = matcher
+        
+        # Check for duplicates
+        for existing in config['hooks'][event]:
+            existing_command = existing.get('hooks', [{}])[0].get('command')
+            if existing_command == command:
+                self.print_warning(f"Hook already exists for {event}")
+                return False
+        
+        # Add the hook
+        config['hooks'][event].append(hook_config)
+        
+        # Save configuration
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with open(target, 'w') as f:
+            json.dump(config, f, indent=2)
+        
+        self.print_success(f"Added hook to {event} in {target}")
+        if matcher:
+            self.print_info(f"Matcher: {matcher}")
+        if timeout:
+            self.print_info(f"Timeout: {timeout}s")
+        
+        return True
+    
+    def remove_hook(self, event: str, command: str, location: str = 'local') -> bool:
+        """Remove a hook from configuration"""
+        # Determine target configuration file
+        if location == 'user':
+            target = self.user_settings
+        elif location == 'project':
+            target = self.project_settings
+        else:
+            target = self.local_settings
+        
+        if not target.exists():
+            self.print_error(f"Configuration file not found: {target}")
+            return False
+        
+        with open(target) as f:
+            config = json.load(f)
+        
+        if event not in config.get('hooks', {}):
+            self.print_warning(f"No hooks found for {event}")
+            return False
+        
+        original_count = len(config['hooks'][event])
+        config['hooks'][event] = [
+            hook for hook in config['hooks'][event]
+            if hook.get('hooks', [{}])[0].get('command') != command
+        ]
+        
+        if len(config['hooks'][event]) < original_count:
+            # Remove empty event entries
+            if not config['hooks'][event]:
+                del config['hooks'][event]
+            
+            with open(target, 'w') as f:
+                json.dump(config, f, indent=2)
+            
+            self.print_success(f"Removed hook from {event}")
+            return True
+        else:
+            self.print_warning(f"Hook not found in {event}")
+            return False
+    
+    def list_hooks(self, location: str = 'all'):
+        """List all configured hooks"""
+        self.print_header("Configured Hooks")
+        
+        files_to_check = []
+        if location == 'all':
+            files_to_check = [
+                ('user', self.user_settings),
+                ('project', self.project_settings),
+                ('local', self.local_settings)
+            ]
+        elif location == 'user':
+            files_to_check = [('user', self.user_settings)]
+        elif location == 'project':
+            files_to_check = [('project', self.project_settings)]
+        else:
+            files_to_check = [('local', self.local_settings)]
+        
+        for loc_name, settings_file in files_to_check:
+            if not settings_file.exists():
+                continue
+            
+            with open(settings_file) as f:
+                config = json.load(f)
+            
+            hooks = config.get('hooks', {})
+            if not hooks:
+                continue
+            
+            print(f"\n{Colors.BOLD}{loc_name.upper()} ({settings_file}):{Colors.END}")
+            print("=" * 60)
+            
+            for event, hook_list in hooks.items():
+                print(f"\n{Colors.BLUE}{event}:{Colors.END}")
+                for hook_config in hook_list:
+                    matcher = hook_config.get('matcher', '')
+                    if matcher:
+                        print(f"  Matcher: {matcher}")
+                    
+                    for hook in hook_config.get('hooks', []):
+                        command = hook.get('command', '')
+                        timeout = hook.get('timeout', '')
+                        
+                        # Truncate long commands for display
+                        display_command = command
+                        if len(command) > 60:
+                            display_command = command[:57] + "..."
+                        
+                        print(f"    • {display_command}")
+                        if timeout:
+                            print(f"      Timeout: {timeout}s")
+    
+    def list_statuslines(self):
+        """List all available statuslines"""
+        self.print_header("Available Statuslines")
+        
+        # Load statusline catalog
+        catalog_file = self.setup_dir / 'statuslines' / 'statusline-catalog.json'
+        if not catalog_file.exists():
+            self.print_error("Statusline catalog not found")
+            return
+        
+        with open(catalog_file) as f:
+            catalog = json.load(f)
+        
+        statuslines = catalog.get('statuslines', {})
+        categories = catalog.get('categories', {})
+        
+        # Show by category
+        for category, names in categories.items():
+            print(f"\n{Colors.BOLD}{category.replace('-', ' ').title()}{Colors.END}")
+            for name in names:
+                if name in statuslines:
+                    sl = statuslines[name]
+                    print(f"  • {Colors.BLUE}{name}{Colors.END}: {sl['description']}")
+        
+        print(f"\n{Colors.BOLD}Usage:{Colors.END}")
+        print("  claude-config statusline <name>")
+        print("  claude-config statusline <name> --location [local|project|user]")
+    
+    def list_commands(self):
+        """List all available slash commands"""
+        self.print_header("Available Slash Commands")
+        
+        # Load commands catalog
+        catalog_file = self.setup_dir / 'commands' / 'commands-catalog.json'
+        if not catalog_file.exists():
+            self.print_error("Commands catalog not found")
+            return
+        
+        with open(catalog_file) as f:
+            catalog = json.load(f)
+        
+        commands = catalog.get('commands', {})
+        categories = catalog.get('categories', {})
+        
+        # Group commands by category
+        by_category = {}
+        for cmd_name, cmd_info in commands.items():
+            category = cmd_info.get('category', 'uncategorized')
+            if category not in by_category:
+                by_category[category] = []
+            by_category[category].append((cmd_name, cmd_info))
+        
+        # Display by category
+        for category_name, category_info in categories.items():
+            if category_name in by_category:
+                icon = category_info.get('icon', '')
+                print(f"\n{Colors.BOLD}{icon} {category_info['description']}{Colors.END}")
+                for cmd_name, cmd_info in sorted(by_category[category_name]):
+                    print(f"  • {Colors.BLUE}{cmd_name}{Colors.END}")
+                    print(f"    {cmd_info['description']}")
+        
+        print(f"\n{Colors.BOLD}Total Commands:{Colors.END} {len(commands)}")
+        print(f"\n{Colors.BOLD}Usage:{Colors.END}")
+        print("  Commands are referenced in preset configurations")
+        print("  Use 'claude-config preset <name>' to apply presets with commands")
+    
+    def list_agents(self):
+        """List all available agents"""
+        self.print_header("Available Agents")
+        
+        # Load agents catalog
+        catalog_file = self.setup_dir / 'agents' / 'agents-catalog.json'
+        if not catalog_file.exists():
+            self.print_error("Agents catalog not found")
+            return
+        
+        with open(catalog_file) as f:
+            catalog = json.load(f)
+        
+        agents = catalog.get('agents', {})
+        categories = catalog.get('categories', {})
+        
+        # Group agents by category
+        by_category = {}
+        for agent_name, agent_info in agents.items():
+            category = agent_info.get('category', 'uncategorized')
+            if category not in by_category:
+                by_category[category] = []
+            by_category[category].append((agent_name, agent_info))
+        
+        # Display by category
+        for category_name, category_info in categories.items():
+            if category_name in by_category:
+                icon = category_info.get('icon', '')
+                print(f"\n{Colors.BOLD}{icon} {category_info['description']}{Colors.END}")
+                for agent_name, agent_info in sorted(by_category[category_name]):
+                    print(f"  • {Colors.GREEN}{agent_name}{Colors.END}")
+                    print(f"    {agent_info['description']}")
+                    if agent_info.get('capabilities'):
+                        capabilities = ', '.join(agent_info['capabilities'][:3])
+                        print(f"    Capabilities: {capabilities}")
+        
+        print(f"\n{Colors.BOLD}Total Agents:{Colors.END} {len(agents)}")
+        print(f"\n{Colors.BOLD}Usage:{Colors.END}")
+        print("  Agents are referenced in preset configurations")
+        print("  Use 'claude-config preset <name>' to apply presets with agents")
+    
+    def apply_preset(self, preset_name: str, location: str = 'local') -> bool:
+        """Apply a preset configuration"""
+        # First try to load from preset files
+        preset_file = self.setup_dir / 'presets' / f'{preset_name}.json'
+        if preset_file.exists():
+            with open(preset_file) as f:
+                preset_config = json.load(f)
+            
+            self.print_header(f"Applying Preset: {preset_config['name']}")
+            self.print_info(preset_config['description'])
+            
+            # Determine target settings file
+            if location == 'user':
+                settings_file = self.user_settings
+            elif location == 'project':
+                settings_file = self.project_settings
+            else:
+                settings_file = self.local_settings
+            
+            # Load or create settings
+            if settings_file.exists():
+                with open(settings_file) as f:
+                    settings = json.load(f)
+            else:
+                settings = {}
+                settings_file.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Merge preset configuration
+            if 'hooks' in preset_config:
+                settings['hooks'] = preset_config['hooks']
+            if 'statusLine' in preset_config:
+                settings['statusLine'] = preset_config['statusLine']
+            
+            # Save settings
+            with open(settings_file, 'w') as f:
+                json.dump(settings, f, indent=2)
+            
+            self.print_success(f"Applied {preset_name} preset to {settings_file}")
+            
+            # Copy necessary hook files if applying to project
+            if location in ['project', 'local']:
+                self.install_hooks()
+            
+            return True
+        
+        # Fallback to built-in presets
+        elif preset_name in self.presets:
+            preset = self.presets[preset_name]
+            self.print_header(f"Applying Preset: {preset['name']}")
+            self.print_info(preset['description'])
+            
+            # Determine target settings file
+            if location == 'user':
+                settings_file = self.user_settings
+            elif location == 'project':
+                settings_file = self.project_settings
+            else:
+                settings_file = self.local_settings
+            
+            # Load or create settings
+            if settings_file.exists():
+                with open(settings_file) as f:
+                    settings = json.load(f)
+            else:
+                settings = {}
+                settings_file.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Apply preset components
+            for component in preset['includes']:
+                self._apply_component(component, settings)
+            
+            # Save settings
+            with open(settings_file, 'w') as f:
+                json.dump(settings, f, indent=2)
+            
+            self.print_success(f"Applied {preset_name} preset to {settings_file}")
+            return True
+        
+        else:
+            self.print_error(f"Unknown preset: {preset_name}")
+            self.print_info(f"Available presets: {', '.join(self.presets.keys())}")
+            return False
+
+    def _apply_component(self, component: str, settings: dict):
+        """Apply a specific component to settings"""
+        # Hook components
+        if component == 'basic-hooks':
+            settings.setdefault('hooks', {})
+            settings['hooks']['SessionStart'] = [{
+                "hooks": [{
+                    "type": "command",
+                    "command": "echo 'Session started: $(date)'"
+                }]
+            }]
+        elif component == 'quality-hooks':
+            settings.setdefault('hooks', {})
+            settings['hooks']['PostToolUse'] = [{
+                "matcher": "Edit|Write",
+                "hooks": [{
+                    "type": "command",
+                    "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/format-and-lint.sh"
+                }]
+            }]
+        elif component == 'security-hooks':
+            settings.setdefault('hooks', {})
+            settings['hooks']['PreToolUse'] = [{
+                "matcher": ".*",
+                "hooks": [{
+                    "type": "command",
+                    "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/security-validator.py"
+                }]
+            }]
+        elif component == 'tdd-hooks':
+            settings.setdefault('hooks', {})
+            settings['hooks']['PreToolUse'] = [{
+                "matcher": "Edit|Write",
+                "hooks": [{
+                    "type": "command",
+                    "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/ensure-tests.py"
+                }]
+            }]
+        
+        # Statusline components
+        elif component == 'minimal-statusline':
+            settings['statusLine'] = {
+                "type": "command",
+                "command": "~/.claude/statuslines/minimalist.sh",
+                "padding": 0
+            }
+        elif component == 'all-statuslines':
+            # Copy all statuslines
+            self._copy_statuslines()
+            settings['statusLine'] = {
+                "type": "command",
+                "command": "~/.claude/statuslines/grey-haven-default.sh",
+                "padding": 0
+            }
+
+    def _copy_statuslines(self):
+        """Copy statusline scripts to user directory"""
+        user_statuslines = Path.home() / '.claude' / 'statuslines'
+        user_statuslines.mkdir(parents=True, exist_ok=True)
+        
+        source_dir = self.claude_dir / 'statuslines'
+        if source_dir.exists():
+            for script in source_dir.glob('*.sh'):
+                dest = user_statuslines / script.name
+                shutil.copy2(script, dest)
+                dest.chmod(0o755)  # Make executable
+                self.print_info(f"Copied {script.name}")
+
+    def list_presets(self):
+        """List all available presets"""
+        self.print_header("Available Presets")
+        
+        for key, preset in self.presets.items():
+            print(f"\n{Colors.BOLD}{key}{Colors.END}: {preset['name']}")
+            print(f"  {preset['description']}")
+            print(f"  Includes: {', '.join(preset['includes'])}")
+
+    def import_config(self, config_path: str, location: str = 'local') -> bool:
+        """Import a configuration file"""
+        source = Path(config_path)
+        if not source.exists():
+            self.print_error(f"Configuration file not found: {source}")
+            return False
+        
+        # Determine target
+        if location == 'user':
+            target = self.user_settings
+        elif location == 'project':
+            target = self.project_settings
+        else:
+            target = self.local_settings
+        
+        target.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Validate JSON
+        try:
+            with open(source) as f:
+                json.load(f)  # Just validate, don't need to store
+        except json.JSONDecodeError as e:
+            self.print_error(f"Invalid JSON in {source}: {e}")
+            return False
+        
+        # Backup existing if present
+        if target.exists():
+            backup = target.with_suffix('.json.backup')
+            shutil.copy2(target, backup)
+            self.print_info(f"Backed up existing config to {backup}")
+        
+        # Copy configuration
+        shutil.copy2(source, target)
+        self.print_success(f"Imported configuration to {target}")
+        return True
+
+    def validate(self, location: str = 'all') -> bool:
+        """Validate configuration files"""
+        self.print_header("Configuration Validator")
+        
+        files_to_check = []
+        if location == 'all':
+            files_to_check = [self.user_settings, self.project_settings, self.local_settings]
+        elif location == 'user':
+            files_to_check = [self.user_settings]
+        elif location == 'project':
+            files_to_check = [self.project_settings]
+        else:
+            files_to_check = [self.local_settings]
+        
+        all_valid = True
+        for settings_file in files_to_check:
+            if not settings_file.exists():
+                self.print_info(f"Not found: {settings_file}")
+                continue
+            
+            try:
+                with open(settings_file) as f:
+                    config = json.load(f)
+                
+                # Validate structure
+                issues = self._validate_config_structure(config)
+                if issues:
+                    self.print_warning(f"Issues in {settings_file}:")
+                    for issue in issues:
+                        print(f"  - {issue}")
+                    all_valid = False
+                else:
+                    self.print_success(f"Valid: {settings_file}")
+            
+            except json.JSONDecodeError as e:
+                self.print_error(f"Invalid JSON in {settings_file}: {e}")
+                all_valid = False
+        
+        return all_valid
+
+    def _validate_config_structure(self, config: dict) -> List[str]:
+        """Validate configuration structure"""
+        issues = []
+        
+        # Check hooks
+        if 'hooks' in config:
+            valid_events = ['PreToolUse', 'PostToolUse', 'UserPromptSubmit', 
+                          'SessionStart', 'Notification', 'Stop', 'SubagentStop', 'PreCompact']
+            for event in config['hooks']:
+                if event not in valid_events:
+                    issues.append(f"Invalid hook event: {event}")
+        
+        # Check statusLine
+        if 'statusLine' in config:
+            if 'type' not in config['statusLine']:
+                issues.append("statusLine missing 'type' field")
+            if config['statusLine'].get('type') == 'command' and 'command' not in config['statusLine']:
+                issues.append("statusLine missing 'command' field")
+        
+        return issues
+
+    def install_hooks(self, target_dir: Optional[Path] = None) -> bool:
+        """Install hook scripts to project"""
+        target = Path(target_dir) if target_dir else Path.cwd()
+        hooks_dir = target / '.claude' / 'hooks'
+        
+        self.print_header("Installing Hooks")
+        
+        # Copy hook implementations
+        source_hooks = self.claude_dir / 'hooks'
+        if not source_hooks.exists():
+            self.print_error("No hooks found in repository")
+            return False
+        
+        hooks_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Copy all hook scripts
+        for hook_file in source_hooks.rglob('*'):
+            if hook_file.is_file():
+                relative = hook_file.relative_to(source_hooks)
+                dest = hooks_dir / relative
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(hook_file, dest)
+                if dest.suffix in ['.py', '.sh', '.js']:
+                    dest.chmod(0o755)
+                self.print_info(f"Installed {relative}")
+        
+        self.print_success(f"Installed hooks to {hooks_dir}")
+        return True
+
+
+    def doctor(self):
+        """Check system for required dependencies"""
+        self.print_header("System Check")
+        
+        checks = {
+            'git': 'git --version',
+            'ripgrep': 'rg --version',
+            'jq': 'jq --version',
+            'python3': 'python3 --version',
+            'node': 'node --version',
+            'bun': 'bun --version',
+            'uv': 'uv --version'
+        }
+        
+        required = ['git', 'ripgrep']
+        recommended = ['jq', 'python3']
+        optional_tools = ['node', 'bun', 'uv']
+        
+        for tool, command in checks.items():
+            try:
+                result = subprocess.run(command.split(), capture_output=True, text=True)
+                if result.returncode == 0:
+                    version = result.stdout.strip().split('\n')[0]
+                    if tool in required:
+                        self.print_success(f"{tool}: {version}")
+                    elif tool in recommended:
+                        self.print_info(f"{tool}: {version} (recommended)")
+                    elif tool in optional_tools:
+                        print(f"  {tool}: {version} (optional)")
+                    else:
+                        print(f"  {tool}: {version}")
+                else:
+                    raise Exception()
+            except Exception:
+                if tool in required:
+                    self.print_error(f"{tool}: NOT FOUND (required)")
+                elif tool in recommended:
+                    self.print_warning(f"{tool}: NOT FOUND (recommended)")
+                else:
+                    print(f"  {tool}: not found (optional)")
+        
+        # Check Claude Code
+        claude_path = Path.home() / '.claude'
+        if claude_path.exists():
+            self.print_success(f"Claude Code directory found: {claude_path}")
+        else:
+            self.print_warning("Claude Code directory not found")
+
+
+def main():
+    """Main CLI entry point"""
+    parser = argparse.ArgumentParser(
+        description='Claude Config - Comprehensive configuration manager for Claude Code',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  claude-config init                    # Initialize in current directory
+  claude-config preset full             # Apply full preset
+  claude-config preset minimal --user   # Apply minimal preset to user config
+  claude-config list-presets            # Show available presets
+  claude-config list-commands           # Show available slash commands
+  claude-config list-agents             # Show available agents
+  claude-config list-statuslines        # Show available statuslines
+  claude-config validate                # Validate all configs
+  claude-config doctor                  # Check system dependencies
+  claude-config statusline tamagotchi   # Set up tamagotchi statusline
+  claude-config import ./my-config.json # Import configuration file
+        """
+    )
+    
+    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    
+    # Init command
+    init_parser = subparsers.add_parser('init', help='Initialize Claude configuration')
+    init_parser.add_argument('path', nargs='?', help='Target directory (default: current)')
+    
+    # Preset command
+    preset_parser = subparsers.add_parser('preset', help='Apply a preset configuration')
+    preset_parser.add_argument('name', help='Preset name')
+    preset_parser.add_argument('--location', choices=['local', 'project', 'user'], 
+                              default='local', help='Where to apply preset')
+    
+    # List presets
+    subparsers.add_parser('list-presets', help='List available presets')
+    
+    # Import command
+    import_parser = subparsers.add_parser('import', help='Import configuration file')
+    import_parser.add_argument('path', help='Path to configuration file')
+    import_parser.add_argument('--location', choices=['local', 'project', 'user'],
+                              default='local', help='Where to import')
+    
+    # Validate command
+    validate_parser = subparsers.add_parser('validate', help='Validate configuration')
+    validate_parser.add_argument('--location', choices=['all', 'local', 'project', 'user'],
+                                default='all', help='Which configs to validate')
+    
+    # Install hooks
+    hooks_parser = subparsers.add_parser('install-hooks', help='Install hook scripts')
+    hooks_parser.add_argument('path', nargs='?', help='Target directory')
+    
+    # Statusline command
+    statusline_parser = subparsers.add_parser('statusline', help='Set up statusline')
+    statusline_parser.add_argument('name', help='Statusline name')
+    statusline_parser.add_argument('--location', choices=['local', 'project', 'user'],
+                                  default='local', help='Where to apply statusline')
+    
+    # List statuslines
+    subparsers.add_parser('list-statuslines', help='List available statuslines')
+    
+    # List commands
+    subparsers.add_parser('list-commands', help='List available slash commands')
+    
+    # List agents
+    subparsers.add_parser('list-agents', help='List available agents')
+    
+    # Hook management commands
+    hook_add_parser = subparsers.add_parser('hook-add', help='Add a single hook')
+    hook_add_parser.add_argument('event', help='Hook event (e.g., PreToolUse, PostToolUse, Stop)')
+    hook_add_parser.add_argument('command', help='Command to execute')
+    hook_add_parser.add_argument('--location', choices=['local', 'project', 'user'],
+                                 default='local', help='Where to add hook')
+    hook_add_parser.add_argument('--matcher', '-m', help='Tool matcher pattern (for Pre/PostToolUse)')
+    hook_add_parser.add_argument('--timeout', '-t', type=int, help='Command timeout in seconds')
+    
+    hook_remove_parser = subparsers.add_parser('hook-remove', help='Remove a hook')
+    hook_remove_parser.add_argument('event', help='Hook event')
+    hook_remove_parser.add_argument('command', help='Command to remove')
+    hook_remove_parser.add_argument('--location', choices=['local', 'project', 'user'],
+                                    default='local', help='Where to remove hook')
+    
+    hook_list_parser = subparsers.add_parser('hook-list', help='List configured hooks')
+    hook_list_parser.add_argument('--location', choices=['all', 'local', 'project', 'user'],
+                                  default='all', help='Which hooks to list')
+    
+    # Doctor command
+    subparsers.add_parser('doctor', help='Check system for dependencies')
+    
+    args = parser.parse_args()
+    
+    # Create manager
+    manager = ClaudeConfigManager()
+    
+    # Execute command
+    if args.command == 'init':
+        manager.init(args.path)
+    elif args.command == 'preset':
+        manager.apply_preset(args.name, args.location)
+    elif args.command == 'list-presets':
+        manager.list_presets()
+    elif args.command == 'import':
+        manager.import_config(args.path, args.location)
+    elif args.command == 'validate':
+        manager.validate(args.location)
+    elif args.command == 'install-hooks':
+        manager.install_hooks(args.path)
+    elif args.command == 'statusline':
+        manager.setup_statusline(args.name, args.location)
+    elif args.command == 'list-statuslines':
+        manager.list_statuslines()
+    elif args.command == 'list-commands':
+        manager.list_commands()
+    elif args.command == 'list-agents':
+        manager.list_agents()
+    elif args.command == 'hook-add':
+        manager.add_hook(args.event, args.command, args.location, args.matcher, args.timeout)
+    elif args.command == 'hook-remove':
+        manager.remove_hook(args.event, args.command, args.location)
+    elif args.command == 'hook-list':
+        manager.list_hooks(args.location)
+    elif args.command == 'doctor':
+        manager.doctor()
+    else:
+        parser.print_help()
+
+
+if __name__ == '__main__':
+    main()

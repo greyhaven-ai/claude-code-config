@@ -1,4 +1,6 @@
 {
+  "name": "Recommended Configuration",
+  "description": "Grey Haven's recommended setup with balanced features",
   "hooks": {
     "SessionStart": [
       {
@@ -7,6 +9,11 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/branch-context-loader.sh",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/context-injector.py",
+            "timeout": 15
           }
         ]
       }
@@ -50,33 +57,34 @@
           },
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/test-runner.sh",
-            "timeout": 60
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/work-completion-assistant.py",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/similar-code-finder.py",
             "timeout": 20
           }
         ]
-      }
-    ],
-    "SubagentStop": [
+      },
       {
+        "matcher": "Task",
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-work-validator.py",
-            "timeout": 15
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-result-processor.py",
+            "timeout": 10
           }
         ]
       }
     ]
+  },
+  "agents": [
+    "code-quality-analyzer",
+    "test-generator"
+  ],
+  "commands": [
+    "/quality-pipeline",
+    "/refactor-clarity"
+  ],
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statuslines/grey-haven-default.sh",
+    "padding": 0
   }
 }

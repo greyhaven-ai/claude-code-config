@@ -1,0 +1,45 @@
+{
+  "name": "Testing Focus",
+  "description": "Test generation, coverage analysis, and TDD using existing tools",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/coverage-gap-finder.py"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/test-data-generator.py"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/context-injector.py"
+          }
+        ]
+      }
+    ]
+  },
+  "agents": [
+    "test-generator",
+    "tdd-python",
+    "tdd-typescript"
+  ],
+  "commands": [
+    "/tdd-implement",
+    "/quality-pipeline"
+  ],
+  "statusLine": {
+    "type": "command",
+    "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); echo \"🧪 [$MODEL] Testing Mode\"'",
+    "padding": 0
+  }
+}

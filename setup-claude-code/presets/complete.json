@@ -1,4 +1,6 @@
 {
+  "name": "Complete Configuration",
+  "description": "Every available hook, agent, and command - maximum automation",
   "hooks": {
     "SessionStart": [
       {
@@ -10,7 +12,7 @@
           },
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/smart-context-injector.py",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/context-injector.py",
             "timeout": 15
           }
         ]
@@ -28,6 +30,11 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/hook-installer.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/auto-documentation-fetcher.py",
+            "timeout": 10
           }
         ]
       }
@@ -40,6 +47,16 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-context-preparer.py",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-router.py",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-orchestrator.py",
+            "timeout": 10
           }
         ]
       },
@@ -50,16 +67,11 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/security-validator.py",
             "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
+          },
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/command-validator.sh",
-            "timeout": 5
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/dependency-impact-analyzer.py",
+            "timeout": 15
           }
         ]
       },
@@ -107,6 +119,11 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/similar-code-finder.py",
             "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/code-narrator.py",
+            "timeout": 15
           }
         ]
       },
@@ -125,7 +142,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/database-query-analyzer.py",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/db-query-performance-analyzer.py",
             "timeout": 15
           }
         ]
@@ -133,6 +150,11 @@
       {
         "matcher": "Task",
         "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-result-processor.py",
+            "timeout": 10
+          },
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-work-validator.py",
@@ -156,6 +178,11 @@
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/performance-regression-detector.py",
+            "timeout": 20
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/api-contract-validator.py",
             "timeout": 20
           }
         ]
@@ -193,17 +220,6 @@
         ]
       }
     ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/session-documenter.py",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
     "Notification": [
       {
         "hooks": [
@@ -215,5 +231,41 @@
         ]
       }
     ]
+  },
+  "agents": [
+    "code-quality-analyzer",
+    "memory-profiler",
+    "performance-optimizer",
+    "security-analyzer",
+    "test-generator",
+    "tech-docs-maintainer",
+    "tech-docs-orchestrator",
+    "web-docs-researcher",
+    "tdd-python",
+    "tdd-typescript",
+    "react-tanstack-tester",
+    "bug-issue-creator",
+    "prompt-engineer",
+    "multi-agent-synthesis-orchestrator",
+    "git-diff-documentation-agent"
+  ],
+  "commands": [
+    "/quality-pipeline",
+    "/performance-optimize-chain",
+    "/security-audit",
+    "/tdd-implement",
+    "/feature-full-cycle",
+    "/debug-chain",
+    "/refactor-clarity",
+    "/linear/continue-work",
+    "/chrome-server/frontend-debug-chain",
+    "/cloudflare/deploy-debug-chain",
+    "/context7/library-learn-implement",
+    "/playwright/visual-test-chain"
+  ],
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statuslines/grey-haven-default.sh",
+    "padding": 0
   }
 }

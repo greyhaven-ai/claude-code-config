@@ -1,4 +1,6 @@
 {
+  "name": "Bun Optimized",
+  "description": "JavaScript/TypeScript development optimized for Bun runtime",
   "hooks": {
     "SessionStart": [
       {
@@ -16,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/prompt-enhancer.js",
+            "command": "bun $CLAUDE_PROJECT_DIR/.claude/hooks/js/prompt-enhancer.js",
             "timeout": 10
           }
         ]
@@ -28,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/subagent-context-preparer.js",
+            "command": "bun $CLAUDE_PROJECT_DIR/.claude/hooks/js/subagent-context-preparer.js",
             "timeout": 10
           }
         ]
@@ -50,53 +52,39 @@
           },
           {
             "type": "command",
-            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/import-organizer.js",
-            "timeout": 15
+            "command": "bun $CLAUDE_PROJECT_DIR/.claude/hooks/js/incremental-type-checker.js",
+            "timeout": 30
           },
           {
             "type": "command",
-            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/incremental-type-checker.js",
+            "command": "bun $CLAUDE_PROJECT_DIR/.claude/hooks/js/test-runner.js",
             "timeout": 30
           }
         ]
       },
       {
-        "matcher": "Edit|Write",
+        "matcher": "Task",
         "hooks": [
           {
             "type": "command",
-            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/test-runner.js",
-            "timeout": 60
-          },
-          {
-            "type": "command",
-            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/coverage-gap-finder.js",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/work-completion-assistant.js",
-            "timeout": 20
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/javascript/subagent-work-validator.js",
-            "timeout": 15
+            "command": "bun $CLAUDE_PROJECT_DIR/.claude/hooks/js/subagent-work-validator.js",
+            "timeout": 10
           }
         ]
       }
     ]
+  },
+  "agents": [
+    "tdd-typescript",
+    "react-tanstack-tester"
+  ],
+  "commands": [
+    "/tdd-implement",
+    "/quality-pipeline"
+  ],
+  "statusLine": {
+    "type": "command",
+    "command": "bash -c 'input=$(cat); MODEL=$(echo \"$input\" | jq -r \".model.display_name\"); echo \"🍞 [$MODEL] Bun Development\"'",
+    "padding": 0
   }
 }

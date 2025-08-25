@@ -1,0 +1,164 @@
+{
+  "commands": {
+    "/chrome-server/e2e-test-development": {
+      "description": "End-to-end test development with Chrome server integration",
+      "category": "testing",
+      "tags": ["testing", "e2e", "chrome", "integration"]
+    },
+    "/chrome-server/frontend-debug-chain": {
+      "description": "Frontend debugging chain with Chrome DevTools integration",
+      "category": "debugging",
+      "tags": ["debugging", "frontend", "chrome", "devtools"]
+    },
+    "/cloudflare/deploy-debug-chain": {
+      "description": "Debug and resolve Cloudflare deployment issues",
+      "category": "deployment",
+      "tags": ["cloudflare", "deployment", "debugging", "production"]
+    },
+    "/context7/library-learn-implement": {
+      "description": "Learn and implement features using Context7 library documentation",
+      "category": "learning",
+      "tags": ["documentation", "learning", "implementation", "libraries"]
+    },
+    "/debug-chain": {
+      "description": "Generic debugging chain for systematic issue resolution",
+      "category": "debugging",
+      "tags": ["debugging", "troubleshooting", "systematic"]
+    },
+    "/feature-full-cycle": {
+      "description": "Complete feature development cycle from design to deployment",
+      "category": "development",
+      "tags": ["feature", "development", "full-cycle", "implementation"]
+    },
+    "/firecrawl/api-research": {
+      "description": "Research APIs and documentation using Firecrawl web scraping",
+      "category": "research",
+      "tags": ["api", "research", "documentation", "web-scraping"]
+    },
+    "/linear/continue-debugging": {
+      "description": "Continue debugging work from Linear issue context",
+      "category": "linear",
+      "tags": ["linear", "debugging", "issue-tracking", "continuation"]
+    },
+    "/linear/continue-testing": {
+      "description": "Continue testing work from Linear issue context",
+      "category": "linear",
+      "tags": ["linear", "testing", "issue-tracking", "continuation"]
+    },
+    "/linear/continue-work": {
+      "description": "Resume work from Linear issue context",
+      "category": "linear",
+      "tags": ["linear", "workflow", "issue-tracking", "continuation"]
+    },
+    "/linear/debug-systematic": {
+      "description": "Systematic debugging approach for Linear-tracked issues",
+      "category": "linear",
+      "tags": ["linear", "debugging", "systematic", "issue-tracking"]
+    },
+    "/linear/implement-feature": {
+      "description": "Implement feature from Linear issue specification",
+      "category": "linear",
+      "tags": ["linear", "feature", "implementation", "issue-tracking"]
+    },
+    "/linear/plan-implementation": {
+      "description": "Plan implementation strategy for Linear issues",
+      "category": "linear",
+      "tags": ["linear", "planning", "implementation", "strategy"]
+    },
+    "/linear/retroactive-git": {
+      "description": "Retroactively create Git commits for Linear issues",
+      "category": "linear",
+      "tags": ["linear", "git", "commits", "retroactive"]
+    },
+    "/performance-optimize-chain": {
+      "description": "Performance optimization workflow with profiling and analysis",
+      "category": "performance",
+      "tags": ["performance", "optimization", "profiling", "analysis"]
+    },
+    "/playwright/visual-test-chain": {
+      "description": "Visual regression testing with Playwright",
+      "category": "testing",
+      "tags": ["playwright", "visual-testing", "regression", "e2e"]
+    },
+    "/quality-pipeline": {
+      "description": "Run comprehensive quality checks pipeline",
+      "category": "quality",
+      "tags": ["quality", "linting", "testing", "validation"]
+    },
+    "/refactor-clarity": {
+      "description": "Refactor code for improved clarity and maintainability",
+      "category": "refactoring",
+      "tags": ["refactoring", "code-quality", "clarity", "maintainability"]
+    },
+    "/security-audit": {
+      "description": "Comprehensive security audit and vulnerability assessment",
+      "category": "security",
+      "tags": ["security", "audit", "vulnerability", "assessment"]
+    },
+    "/security/security-audit": {
+      "description": "Detailed security audit with recommendations",
+      "category": "security",
+      "tags": ["security", "audit", "compliance", "recommendations"]
+    },
+    "/security/security-scan": {
+      "description": "Quick security scan for common vulnerabilities",
+      "category": "security",
+      "tags": ["security", "scan", "vulnerability", "quick-check"]
+    },
+    "/tdd-implement": {
+      "description": "Test-driven development implementation workflow",
+      "category": "tdd",
+      "tags": ["tdd", "testing", "implementation", "red-green-refactor"]
+    }
+  },
+  "categories": {
+    "testing": {
+      "description": "Testing and quality assurance commands",
+      "icon": "🧪"
+    },
+    "debugging": {
+      "description": "Debugging and troubleshooting commands",
+      "icon": "🐛"
+    },
+    "deployment": {
+      "description": "Deployment and production commands",
+      "icon": "🚀"
+    },
+    "learning": {
+      "description": "Learning and documentation commands",
+      "icon": "📚"
+    },
+    "development": {
+      "description": "Feature development commands",
+      "icon": "💻"
+    },
+    "research": {
+      "description": "Research and exploration commands",
+      "icon": "🔍"
+    },
+    "linear": {
+      "description": "Linear issue tracking integration",
+      "icon": "📋"
+    },
+    "performance": {
+      "description": "Performance optimization commands",
+      "icon": "⚡"
+    },
+    "quality": {
+      "description": "Code quality and validation",
+      "icon": "✅"
+    },
+    "refactoring": {
+      "description": "Code refactoring and improvement",
+      "icon": "🔧"
+    },
+    "security": {
+      "description": "Security analysis and auditing",
+      "icon": "🔒"
+    },
+    "tdd": {
+      "description": "Test-driven development",
+      "icon": "🔴"
+    }
+  }
+}

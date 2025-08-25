@@ -1,0 +1,60 @@
+{
+  "name": "Subagent Orchestration",
+  "description": "Advanced multi-agent workflow coordination using existing orchestration hooks",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-context-preparer.py"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-router.py"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-orchestrator.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-result-processor.py"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/subagent-work-validator.py"
+          }
+        ]
+      }
+    ]
+  },
+  "agents": [
+    "multi-agent-synthesis-orchestrator",
+    "prompt-engineer"
+  ],
+  "commands": [
+    "/feature-full-cycle",
+    "/debug-chain",
+    "/performance-optimize-chain"
+  ],
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statuslines/grey-haven-default.sh",
+    "padding": 0
+  }
+}

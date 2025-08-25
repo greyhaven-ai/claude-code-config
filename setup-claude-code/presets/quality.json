@@ -1,0 +1,74 @@
+{
+  "name": "Quality Focused Configuration",
+  "description": "Testing, linting, formatting, and code quality automation using existing hooks",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/dependency-impact-analyzer.py",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/code-linter.sh"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/auto-formatter.sh"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/test-runner.sh"
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/coverage-gap-finder.py"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/python/prompt-enhancer.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/bash/test-runner.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "agents": [
+    "code-quality-analyzer",
+    "test-generator"
+  ],
+  "commands": [
+    "/quality-pipeline",
+    "/refactor-clarity"
+  ],
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statuslines/productivity-dashboard.sh",
+    "padding": 0
+  }
+}
