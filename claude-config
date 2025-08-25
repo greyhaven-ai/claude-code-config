@@ -163,6 +163,163 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
         self.print_success(f"Initialized Claude configuration at {claude_dir}")
         return True
 
+    def interactive_setup(self) -> bool:
+        """Interactive setup wizard for Claude Code configuration"""
+        self.print_header("Claude Config - Interactive Setup Wizard")
+        print("\nThis wizard will help you configure Claude Code for your project.\n")
+        
+        # Check if already initialized
+        claude_dir = Path.cwd() / '.claude'
+        if not claude_dir.exists():
+            print("First, let's initialize Claude Code in this directory...")
+            self.init()
+            print()
+        
+        # Step 1: Choose project type
+        print(f"{Colors.BOLD}Step 1: What type of project is this?{Colors.END}")
+        project_types = {
+            '1': ('python', 'Python Project'),
+            '2': ('javascript', 'JavaScript/TypeScript Project'),
+            '3': ('react', 'React/Next.js Application'),
+            '4': ('api', 'API/Backend Service'),
+            '5': ('data-science', 'Data Science/ML Project'),
+            '6': ('general', 'General/Other Project')
+        }
+        
+        for key, (_, desc) in project_types.items():
+            print(f"  {key}. {desc}")
+        
+        choice = input("\nSelect project type (1-6): ").strip()
+        project_type = project_types.get(choice, ('general', 'General Project'))[0]
+        
+        # Step 2: Choose configuration level
+        print(f"\n{Colors.BOLD}Step 2: How comprehensive should the configuration be?{Colors.END}")
+        config_levels = {
+            '1': ('minimal', 'Minimal - Essential hooks only'),
+            '2': ('recommended', 'Recommended - Balanced setup (default)'),
+            '3': ('complete', 'Complete - All features enabled')
+        }
+        
+        for key, (_, desc) in config_levels.items():
+            print(f"  {key}. {desc}")
+        
+        choice = input("\nSelect configuration level (1-3) [2]: ").strip() or '2'
+        config_level = config_levels.get(choice, ('recommended', 'Recommended'))[0]
+        
+        # Step 3: Choose workflow features
+        print(f"\n{Colors.BOLD}Step 3: Which workflow features would you like?{Colors.END}")
+        print("(You can select multiple, separated by commas)")
+        features = {
+            '1': ('quality', 'Code Quality Checks'),
+            '2': ('security', 'Security Validation'),
+            '3': ('tdd', 'Test-Driven Development'),
+            '4': ('documentation', 'Auto-Documentation'),
+            '5': ('linear', 'Linear Integration'),
+            '6': ('performance', 'Performance Monitoring')
+        }
+        
+        for key, (_, desc) in features.items():
+            print(f"  {key}. {desc}")
+        
+        feature_choices = input("\nSelect features (e.g., 1,2,4) or press Enter for none: ").strip()
+        selected_features = []
+        if feature_choices:
+            for choice in feature_choices.split(','):
+                choice = choice.strip()
+                if choice in features:
+                    selected_features.append(features[choice][0])
+        
+        # Step 4: Statusline preference
+        print(f"\n{Colors.BOLD}Step 4: Choose a statusline style{Colors.END}")
+        statuslines = {
+            '1': 'minimal',
+            '2': 'grey-haven-default',
+            '3': 'colorful',
+            '4': 'emoji-status',
+            '5': 'development',
+            '6': 'none'
+        }
+        
+        for key, name in statuslines.items():
+            if name != 'none':
+                print(f"  {key}. {name}")
+            else:
+                print(f"  {key}. No statusline")
+        
+        choice = input("\nSelect statusline (1-6) [1]: ").strip() or '1'
+        statusline = statuslines.get(choice, 'minimal')
+        
+        # Step 5: Configuration location
+        print(f"\n{Colors.BOLD}Step 5: Where should these settings be saved?{Colors.END}")
+        locations = {
+            '1': ('local', 'Local only (.claude/settings.local.json - not committed)'),
+            '2': ('project', 'Project (.claude/settings.json - committed to git)'),
+            '3': ('user', 'User-wide (~/.claude/settings.json - all projects)')
+        }
+        
+        for key, (_, desc) in locations.items():
+            print(f"  {key}. {desc}")
+        
+        choice = input("\nSelect location (1-3) [1]: ").strip() or '1'
+        location = locations.get(choice, ('local', 'Local'))[0]
+        
+        # Apply configuration
+        print(f"\n{Colors.BOLD}Applying configuration...{Colors.END}\n")
+        
+        # Determine preset based on selections
+        preset_map = {
+            ('python', 'minimal'): 'minimal',
+            ('python', 'recommended'): 'python-focused',
+            ('python', 'complete'): 'full',
+            ('javascript', 'minimal'): 'minimal',
+            ('javascript', 'recommended'): 'javascript-focused',
+            ('javascript', 'complete'): 'complete',
+            ('react', 'minimal'): 'minimal',
+            ('react', 'recommended'): 'react',
+            ('react', 'complete'): 'complete',
+            ('api', 'recommended'): 'api-backend',
+            ('data-science', 'recommended'): 'python-data-science',
+            ('general', 'minimal'): 'minimal',
+            ('general', 'recommended'): 'recommended',
+            ('general', 'complete'): 'complete'
+        }
+        
+        preset = preset_map.get((project_type, config_level), 'recommended')
+        
+        # Apply base preset
+        self.print_info(f"Applying {preset} preset...")
+        self.apply_preset(preset, location)
+        
+        # Apply additional features
+        for feature in selected_features:
+            self.print_info(f"Adding {feature} configuration...")
+            if feature in ['quality', 'security', 'tdd', 'documentation', 'linear', 'performance']:
+                # These are valid presets, apply them
+                self.apply_preset(feature, location)
+        
+        # Set up statusline
+        if statusline != 'none':
+            self.print_info(f"Setting up {statusline} statusline...")
+            self.setup_statusline(statusline, location)
+        
+        # Summary
+        print(f"\n{Colors.GREEN}✓ Configuration complete!{Colors.END}\n")
+        print("Summary:")
+        print(f"  • Project Type: {project_type}")
+        print(f"  • Configuration: {config_level}")
+        if selected_features:
+            print(f"  • Features: {', '.join(selected_features)}")
+        print(f"  • Statusline: {statusline if statusline != 'none' else 'None'}")
+        print(f"  • Location: {location}")
+        
+        print(f"\n{Colors.BOLD}Next steps:{Colors.END}")
+        print("  • Review .claude/settings.json or settings.local.json")
+        print("  • Run 'claude-config validate' to check configuration")
+        print("  • Run 'claude-config doctor' to verify dependencies")
+        print(f"\nFor more options, run: {Colors.BLUE}claude-config --help{Colors.END}")
+        
+        return True
+
     def setup_statusline(self, statusline_name: str, location: str = 'local') -> bool:
         """Set up a specific statusline configuration"""
         self.print_header("Statusline Setup")
@@ -932,6 +1089,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
+  claude-config wizard                  # Interactive setup wizard (easiest!)
   claude-config init                    # Initialize in current directory
   claude-config preset full             # Apply full preset
   claude-config preset minimal --user   # Apply minimal preset to user config
@@ -953,6 +1111,10 @@ Examples:
     # Init command
     init_parser = subparsers.add_parser('init', help='Initialize Claude configuration')
     init_parser.add_argument('path', nargs='?', help='Target directory (default: current)')
+    
+    # Interactive setup wizard
+    subparsers.add_parser('wizard', help='Interactive setup wizard')
+    subparsers.add_parser('setup', help='Interactive setup wizard (alias for wizard)')
     
     # Preset command
     preset_parser = subparsers.add_parser('preset', help='Apply a preset configuration')
@@ -1029,6 +1191,8 @@ Examples:
     # Execute command
     if args.command == 'init':
         manager.init(args.path)
+    elif args.command in ['wizard', 'setup']:
+        manager.interactive_setup()
     elif args.command == 'preset':
         manager.apply_preset(args.name, args.location)
     elif args.command == 'list-presets':
