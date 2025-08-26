@@ -15,7 +15,7 @@ import argparse
 from datetime import datetime
 
 # Version info
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 
 # ANSI color codes for terminal output
 class Colors:
@@ -926,8 +926,8 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
         
         self.print_header("Installing Hooks")
         
-        # Copy hook implementations
-        source_hooks = self.claude_dir / 'hooks'
+        # Copy hook implementations - hooks are in the .claude/hooks directory
+        source_hooks = self.repo_dir / '.claude' / 'hooks'
         if not source_hooks.exists():
             self.print_error("No hooks found in repository")
             return False
