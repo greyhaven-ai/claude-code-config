@@ -15,7 +15,7 @@ import argparse
 from datetime import datetime
 
 # Version info
-VERSION = "1.1.1"
+VERSION = "1.1.2"
 
 # ANSI color codes for terminal output
 class Colors:
@@ -691,7 +691,32 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
             
             # Merge preset configuration
             if 'hooks' in preset_config:
-                settings['hooks'] = preset_config['hooks']
+                # Merge hooks instead of overwriting
+                if 'hooks' not in settings:
+                    settings['hooks'] = {}
+                for hook_type, hook_configs in preset_config['hooks'].items():
+                    if hook_type not in settings['hooks']:
+                        settings['hooks'][hook_type] = []
+                    # Add new hook configurations
+                    for new_hook in hook_configs:
+                        # Check if this hook already exists
+                        exists = False
+                        for existing_hook in settings['hooks'][hook_type]:
+                            # Compare matchers if they exist
+                            if 'matcher' in new_hook and 'matcher' in existing_hook:
+                                if new_hook['matcher'] == existing_hook['matcher']:
+                                    # Merge the hooks arrays
+                                    for h in new_hook.get('hooks', []):
+                                        if h not in existing_hook.get('hooks', []):
+                                            existing_hook.setdefault('hooks', []).append(h)
+                                    exists = True
+                                    break
+                            # For hooks without matchers, check if they're the same
+                            elif new_hook == existing_hook:
+                                exists = True
+                                break
+                        if not exists:
+                            settings['hooks'][hook_type].append(new_hook)
             if 'statusLine' in preset_config:
                 settings['statusLine'] = preset_config['statusLine']
             
