@@ -15,7 +15,7 @@ import argparse
 from datetime import datetime
 
 # Version info
-VERSION = "1.2.1"
+VERSION = "1.2.2"
 
 # ANSI color codes for terminal output
 class Colors:
@@ -1095,6 +1095,42 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
         return True
 
 
+    def install_single_hook(self, target_dir: Optional[Path] = None, hook_path: str = None) -> bool:
+        """Install a single hook file to project
+        
+        Args:
+            target_dir: Target directory for installation
+            hook_path: Path of hook file relative to .claude/hooks (e.g., 'python/security-scanner.py')
+        """
+        target = Path(target_dir) if target_dir else Path.cwd()
+        hooks_dir = target / '.claude' / 'hooks'
+        
+        self.print_header("Installing Hook")
+        
+        # Source hook file
+        source_hook = self.repo_dir / '.claude' / 'hooks' / hook_path
+        if not source_hook.exists():
+            self.print_error(f"Hook file not found: {hook_path}")
+            self.print_info("Available hooks:")
+            source_hooks = self.repo_dir / '.claude' / 'hooks'
+            for hook_file in source_hooks.rglob('*'):
+                if hook_file.is_file() and hook_file.suffix in ['.py', '.sh', '.js']:
+                    relative = hook_file.relative_to(source_hooks)
+                    print(f"  • {relative}")
+            return False
+        
+        # Create destination directory and copy file
+        dest = hooks_dir / hook_path
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source_hook, dest)
+        
+        # Make executable if script
+        if dest.suffix in ['.py', '.sh', '.js']:
+            dest.chmod(0o755)
+        
+        self.print_success(f"Installed hook: {hook_path}")
+        return True
+
     def doctor(self):
         """Check system for required dependencies"""
         self.print_header("System Check")
@@ -1362,6 +1398,29 @@ Examples:
     # Sync command (for global installations)
     subparsers.add_parser('sync', help='Sync configurations with remote repository')
     
+    # Add individual agent
+    add_agent_parser = subparsers.add_parser('add-agent', help='Add a single agent')
+    add_agent_parser.add_argument('name', help='Agent name to add')
+    add_agent_parser.add_argument('path', nargs='?', help='Target directory (default: current)')
+    
+    # Add individual command
+    add_command_parser = subparsers.add_parser('add-command', help='Add a single slash command')
+    add_command_parser.add_argument('name', help='Command path/name to add (e.g., security/security-audit)')
+    add_command_parser.add_argument('path', nargs='?', help='Target directory (default: current)')
+    
+    # Add individual hook
+    add_hook_parser = subparsers.add_parser('add-hook', help='Add a single hook file')
+    add_hook_parser.add_argument('name', help='Hook file path to add (e.g., python/security-scanner.py)')
+    add_hook_parser.add_argument('path', nargs='?', help='Target directory (default: current)')
+    
+    # Install all agents
+    install_all_agents_parser = subparsers.add_parser('install-all-agents', help='Install all available agents')
+    install_all_agents_parser.add_argument('path', nargs='?', help='Target directory (default: current)')
+    
+    # Install all commands
+    install_all_commands_parser = subparsers.add_parser('install-all-commands', help='Install all available slash commands')
+    install_all_commands_parser.add_argument('path', nargs='?', help='Target directory (default: current)')
+    
     args = parser.parse_args()
     
     # Create manager
@@ -1402,6 +1461,21 @@ Examples:
         manager.update()
     elif args.command == 'sync':
         manager.sync()
+    elif args.command == 'add-agent':
+        target_dir = Path(args.path) if args.path else Path.cwd()
+        manager.install_agents(target_dir, [args.name])
+    elif args.command == 'add-command':
+        target_dir = Path(args.path) if args.path else Path.cwd()
+        manager.install_commands(target_dir, [args.name])
+    elif args.command == 'add-hook':
+        target_dir = Path(args.path) if args.path else Path.cwd()
+        manager.install_single_hook(target_dir, args.name)
+    elif args.command == 'install-all-agents':
+        target_dir = Path(args.path) if args.path else Path.cwd()
+        manager.install_agents(target_dir)
+    elif args.command == 'install-all-commands':
+        target_dir = Path(args.path) if args.path else Path.cwd()
+        manager.install_commands(target_dir)
     else:
         parser.print_help()
 
