@@ -15,7 +15,7 @@ import argparse
 from datetime import datetime
 
 # Version info
-VERSION = "1.1.2"
+VERSION = "1.2.0"
 
 # ANSI color codes for terminal output
 class Colors:
@@ -142,14 +142,36 @@ class ClaudeConfigManager:
         
         # Create directory structure
         self.print_info("Creating .claude directory structure...")
+        
+        # Create essential directories (empty structure)
         directories = [
             'hooks/python', 'hooks/bash', 'hooks/javascript',
             'agents', 'commands', 'prompts', 'statuslines',
-            'documentation', 'templates'
+            'documentation', 'output-styles', 'templates'
         ]
         
         for dir_path in directories:
             (claude_dir / dir_path).mkdir(parents=True, exist_ok=True)
+        
+        # Copy project subdirectories if they exist in source
+        source_claude = self.repo_dir / '.claude'
+        if source_claude.exists():
+            source_project = source_claude / 'project'
+            if source_project.exists():
+                target_project = claude_dir / 'project'
+                # In merge mode, only copy missing subdirectories
+                if merge and target_project.exists():
+                    # Copy only missing subdirectories from project/
+                    for subdir in source_project.iterdir():
+                        if subdir.is_dir():
+                            target_subdir = target_project / subdir.name
+                            if not target_subdir.exists():
+                                shutil.copytree(subdir, target_subdir)
+                elif not target_project.exists() or force:
+                    # Copy entire project directory
+                    if target_project.exists() and force:
+                        shutil.rmtree(target_project)
+                    shutil.copytree(source_project, target_project)
         
         # Create basic settings.json
         settings_file = claude_dir / 'settings.json'
@@ -726,9 +748,17 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
             
             self.print_success(f"Applied {preset_name} preset to {settings_file}")
             
-            # Copy necessary hook files if applying to project
+            # Copy necessary files if applying to project
             if location in ['project', 'local']:
-                self.install_hooks()
+                # Install hooks if preset contains them
+                if 'hooks' in preset_config:
+                    self.install_hooks()
+                # Install agents if preset contains them
+                if 'agents' in preset_config:
+                    self.install_agents()
+                # Install commands if preset contains them
+                if 'commands' in preset_config:
+                    self.install_commands()
             
             return True
         
@@ -943,6 +973,60 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
                 issues.append("statusLine missing 'command' field")
         
         return issues
+
+    def install_agents(self, target_dir: Optional[Path] = None) -> bool:
+        """Install agent files to project"""
+        target = Path(target_dir) if target_dir else Path.cwd()
+        agents_dir = target / '.claude' / 'agents'
+        
+        self.print_header("Installing Agents")
+        
+        # Copy agent implementations
+        source_agents = self.repo_dir / '.claude' / 'agents'
+        if not source_agents.exists():
+            self.print_error("No agents found in repository")
+            return False
+        
+        agents_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Copy all agent files
+        for agent_file in source_agents.rglob('*'):
+            if agent_file.is_file():
+                relative = agent_file.relative_to(source_agents)
+                dest = agents_dir / relative
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(agent_file, dest)
+                self.print_info(f"Installed {relative}")
+        
+        self.print_success(f"Installed agents to {agents_dir}")
+        return True
+    
+    def install_commands(self, target_dir: Optional[Path] = None) -> bool:
+        """Install command files to project"""
+        target = Path(target_dir) if target_dir else Path.cwd()
+        commands_dir = target / '.claude' / 'commands'
+        
+        self.print_header("Installing Commands")
+        
+        # Copy command implementations
+        source_commands = self.repo_dir / '.claude' / 'commands'
+        if not source_commands.exists():
+            self.print_error("No commands found in repository")
+            return False
+        
+        commands_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Copy all command files
+        for cmd_file in source_commands.rglob('*'):
+            if cmd_file.is_file():
+                relative = cmd_file.relative_to(source_commands)
+                dest = commands_dir / relative
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(cmd_file, dest)
+                self.print_info(f"Installed {relative}")
+        
+        self.print_success(f"Installed commands to {commands_dir}")
+        return True
 
     def install_hooks(self, target_dir: Optional[Path] = None) -> bool:
         """Install hook scripts to project"""
