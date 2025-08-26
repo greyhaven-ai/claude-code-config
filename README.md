@@ -1,207 +1,247 @@
-# Grey Haven Claude Code Configuration
+# Claude Config - Comprehensive Configuration Manager for Claude Code
 
-A comprehensive collection of hooks, agents, and configurations to enhance Claude Code's capabilities for modern development workflows.
-
-## 🚀 Quick Start
-
-```bash
-# Clone this repository
-git clone https://github.com/grey-haven/claude-code-config.git
-
-# Run setup in your project
-bash claude-code-config/setup.sh /path/to/your/project
-```
-
-## 📁 Repository Structure
-
-```
-grey-haven-claude-code-config/
-├── .claude/                    # Template directory (copy to projects)
-│   ├── hooks/                 # Hook implementations
-│   │   ├── python/           # Python-based hooks (13 hooks)
-│   │   ├── javascript/       # JavaScript/TypeScript hooks (4 hooks)
-│   │   ├── bash/             # Shell script hooks (4 hooks)
-│   │   └── README.md         # Hook documentation
-│   ├── agents/                # AI agent configurations
-│   └── CLAUDE.md             # Project instructions for Claude
-├── docs/                      # Documentation
-│   └── hooks/
-│       └── index.md          # Comprehensive hook guide
-├── setup.sh                   # Main setup script (auto-detects project type)
-├── LICENSE                    # MIT License
-└── README.md                  # This file
-```
+A powerful CLI tool and configuration framework that enhances Claude Code with hooks, agents, slash commands, presets, and statuslines. Manage and deploy complete Claude Code configurations with a single command.
 
 ## 🌟 Features
 
-### 🪝 Hooks (17 Advanced Hooks)
+- **🎨 20+ Presets** - Pre-configured setups for different workflows (TDD, API development, security, etc.)
+- **🤖 19 Specialized Agents** - AI assistants for code quality, documentation, security, and more
+- **⚡ 23 Slash Commands** - Custom commands for complex workflows
+- **🪝 36 Hook Scripts** - Automated code analysis, testing, and validation
+- **📊 10 Statuslines** - Fun and informative status indicators
+- **🔧 CLI Tool** - Manage everything from the command line
 
-**Context Intelligence**
-- **Smart Context Injector** - Analyzes prompts and loads relevant code
-- **Branch Context Loader** - Loads context based on git branch patterns
+## 📦 Installation
 
-**Code Analysis**
-- **Dependency Impact Analyzer** - Shows what depends on code before editing
-- **Similar Code Finder** - Finds similar patterns after edits
-- **Performance Regression Detector** - Detects performance issues
+### Homebrew (Recommended)
+```bash
+brew tap greyhaven-ai/greyhaven
+brew install claude-config
+```
 
-**Testing & Quality**
-- **Smart Test Runner** - Runs only affected tests
-- **Coverage Gap Finder** - Shows uncovered code in changed files
-- **Test Data Generator** - Generates realistic test data
-- **Incremental Type Checker** - Type checks only changed files
+### npm
+```bash
+npm install -g @greyhaven/claude-code-config
+```
 
-**Documentation & Migration**
-- **Auto-Documentation Fetcher** - Fetches library documentation
-- **Code Narrator** - Generates plain English explanations
-- **Migration Assistant** - Detects outdated patterns
+### From Source
+```bash
+git clone https://github.com/greyhaven-ai/claude-code-config.git
+cd claude-code-config
+./claude-config wizard  # Interactive setup
+```
 
-**API & Database**
-- **API Contract Validator** - Validates API changes against OpenAPI specs
-- **Database Query Analyzer** - Analyzes SQL queries for performance
+## 🚀 Quick Start
 
-**Code Organization & Quality**
-- **Smart Import Organizer** - Organizes and cleans imports
-- **Code Linter** - Runs ruff, eslint, prettier, and other linters
-- **Pre-commit Runner** - Executes pre-commit checks automatically
+### Interactive Setup (Easiest)
+```bash
+claude-config wizard
+```
+
+### Apply a Preset
+```bash
+# View available presets
+claude-config list-presets
+
+# Apply a preset
+claude-config preset recommended     # Balanced setup for most projects
+claude-config preset full           # Everything included
+claude-config preset minimal        # Lightweight setup
+claude-config preset tdd           # Test-driven development
+claude-config preset api-backend   # API development focus
+```
+
+### Initialize in Current Directory
+```bash
+claude-config init
+```
+
+## 🎯 Key Commands
+
+### Resource Management
+```bash
+# Add individual components
+claude-config add-agent security-analyzer
+claude-config add-command security/security-audit
+claude-config add-hook python/api-contract-validator.py
+
+# Install all resources
+claude-config install-all-agents
+claude-config install-all-commands
+claude-config install-hooks
+
+# List available resources
+claude-config list-agents
+claude-config list-commands
+claude-config list-statuslines
+claude-config list-presets
+```
+
+### Configuration Management
+```bash
+# Hook management
+claude-config hook-add PreToolUse "echo 'Running pre-tool hook'" --matcher "Edit"
+claude-config hook-list
+claude-config hook-remove PreToolUse "echo 'Running pre-tool hook'"
+
+# Statusline setup
+claude-config statusline tamagotchi    # Fun pet in your status bar
+claude-config statusline minimal       # Clean and simple
+
+# Validation and troubleshooting
+claude-config validate                 # Check configuration
+claude-config doctor                   # Check system dependencies
+```
+
+## 📚 What's Included
 
 ### 🤖 Agents
-Specialized AI assistants for specific tasks (coming soon)
+Specialized AI assistants that extend Claude Code's capabilities:
 
-## 💻 Supported Environments
+- **Code Quality**: `code-clarity-refactorer`, `code-quality-analyzer`
+- **Security**: `security-analyzer`, `security-orchestrator`
+- **Testing**: `tdd-python`, `tdd-typescript`, `test-generator`
+- **Documentation**: `tech-docs-maintainer`, `git-diff-documenter`
+- **Performance**: `performance-optimizer`, `memory-profiler`
+- **And more...**
 
-- **Python Projects** - Uses `uv` for dependency management
-- **JavaScript/TypeScript** - Uses `bunx` (Bun) or `npx` (Node.js)
-  - Automatic detection of project type
-  - Language-specific hook versions (JS test runner, type checker, etc.)
-- **Multi-language** - Hooks support Python, JS/TS, Go, Rust, Java
+### ⚡ Slash Commands
+Custom commands for complex workflows:
 
-## 📋 Prerequisites
+- `/security-audit` - Comprehensive security analysis
+- `/tdd-implement` - Test-driven implementation
+- `/performance-optimize-chain` - Performance optimization workflow
+- `/quality-pipeline` - Full quality check pipeline
+- **And 19 more commands...**
+
+### 🪝 Hooks
+Automated scripts that run at key moments:
+
+**Pre/Post Tool Use Hooks**:
+- API contract validation
+- Database query analysis
+- Dependency impact analysis
+- Security validation
+- Code formatting and linting
+
+**User Prompt Hooks**:
+- Context injection
+- Prompt enhancement
+- Documentation fetching
+
+### 🎨 Presets
+
+Pre-configured combinations of agents, commands, and hooks:
+
+| Preset | Description | Best For |
+|--------|-------------|----------|
+| `recommended` | Balanced setup with essential tools | Most projects |
+| `full` | Complete setup with all features | Power users |
+| `minimal` | Lightweight with core features | Simple projects |
+| `tdd` | Test-driven development focus | TDD practitioners |
+| `api-backend` | API development tools | Backend services |
+| `react` | React/frontend optimized | React applications |
+| `python-focused` | Python development tools | Python projects |
+| `security` | Security-first configuration | Security-critical apps |
+
+## 📁 Project Structure
+
+```
+claude-code-config/
+├── .claude/                    # Claude Code configurations
+│   ├── agents/                # Agent definitions
+│   ├── commands/              # Slash command definitions
+│   ├── hooks/                 # Hook implementations
+│   │   ├── python/           # Python hooks (23 scripts)
+│   │   ├── js/               # JavaScript hooks (8 scripts)
+│   │   └── bash/             # Bash hooks (5 scripts)
+│   └── project/              # Project-specific configs
+├── setup-claude-code/         # Configuration assets
+│   ├── presets/              # Preset definitions
+│   ├── agents/               # Agent catalog
+│   ├── commands/             # Command catalog
+│   └── statuslines/          # Statusline definitions
+├── claude-config             # Main CLI script
+└── docs/                     # Documentation
+```
+
+## 🔧 Advanced Usage
+
+### Merge with Existing Configuration
+```bash
+# Merge without overwriting existing files
+claude-config init --merge
+
+# Force overwrite
+claude-config init --force
+```
+
+### Custom Configurations
+```bash
+# Import custom configuration
+claude-config import ./my-config.json
+
+# Add custom hooks
+claude-config hook-add PreToolUse "/path/to/custom-hook.sh" \
+  --matcher "Edit|Write" \
+  --timeout 10
+```
+
+### Global vs Local Installation
+```bash
+# User-level configuration (applies to all projects)
+claude-config preset recommended --user
+
+# Project-level configuration (current directory)
+claude-config preset recommended --local
+```
+
+## 📋 System Requirements
 
 ### Required
-- `git` - Version control
-- `ripgrep` (rg) - Fast file searching
+- Python 3.8+ or UV
+- Git
+- Ripgrep (rg)
 
-### Environment Specific
+### Optional but Recommended
+- jq (JSON processing)
+- Node.js/Bun (for JavaScript hooks)
+- GitHub CLI (for issue creation)
 
-**For Python hooks:**
+### Check Dependencies
 ```bash
-# Install uv
-curl -LsSf https://astral.sh/uv/install.sh | sh
+claude-config doctor
 ```
 
-**For JavaScript/TypeScript projects:**
-```bash
-# Install Bun (recommended)
-curl -fsSL https://bun.sh/install | bash
+## 🔗 Links
 
-# Or use Node.js/npm
-# https://nodejs.org/
-```
-
-### Optional
-- `jq` - JSON processing (recommended)
-
-## 🔧 Installation
-
-### Interactive Setup
-
-```bash
-# Run the setup script
-bash setup.sh /path/to/your/project
-
-# Choose what to install:
-# 1) Hooks only
-# 2) Agents only
-# 3) Everything
-# 4) Custom selection
-```
-
-### Manual Installation
-
-1. Copy the `.claude` directory to your project:
-```bash
-cp -r .claude /your/project/
-```
-
-2. Update paths in `.claude/settings.json` to point to the hooks
-
-## 🎯 Usage
-
-### Testing Hooks
-
-```bash
-# Test a Python hook
-echo '{"prompt": "test"}' | .claude/implementations/hooks/python/smart-context-injector.py
-
-# Test a Bash hook
-echo '{"branch": "feature/test"}' | .claude/implementations/hooks/bash/branch-context-loader.sh
-```
-
-### Claude Code Commands
-
-- `/hooks` - View active hooks
-- `/agents` - List available agents
-- `/help` - Get help
-
-## 📚 Documentation
-
-- **Hooks Guide**: `.claude/implementations/hooks/index.md`
-- **Agents Guide**: `.claude/agents/guide.md`
-- **Hook Documentation**: `.claude/implementations/hooks/docs/README.md`
-
-## 🛠️ Customization
-
-### Disable Specific Hooks
-
-Edit `.claude/settings.json` and remove or comment out unwanted hooks:
-
-```json
-{
-  "hooks": {
-    "sessionStart": [
-      // "/path/to/hook"  <- Commented out
-    ]
-  }
-}
-```
-
-### Add Custom Documentation Sources
-
-Edit hooks like `auto-documentation-fetcher.py` to add your libraries:
-
-```python
-DOC_SOURCES = {
-    'your-library': 'https://docs.your-library.com/',
-    # ...
-}
-```
-
-## 🐛 Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| "uv: command not found" | Install uv: `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
-| "ripgrep: command not found" | Install ripgrep: `brew install ripgrep` or `apt-get install ripgrep` |
-| Hook not executing | Check permissions: `chmod +x .claude/implementations/hooks/*/*.{py,sh}` |
-| JSON parse errors | Validate: `jq . < .claude/settings.json` |
-
-## 🤝 Contributing
-
-1. Fork this repository
-2. Create a feature branch
-3. Follow existing patterns for new hooks
-4. Test with multiple project types
-5. Submit a pull request
-
-## 📄 License
-
-MIT License - See [LICENSE](LICENSE) file
+- **Claude Code Documentation**: [https://docs.anthropic.com/en/docs/claude-code](https://docs.anthropic.com/en/docs/claude-code)
+- **GitHub Repository**: [https://github.com/greyhaven-ai/claude-code-config](https://github.com/greyhaven-ai/claude-code-config)
+- **npm Package**: [https://www.npmjs.com/package/@greyhaven/claude-code-config](https://www.npmjs.com/package/@greyhaven/claude-code-config)
+- **Issue Tracker**: [https://github.com/greyhaven-ai/claude-code-config/issues](https://github.com/greyhaven-ai/claude-code-config/issues)
 
 ## 🎉 Acknowledgments
 
-Built for the Claude Code community to enhance development workflows with intelligent automation.
+This project was inspired by and builds upon the excellent work from:
+- [I Love Claude Code](https://github.com/alchemiststudiosDOTai/i-love-claude-code) by Alchemist Studios
+
+Special thanks to the Claude Code community for their contributions and feedback.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+1. Fork the repository
+2. Create a feature branch
+3. Test your changes
+4. Submit a pull request
+
+## 📄 License
+
+MIT License - Copyright (c) 2025 Grey Haven Studio
+
+See [LICENSE](LICENSE) file for details.
 
 ---
 
-**Happy coding with Grey Haven tools! 🚀**
+**Built with ❤️ for the Claude Code community**
