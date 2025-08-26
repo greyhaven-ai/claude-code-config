@@ -15,7 +15,7 @@ import argparse
 from datetime import datetime
 
 # Version info
-VERSION = "1.2.0"
+VERSION = "1.2.1"
 
 # ANSI color codes for terminal output
 class Colors:
@@ -753,12 +753,12 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
                 # Install hooks if preset contains them
                 if 'hooks' in preset_config:
                     self.install_hooks()
-                # Install agents if preset contains them
+                # Install specific agents if preset contains them
                 if 'agents' in preset_config:
-                    self.install_agents()
-                # Install commands if preset contains them
+                    self.install_agents(agent_names=preset_config['agents'])
+                # Install specific commands if preset contains them
                 if 'commands' in preset_config:
-                    self.install_commands()
+                    self.install_commands(command_names=preset_config['commands'])
             
             return True
         
@@ -974,8 +974,13 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
         
         return issues
 
-    def install_agents(self, target_dir: Optional[Path] = None) -> bool:
-        """Install agent files to project"""
+    def install_agents(self, target_dir: Optional[Path] = None, agent_names: Optional[list] = None) -> bool:
+        """Install agent files to project
+        
+        Args:
+            target_dir: Target directory for installation
+            agent_names: List of specific agent names to install (if None, installs all)
+        """
         target = Path(target_dir) if target_dir else Path.cwd()
         agents_dir = target / '.claude' / 'agents'
         
@@ -989,20 +994,37 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
         
         agents_dir.mkdir(parents=True, exist_ok=True)
         
-        # Copy all agent files
-        for agent_file in source_agents.rglob('*'):
-            if agent_file.is_file():
-                relative = agent_file.relative_to(source_agents)
-                dest = agents_dir / relative
-                dest.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(agent_file, dest)
-                self.print_info(f"Installed {relative}")
+        # If specific agents requested, only copy those
+        if agent_names:
+            for agent_name in agent_names:
+                # Look for agent file (with .md extension)
+                agent_file = source_agents / f"{agent_name}.md"
+                if agent_file.exists():
+                    dest = agents_dir / agent_file.name
+                    shutil.copy2(agent_file, dest)
+                    self.print_info(f"Installed {agent_file.name}")
+                else:
+                    self.print_warning(f"Agent not found: {agent_name}")
+        else:
+            # Copy all agent files
+            for agent_file in source_agents.rglob('*'):
+                if agent_file.is_file():
+                    relative = agent_file.relative_to(source_agents)
+                    dest = agents_dir / relative
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(agent_file, dest)
+                    self.print_info(f"Installed {relative}")
         
         self.print_success(f"Installed agents to {agents_dir}")
         return True
     
-    def install_commands(self, target_dir: Optional[Path] = None) -> bool:
-        """Install command files to project"""
+    def install_commands(self, target_dir: Optional[Path] = None, command_names: Optional[list] = None) -> bool:
+        """Install command files to project
+        
+        Args:
+            target_dir: Target directory for installation
+            command_names: List of specific command names to install (if None, installs all)
+        """
         target = Path(target_dir) if target_dir else Path.cwd()
         commands_dir = target / '.claude' / 'commands'
         
@@ -1016,14 +1038,29 @@ Project configuration for Claude Code initialized on {datetime.now().strftime('%
         
         commands_dir.mkdir(parents=True, exist_ok=True)
         
-        # Copy all command files
-        for cmd_file in source_commands.rglob('*'):
-            if cmd_file.is_file():
-                relative = cmd_file.relative_to(source_commands)
-                dest = commands_dir / relative
-                dest.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(cmd_file, dest)
-                self.print_info(f"Installed {relative}")
+        # If specific commands requested, only copy those
+        if command_names:
+            for command_name in command_names:
+                # Remove leading slash if present
+                cmd_path = command_name.lstrip('/')
+                # Look for command file (with .md extension)
+                cmd_file = source_commands / f"{cmd_path}.md"
+                if cmd_file.exists():
+                    dest = commands_dir / cmd_file.relative_to(source_commands)
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(cmd_file, dest)
+                    self.print_info(f"Installed {cmd_file.relative_to(source_commands)}")
+                else:
+                    self.print_warning(f"Command not found: {command_name}")
+        else:
+            # Copy all command files
+            for cmd_file in source_commands.rglob('*'):
+                if cmd_file.is_file():
+                    relative = cmd_file.relative_to(source_commands)
+                    dest = commands_dir / relative
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(cmd_file, dest)
+                    self.print_info(f"Installed {relative}")
         
         self.print_success(f"Installed commands to {commands_dir}")
         return True

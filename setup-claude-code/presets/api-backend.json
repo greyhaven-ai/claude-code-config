@@ -39,8 +39,8 @@
     "security-analyzer"
   ],
   "commands": [
-    "/security-audit",
-    "/performance-optimize-chain"
+    "security/security-audit",
+    "performance-optimize-chain"
   ],
   "statusLine": {
     "type": "command",
