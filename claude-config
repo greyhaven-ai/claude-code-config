@@ -15,7 +15,7 @@ import argparse
 from datetime import datetime
 
 # Version info
-VERSION = "1.0.1"
+VERSION = "1.1.0"
 
 # ANSI color codes for terminal output
 class Colors:
@@ -108,8 +108,14 @@ class ClaudeConfigManager:
         """Print info message"""
         print(f"{Colors.BLUE}ℹ️  {text}{Colors.END}")
 
-    def init(self, target_dir: Optional[Path] = None) -> bool:
-        """Initialize Claude Code configuration in a project"""
+    def init(self, target_dir: Optional[Path] = None, force: bool = False, merge: bool = False) -> bool:
+        """Initialize Claude Code configuration in a project
+        
+        Args:
+            target_dir: Target directory for initialization
+            force: Force overwrite without prompting
+            merge: Merge with existing configuration (add missing files only)
+        """
         target = Path(target_dir) if target_dir else Path.cwd()
         claude_dir = target / '.claude'
         
@@ -117,10 +123,22 @@ class ClaudeConfigManager:
         
         # Check if already initialized
         if claude_dir.exists():
-            self.print_warning(f"Claude configuration already exists at {claude_dir}")
-            response = input("Overwrite existing configuration? (y/n): ")
-            if response.lower() != 'y':
-                return False
+            if merge:
+                self.print_info(f"Merging with existing configuration at {claude_dir}")
+            elif force:
+                self.print_warning(f"Forcing overwrite of existing configuration at {claude_dir}")
+            else:
+                self.print_warning(f"Claude configuration already exists at {claude_dir}")
+                try:
+                    response = input("Overwrite existing configuration? (y/n): ")
+                    if response.lower() != 'y':
+                        return False
+                except (EOFError, KeyboardInterrupt):
+                    self.print_info("\nSkipping initialization - directory already exists")
+                    self.print_info("Use 'claude-config preset' to add configurations")
+                    self.print_info("Or use 'claude-config init --force' to overwrite")
+                    self.print_info("Or use 'claude-config init --merge' to add missing files")
+                    return False
         
         # Create directory structure
         self.print_info("Creating .claude directory structure...")
@@ -134,22 +152,25 @@ class ClaudeConfigManager:
             (claude_dir / dir_path).mkdir(parents=True, exist_ok=True)
         
         # Create basic settings.json
-        settings = {
-            "hooks": {},
-            "statusLine": {
-                "type": "command",
-                "command": "~/.claude/statuslines/grey-haven-default.sh",
-                "padding": 0
+        settings_file = claude_dir / 'settings.json'
+        if not settings_file.exists() or not merge:
+            settings = {
+                "hooks": {},
+                "statusLine": {
+                    "type": "command",
+                    "command": "~/.claude/statuslines/grey-haven-default.sh",
+                    "padding": 0
+                }
             }
-        }
-        
-        with open(claude_dir / 'settings.json', 'w') as f:
-            json.dump(settings, f, indent=2)
+            
+            with open(settings_file, 'w') as f:
+                json.dump(settings, f, indent=2)
         
         # Create CLAUDE.md
         claude_md = claude_dir / 'CLAUDE.md'
-        with open(claude_md, 'w') as f:
-            f.write(f"""# CLAUDE.md
+        if not claude_md.exists() or not merge:
+            with open(claude_md, 'w') as f:
+                f.write(f"""# CLAUDE.md
 
 Project configuration for Claude Code initialized on {datetime.now().strftime('%Y-%m-%d')}
 
@@ -1121,6 +1142,8 @@ Examples:
     # Init command
     init_parser = subparsers.add_parser('init', help='Initialize Claude configuration')
     init_parser.add_argument('path', nargs='?', help='Target directory (default: current)')
+    init_parser.add_argument('--force', action='store_true', help='Force overwrite existing configuration')
+    init_parser.add_argument('--merge', action='store_true', help='Merge with existing configuration (add missing files only)')
     
     # Interactive setup wizard
     subparsers.add_parser('wizard', help='Interactive setup wizard')
@@ -1200,7 +1223,7 @@ Examples:
     
     # Execute command
     if args.command == 'init':
-        manager.init(args.path)
+        manager.init(args.path, force=args.force, merge=args.merge)
     elif args.command in ['wizard', 'setup']:
         manager.interactive_setup()
     elif args.command == 'preset':
