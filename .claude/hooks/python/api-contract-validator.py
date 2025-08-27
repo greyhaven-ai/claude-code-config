@@ -20,7 +20,7 @@ from typing import Dict, List, Optional
 
 import yaml
 from openapi_spec_validator import validate_spec
-from openapi_spec_validator.exceptions import OpenAPIValidationError
+from openapi_spec_validator.exceptions import OpenAPISpecValidatorError
 
 
 def find_openapi_spec(project_dir: str) -> Optional[Path]:
@@ -69,7 +69,7 @@ def load_openapi_spec(spec_path: Path) -> Optional[Dict]:
         validate_spec(spec)
         return spec
 
-    except (yaml.YAMLError, json.JSONDecodeError, OpenAPIValidationError) as e:
+    except (yaml.YAMLError, json.JSONDecodeError, OpenAPISpecValidatorError) as e:
         print(f"⚠️  Invalid OpenAPI spec: {e}", file=sys.stderr)
         return None
     except Exception as e:
