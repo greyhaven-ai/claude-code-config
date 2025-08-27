@@ -39,9 +39,10 @@ Need root cause analysis and comprehensive fix
 5. Add targeted logging: logger.debug(f"State: {state}, Inputs: {inputs}, Conditions: {conditions}")
 6. Fix root cause → handle all discovered edge cases
 7. Write failing test → add integration test → document pattern
-8. Commit with Linear magic words:
-   - "Refs TEAM-123" for investigation commits
-   - "Fixes TEAM-123" for final bug fix
+8. Commit with Linear magic words (use actual team ID like ENG, DES, CVIREC):
+   - "Refs [TEAM]-123" for investigation commits (links without closing)
+   - "Fixes [TEAM]-123" for final bug fix (auto-closes on merge)
+   - Branch with issue ID auto-links (e.g., username/eng-123-fix-bug)
 9. Create `.claude/debugging/[issue-type].md` with full learnings
 10. If using project: Update all related issues with findings
 </actions>

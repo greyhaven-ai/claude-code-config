@@ -75,9 +75,10 @@ Need to understand bug state, leverage advanced tools, and find root cause
    - Write failing test that reproduces the bug
    - Implement minimal fix addressing root cause
    - Add defensive coding to prevent recurrence
-   - Commit with Linear magic words:
-     - "Refs TEAM-123" for investigation commits
-     - "Fixes TEAM-123" for final bug fix
+   - Commit with Linear magic words (use actual team ID like ENG, DES, CVIREC):
+     - "Refs [TEAM]-123" for investigation commits (links without closing)
+     - "Fixes [TEAM]-123" for final bug fix (auto-closes on merge)
+     - Branch with issue ID auto-links (e.g., username/eng-123-bug-fix)
    - Update Linear with detailed findings:
 
      ```javascript

@@ -51,9 +51,10 @@ Need detailed, actionable plan with measurable outcomes
 6. Generate workflow:
    - Branch names per issue (using Linear's git branch names)
    - Implementation order with dependencies
-   - Commit templates with magic words:
-     - "Refs TEAM-123" for progress commits
-     - "Fixes TEAM-123" for completing issues
+   - Commit templates with magic words (use actual team ID like ENG, DES, CVIREC):
+     - "Refs [TEAM]-123" for progress commits (links without closing)
+     - "Fixes [TEAM]-123" for completing issues (auto-closes on merge)
+     - Branch names should include issue ID for auto-linking
    - PR checklist with Linear integration
 7. Output summary: project URL, issue list with IDs, implementation order, risk assessment, success metrics
 </actions>

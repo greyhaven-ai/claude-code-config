@@ -45,10 +45,13 @@ Need complete workflow from Linear issue to merged PR
    - Mark "In Progress" in Linear
    - Implement with full error handling
    - Write comprehensive tests
-   - Commit with Linear magic words:
-     - Use "Fixes TEAM-123" to auto-complete on merge
-     - Use "Refs TEAM-123" to link without status change
-   - Push and create PR with magic words in description
+   - Commit with Linear magic words (use actual team ID like ENG, DES, CVIREC, etc.):
+     - Use "Fixes [TEAM]-123" to auto-close issue on merge
+     - Use "Refs [TEAM]-123" to link without closing issue
+     - Other closing words: close, resolve, complete
+     - Non-closing words: ref, references, part of, related to
+   - Push and create PR with magic words in title or description
+   - Branch name should include issue ID for auto-linking (e.g., username/eng-123-description)
    - Link PR to Linear issue
    - Update to "Done" when merged (or auto-completed via magic words)
 4. Quality gates per PR: tests pass, linting clean, docs updated
