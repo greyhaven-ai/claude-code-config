@@ -206,7 +206,7 @@ class SubagentResultProcessor:
             }
         
         return {
-            "decision": "allow",
+            "decision": "approve",
             "output": summary,
             "hookSpecificOutput": {
                 "subagent": subagent_name,
@@ -230,7 +230,7 @@ def main():
         
     except Exception as e:
         error_response = {
-            "decision": "allow",
+            "decision": "approve",
             "error": f"Subagent result processor error: {str(e)}"
         }
         print(json.dumps(error_response))

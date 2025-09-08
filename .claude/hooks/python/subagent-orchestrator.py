@@ -237,7 +237,7 @@ class SubagentOrchestrator:
         result = data.get('result', {})
         
         if not subagent_name:
-            return {"decision": "allow"}
+            return {"decision": "approve"}
         
         # Load current workflow state
         state = self.load_workflow_state()
@@ -287,7 +287,7 @@ class SubagentOrchestrator:
             suggestion = self.format_suggestion(next_subagents, active_workflow)
             
             return {
-                "decision": "allow",
+                "decision": "approve",
                 "output": suggestion,
                 "hookSpecificOutput": {
                     "completedSubagent": subagent_name,
@@ -310,11 +310,11 @@ class SubagentOrchestrator:
                 self.save_workflow_state(state)
                 
                 return {
-                    "decision": "allow",
+                    "decision": "approve",
                     "output": completion_msg
                 }
         
-        return {"decision": "allow"}
+        return {"decision": "approve"}
 
 def main():
     try:
@@ -331,7 +331,7 @@ def main():
         
     except Exception as e:
         error_response = {
-            "decision": "allow",
+            "decision": "approve",
             "error": f"Orchestrator error: {str(e)}"
         }
         print(json.dumps(error_response))

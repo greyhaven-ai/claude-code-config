@@ -102,12 +102,12 @@ class SubagentRouter:
         """Process the hook event"""
         prompt = data.get('prompt', '')
         if not prompt:
-            return {"decision": "allow"}
+            return {"decision": "approve"}
         
         matches = self.analyze_prompt(prompt)
         
         if not matches:
-            return {"decision": "allow"}
+            return {"decision": "approve"}
         
         # Only suggest if confidence is reasonable
         suggestions = []
@@ -120,7 +120,7 @@ class SubagentRouter:
             enhanced_prompt = f"{prompt}\n\n---\n🤖 Subagent Router Suggestions:\n{suggestion_text}\n---"
             
             return {
-                "decision": "allow",
+                "decision": "approve",
                 "output": enhanced_prompt,
                 "hookSpecificOutput": {
                     "suggestedSubagents": [{"name": subagent, "confidence": conf} 
@@ -128,7 +128,7 @@ class SubagentRouter:
                 }
             }
         
-        return {"decision": "allow"}
+        return {"decision": "approve"}
 
 def main():
     try:
@@ -145,7 +145,7 @@ def main():
         
     except Exception as e:
         error_response = {
-            "decision": "allow",
+            "decision": "approve",
             "error": f"Subagent router error: {str(e)}"
         }
         print(json.dumps(error_response))

@@ -415,13 +415,13 @@ class SubagentContextPreparer:
         """Process the PreToolUse event for Task tool"""
         tool = data.get('tool')
         if tool != 'Task':
-            return {"decision": "allow"}
+            return {"decision": "approve"}
         
         params = data.get('params', {})
         subagent_type = params.get('subagent_type')
         
         if not subagent_type:
-            return {"decision": "allow"}
+            return {"decision": "approve"}
         
         # Prepare context for the specific subagent
         preparer = self.subagent_contexts.get(subagent_type)
@@ -429,7 +429,7 @@ class SubagentContextPreparer:
             context = preparer()
             
             return {
-                "decision": "allow",
+                "decision": "approve",
                 "output": f"🎯 Prepared context for {subagent_type} subagent\n" +
                          f"   Context saved to: .claude/context/",
                 "hookSpecificOutput": {
@@ -439,7 +439,7 @@ class SubagentContextPreparer:
                 }
             }
         
-        return {"decision": "allow"}
+        return {"decision": "approve"}
 
 def main():
     try:
@@ -456,7 +456,7 @@ def main():
         
     except Exception as e:
         error_response = {
-            "decision": "allow",
+            "decision": "approve",
             "error": f"Context preparer error: {str(e)}"
         }
         print(json.dumps(error_response))

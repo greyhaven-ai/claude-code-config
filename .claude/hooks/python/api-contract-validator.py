@@ -176,7 +176,10 @@ def extract_api_endpoints_from_code(content: str, language: str) -> List[Dict]:
         # Spring patterns
         spring_patterns = [
             r'@(?:Get|Post|Put|Delete|Patch)Mapping\([\'"]([^\'"\s]+)[\'"]',
-            r'@RequestMapping\(.*?value\s*=\s*[\'"]([^\'"\s]+)[\'"].*?method\s*=\s*RequestMethod\.(\w+)',
+            (
+                r'@RequestMapping\(.*?value\s*=\s*[\'"]([^\'"\s]+)[\'"]'
+                r'.*?method\s*=\s*RequestMethod\.(\w+)'
+            ),
         ]
 
         for pattern in spring_patterns:
