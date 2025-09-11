@@ -430,13 +430,8 @@ class SubagentContextPreparer:
             
             return {
                 "decision": "approve",
-                "output": f"🎯 Prepared context for {subagent_type} subagent\n" +
-                         f"   Context saved to: .claude/context/",
-                "hookSpecificOutput": {
-                    "subagent": subagent_type,
-                    "contextPrepared": True,
-                    "context": context
-                }
+                "systemMessage": f"🎯 Prepared context for {subagent_type} subagent\n" +
+                               f"   Context saved to: .claude/context/"
             }
         
         return {"decision": "approve"}
