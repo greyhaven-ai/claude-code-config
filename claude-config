@@ -15,7 +15,7 @@ import argparse
 from datetime import datetime
 
 # Version info
-VERSION = "1.2.7"
+VERSION = "1.2.8"
 
 # ANSI color codes for terminal output
 class Colors:
