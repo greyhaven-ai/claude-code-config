@@ -15,7 +15,7 @@ import json
 import os
 import subprocess
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Optional
 
 class SubagentContextPreparer:
     def __init__(self):

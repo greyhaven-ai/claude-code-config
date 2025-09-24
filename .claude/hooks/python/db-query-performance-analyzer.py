@@ -1,7 +1,5 @@
-#!/usr/bin/env -S uv run --quiet --script
-# /// script
-# dependencies = ["sqlparse"]
-# ///
+#!/usr/bin/env python3
+# Note: Requires sqlparse to be installed: uv pip install sqlparse
 """
 Database Query Analyzer Hook
 ============================
@@ -13,9 +11,9 @@ performance problems, and suggests optimizations like indexes.
 """
 
 import json
-import sys
 import re
-from typing import List, Dict, Optional
+import sys
+from typing import Dict, List, Optional
 
 # Try to import sqlparse, but continue without it
 try:
@@ -26,7 +24,7 @@ except ImportError:
     sqlparse = None
 
 
-def extract_sql_from_command(command: str) -> List[str]:
+def extract_sql_from_command(command: str) -> list[str]:
     """Extract SQL queries from a bash command"""
     queries = []
 
@@ -63,7 +61,7 @@ def extract_sql_from_command(command: str) -> List[str]:
     return queries
 
 
-def parse_sql_query(query: str) -> Optional[Dict]:
+def parse_sql_query(query: str) -> dict | None:
     """Parse SQL query and extract key components"""
     try:
         parsed = sqlparse.parse(query)[0]
@@ -96,7 +94,7 @@ def parse_sql_query(query: str) -> Optional[Dict]:
         return None
 
 
-def extract_tables(parsed) -> List[str]:
+def extract_tables(parsed) -> list[str]:
     """Extract table names from parsed SQL"""
     tables = []
 
@@ -124,7 +122,7 @@ def extract_tables(parsed) -> List[str]:
     return tables
 
 
-def extract_where_conditions(query: str) -> List[str]:
+def extract_where_conditions(query: str) -> list[str]:
     """Extract WHERE clause conditions"""
     conditions = []
 
@@ -142,7 +140,7 @@ def extract_where_conditions(query: str) -> List[str]:
     return conditions
 
 
-def extract_joins(query: str) -> List[str]:
+def extract_joins(query: str) -> list[str]:
     """Extract JOIN clauses"""
     joins = []
 
@@ -157,7 +155,7 @@ def extract_joins(query: str) -> List[str]:
     return joins
 
 
-def extract_columns(query: str) -> List[str]:
+def extract_columns(query: str) -> list[str]:
     """Extract column names from query"""
     columns = []
 
@@ -178,7 +176,7 @@ def extract_columns(query: str) -> List[str]:
     return columns
 
 
-def analyze_query_performance(parsed_query: Dict) -> List[Dict]:
+def analyze_query_performance(parsed_query: dict) -> list[dict]:
     """Analyze query for performance issues"""
     issues = []
 
@@ -318,7 +316,7 @@ def analyze_query_performance(parsed_query: Dict) -> List[Dict]:
     return issues
 
 
-def suggest_indexes(parsed_query: Dict) -> List[str]:
+def suggest_indexes(parsed_query: dict) -> list[str]:
     """Suggest indexes based on query analysis"""
     suggestions = []
 
@@ -357,7 +355,7 @@ def suggest_indexes(parsed_query: Dict) -> List[str]:
     return suggestions
 
 
-def check_for_n_plus_one(command: str, queries: List[str]) -> bool:
+def check_for_n_plus_one(command: str, queries: list[str]) -> bool:
     """Check for potential N+1 query problems"""
     # Look for patterns like loops with queries inside
     loop_patterns = [
@@ -385,6 +383,8 @@ def main():
         # Check if sqlparse is available
         if not SQLPARSE_AVAILABLE:
             # Silently exit - don't disrupt workflow
+            # You can uncomment the line below to see when this happens
+            # print("Note: sqlparse not available, skipping query analysis", file=sys.stderr)
             sys.exit(0)
             
         # Read hook data from stdin

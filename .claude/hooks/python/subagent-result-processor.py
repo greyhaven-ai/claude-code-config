@@ -207,7 +207,7 @@ class SubagentResultProcessor:
         
         return {
             "decision": "approve",
-            "output": summary,
+            "systemMessage": summary,
             "hookSpecificOutput": {
                 "subagent": subagent_name,
                 "resultFile": str(result_file),

@@ -288,7 +288,7 @@ class SubagentOrchestrator:
             
             return {
                 "decision": "approve",
-                "output": suggestion,
+                "systemMessage": suggestion,
                 "hookSpecificOutput": {
                     "completedSubagent": subagent_name,
                     "suggestedSubagents": next_subagents,
@@ -311,7 +311,7 @@ class SubagentOrchestrator:
                 
                 return {
                     "decision": "approve",
-                    "output": completion_msg
+                    "systemMessage": completion_msg
                 }
         
         return {"decision": "approve"}
