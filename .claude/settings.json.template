@@ -1,0 +1,33 @@
+{
+  "plugin": {
+    "marketplaces": [
+      {
+        "name": "grey-haven-plugins",
+        "source": "/REPLACE/WITH/ABSOLUTE/PATH/grey-haven-plugins"
+      }
+    ],
+    "install": [
+      "grey-haven-core@grey-haven-plugins",
+      "grey-haven-developer-experience@grey-haven-plugins",
+      "grey-haven-observability@grey-haven-plugins",
+      "grey-haven-infrastructure@grey-haven-plugins",
+      "grey-haven-quality-assurance@grey-haven-plugins",
+      "grey-haven-security@grey-haven-plugins",
+      "grey-haven-data-engineering@grey-haven-plugins",
+      "grey-haven-ai-ml@grey-haven-plugins",
+      "grey-haven-mobile-development@grey-haven-plugins",
+      "grey-haven-cloudflare@grey-haven-plugins",
+      "grey-haven-linear-integration@grey-haven-plugins",
+      "grey-haven-hooks@grey-haven-plugins"
+    ]
+  },
+  "hooks": {
+    "subagent-context-preparer": {"enabled": true},
+    "bash-permission-validator": {"enabled": true},
+    "edit-permission-validator": {"enabled": true},
+    "write-permission-validator": {"enabled": true},
+    "agent-output-formatter": {"enabled": true},
+    "mcp-tool-permission-validator": {"enabled": true},
+    "user-prompt-submit": {"enabled": true}
+  }
+}

@@ -1,0 +1,17 @@
+{
+    "name": "grey-haven-security",
+    "description": "Security scanning and vulnerability auditing following OWASP Top 10 guidelines with automated remediation",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "keywords": [
+        "security",
+        "vulnerability",
+        "owasp",
+        "audit",
+        "scanning"
+    ],
+    "license": "MIT",
+    "category": "security"
+}

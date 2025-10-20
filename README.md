@@ -1,246 +1,285 @@
-# Claude Config - Comprehensive Configuration Manager for Claude Code
+# Grey Haven Claude Code Configuration
 
-A powerful CLI tool and configuration framework that enhances Claude Code with hooks, agents, slash commands, presets, and statuslines. Manage and deploy complete Claude Code configurations with a single command.
+**Version 2.0.0** - Hooks, configuration, and plugin marketplace for Claude Code
 
-## 🌟 Features
+[![npm version](https://badge.fury.io/js/%40greyhaven%2Fclaude-code-config.svg)](https://www.npmjs.com/package/@greyhaven/claude-code-config)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-- **🎨 20+ Presets** - Pre-configured setups for different workflows (TDD, API development, security, etc.)
-- **🤖 19 Specialized Agents** - AI assistants for code quality, documentation, security, and more
-- **⚡ 23 Slash Commands** - Custom commands for complex workflows
-- **🪝 36 Hook Scripts** - Automated code analysis, testing, and validation
-- **📊 10 Statuslines** - Fun and informative status indicators
-- **🔧 CLI Tool** - Manage everything from the command line
+---
+
+## 🎯 What This Repository Provides
+
+This repository contains Grey Haven Studio's comprehensive Claude Code ecosystem:
+
+**12 Plugin Packages** with **26+ Agents** and **30+ Commands**
+- Distributed via local plugin marketplace (not npm)
+- Clone this repository and configure in Claude Code settings
+
+**npm Package** (`@greyhaven/claude-code-config`) for:
+- ✅ Hook installation and management
+- ✅ MCP server configuration
+- ✅ Project initialization
+- ✅ Settings backup/restore
+- ✅ Diagnostics
+
+---
 
 ## 📦 Installation
 
-### Homebrew (Recommended)
+### Option 1: Full Setup (Recommended)
+
+**Get plugins + CLI tools**:
+
 ```bash
-brew tap greyhaven-ai/greyhaven
-brew install claude-config
+# 1. Clone repository for plugins
+git clone https://github.com/greyhaven-ai/grey-haven-claude-code-config.git ~/grey-haven-plugins
+
+# 2. Configure plugin marketplace in ~/.claude/settings.json
+{
+  "plugin": {
+    "marketplaces": [{
+      "name": "grey-haven-plugins",
+      "source": "/Users/YOU/grey-haven-plugins/grey-haven-plugins"
+    }],
+    "install": [
+      "grey-haven-core@grey-haven-plugins",
+      "grey-haven-developer-experience@grey-haven-plugins",
+      "grey-haven-observability@grey-haven-plugins"
+    ]
+  }
+}
+
+# 3. (Optional) Install CLI tools for hook management
+npm install -g @greyhaven/claude-code-config
+claude-config install-hooks
 ```
 
-### npm
+### Option 2: Plugins Only
+
+**If you only need agents and commands**:
+
+```bash
+# Clone and configure plugin marketplace
+git clone https://github.com/greyhaven-ai/grey-haven-claude-code-config.git ~/grey-haven-plugins
+
+# Add to ~/.claude/settings.json (see full config above)
+```
+
+No npm package required!
+
+### Option 3: CLI Tools Only
+
+**If you only need hook installation and setup utilities**:
+
 ```bash
 npm install -g @greyhaven/claude-code-config
 ```
 
-### From Source
-```bash
-git clone https://github.com/greyhaven-ai/claude-code-config.git
-cd claude-code-config
-./claude-config wizard  # Interactive setup
-```
+---
 
 ## 🚀 Quick Start
 
-### Interactive Setup (Easiest)
+### 1. Install Hooks
+
 ```bash
-claude-config wizard
-```
-
-### Apply a Preset
-```bash
-# View available presets
-claude-config list-presets
-
-# Apply a preset
-claude-config preset recommended     # Balanced setup for most projects
-claude-config preset full           # Everything included
-claude-config preset minimal        # Lightweight setup
-claude-config preset tdd           # Test-driven development
-claude-config preset api-backend   # API development focus
-```
-
-### Initialize in Current Directory
-```bash
-claude-config init
-```
-
-## 🎯 Key Commands
-
-### Resource Management
-```bash
-# Add individual components
-claude-config add-agent security-analyzer
-claude-config add-command security/security-audit
-claude-config add-hook python/api-contract-validator.py
-
-# Install all resources
-claude-config install-all-agents
-claude-config install-all-commands
 claude-config install-hooks
-
-# List available resources
-claude-config list-agents
-claude-config list-commands
-claude-config list-statuslines
-claude-config list-presets
 ```
 
-### Configuration Management
-```bash
-# Hook management
-claude-config hook-add PreToolUse "echo 'Running pre-tool hook'" --matcher "Edit"
-claude-config hook-list
-claude-config hook-remove PreToolUse "echo 'Running pre-tool hook'"
+### 2. Test Installation
 
-# Statusline setup
-claude-config statusline tamagotchi    # Fun pet in your status bar
-claude-config statusline minimal       # Clean and simple
-
-# Validation and troubleshooting
-claude-config validate                 # Check configuration
-claude-config doctor                   # Check system dependencies
-```
-
-## 📚 What's Included
-
-### 🤖 Agents
-Specialized AI assistants that extend Claude Code's capabilities:
-
-- **Code Quality**: `code-clarity-refactorer`, `code-quality-analyzer`
-- **Security**: `security-analyzer`, `security-orchestrator`
-- **Testing**: `tdd-python`, `tdd-typescript`, `test-generator`
-- **Documentation**: `tech-docs-maintainer`, `git-diff-documenter`
-- **Performance**: `performance-optimizer`, `memory-profiler`
-- **And more...**
-
-### ⚡ Slash Commands
-Custom commands for complex workflows:
-
-- `/security-audit` - Comprehensive security analysis
-- `/tdd-implement` - Test-driven implementation
-- `/performance-optimize-chain` - Performance optimization workflow
-- `/quality-pipeline` - Full quality check pipeline
-- **And 19 more commands...**
-
-### 🪝 Hooks
-Automated scripts that run at key moments:
-
-**Pre/Post Tool Use Hooks**:
-- API contract validation
-- Database query analysis
-- Dependency impact analysis
-- Security validation
-- Code formatting and linting
-
-**User Prompt Hooks**:
-- Context injection
-- Prompt enhancement
-- Documentation fetching
-
-### 🎨 Presets
-
-Pre-configured combinations of agents, commands, and hooks:
-
-| Preset | Description | Best For |
-|--------|-------------|----------|
-| `recommended` | Balanced setup with essential tools | Most projects |
-| `full` | Complete setup with all features | Power users |
-| `minimal` | Lightweight with core features | Simple projects |
-| `tdd` | Test-driven development focus | TDD practitioners |
-| `api-backend` | API development tools | Backend services |
-| `react` | React/frontend optimized | React applications |
-| `python-focused` | Python development tools | Python projects |
-| `security` | Security-first configuration | Security-critical apps |
-
-## 📁 Project Structure
-
-```
-claude-code-config/
-├── .claude/                    # Claude Code configurations
-│   ├── agents/                # Agent definitions
-│   ├── commands/              # Slash command definitions
-│   ├── hooks/                 # Hook implementations
-│   │   ├── python/           # Python hooks (23 scripts)
-│   │   ├── js/               # JavaScript hooks (8 scripts)
-│   │   └── bash/             # Bash hooks (5 scripts)
-│   └── project/              # Project-specific configs
-├── setup-claude-code/         # Configuration assets
-│   ├── presets/              # Preset definitions
-│   ├── agents/               # Agent catalog
-│   ├── commands/             # Command catalog
-│   └── statuslines/          # Statusline definitions
-├── claude-config             # Main CLI script
-└── docs/                     # Documentation
-```
-
-## 🔧 Advanced Usage
-
-### Merge with Existing Configuration
-```bash
-# Merge without overwriting existing files
-claude-config init --merge
-
-# Force overwrite
-claude-config init --force
-```
-
-### Custom Configurations
-```bash
-# Import custom configuration
-claude-config import ./my-config.json
-
-# Add custom hooks
-claude-config hook-add PreToolUse "/path/to/custom-hook.sh" \
-  --matcher "Edit|Write" \
-  --timeout 10
-```
-
-### Global vs Local Installation
-```bash
-# User-level configuration (applies to all projects)
-claude-config preset recommended --user
-
-# Project-level configuration (current directory)
-claude-config preset recommended --local
-```
-
-## 📋 System Requirements
-
-### Required
-- Python 3.8+ or UV
-- Git
-- Ripgrep (rg)
-
-### Optional but Recommended
-- jq (JSON processing)
-- Node.js/Bun (for JavaScript hooks)
-- GitHub CLI (for issue creation)
-
-### Check Dependencies
 ```bash
 claude-config doctor
 ```
 
-## 🔗 Links
+### 3. Use Plugins
 
-- **Claude Code Documentation**: [https://docs.anthropic.com/en/docs/claude-code](https://docs.anthropic.com/en/docs/claude-code)
-- **GitHub Repository**: [https://github.com/greyhaven-ai/claude-code-config](https://github.com/greyhaven-ai/claude-code-config)
-- **npm Package**: [https://www.npmjs.com/package/@greyhaven/claude-code-config](https://www.npmjs.com/package/@greyhaven/claude-code-config)
-- **Issue Tracker**: [https://github.com/greyhaven-ai/claude-code-config/issues](https://github.com/greyhaven-ai/claude-code-config/issues)
+In Claude Code:
+```bash
+/tdd-implement          # Test-driven development
+/code-review            # Code review analysis
+/security-scan          # Security audit
+/doc-generate-api       # API documentation
+```
 
-## 🎉 Acknowledgments
+---
 
-This project was inspired by and builds upon the excellent work from:
-- [I Love Claude Code](https://github.com/alchemiststudiosDOTai/i-love-claude-code) by Alchemist Studios
+## 📦 Available Plugins
 
-Special thanks to the Claude Code community for their contributions and feedback.
+| Plugin | Agents | Commands | Description |
+|--------|--------|----------|-------------|
+| `grey-haven-core` | 3 | 5 | Core functionality (research, context, git) |
+| `grey-haven-developer-experience` | 5 | 8 | DX tools (TDD, code review, docs) |
+| `grey-haven-observability` | 2 | 3 | Monitoring, logging, metrics |
+| `grey-haven-infrastructure` | 3 | 4 | IaC, deployment, scaling |
+| `grey-haven-quality-assurance` | 2 | 3 | Testing, E2E, visual regression |
+| `grey-haven-security` | 2 | 2 | Security scanning, vulnerability analysis |
+| `grey-haven-data-engineering` | 2 | 2 | ETL, data pipelines, analytics |
+| `grey-haven-ai-ml` | 2 | 1 | AI/ML workflows, model training |
+| `grey-haven-mobile-development` | 2 | 1 | Mobile app development |
+| `grey-haven-cloudflare` | 1 | 1 | Cloudflare Workers/Pages deployment |
+| `grey-haven-linear-integration` | 1 | 1 | Linear project management |
+| `grey-haven-hooks` | 0 | 0 | Hook documentation |
+
+**Total**: 26+ agents, 30+ commands across 12 plugins
+
+---
+
+## 🔧 CLI Commands
+
+### Hooks Management
+
+```bash
+claude-config install-hooks         # Install hooks to ~/.claude/hooks/
+claude-config list-hooks            # Show available hooks
+```
+
+### Configuration
+
+```bash
+claude-config init                  # Initialize .claude/ directory
+claude-config backup-settings       # Backup user settings
+claude-config restore-settings      # Restore from backup
+```
+
+### Diagnostics
+
+```bash
+claude-config doctor                # Diagnose installation
+claude-config version               # Show version
+```
+
+---
+
+## 📚 Documentation
+
+- **[Migration Guide](MIGRATION_V2.md)** - Upgrade from v1.x to v2.0.0
+- **[npm Package README](README-npm.md)** - CLI tool documentation
+- **[Installation Guide](INSTALLATION.md)** - Detailed setup instructions
+- **[Architecture Plan](.claude/V2_ARCHITECTURE_PLAN.md)** - v2.0.0 design decisions
+
+---
+
+## 🔄 Updating
+
+### Update Plugins
+
+```bash
+cd ~/grey-haven-plugins
+git pull origin main
+```
+
+### Update CLI Tools
+
+```bash
+npm update -g @greyhaven/claude-code-config
+# Or: claude-config self-update
+```
+
+---
+
+## 🎯 Key Features
+
+### 26+ Specialized Agents
+
+**Core Functionality**:
+- `docs-architect` - Technical documentation creation
+- `code-quality-analyzer` - Multi-mode code analysis
+- `tdd-python-implementer` - Test-driven Python development
+- `tdd-typescript-implementer` - Test-driven TypeScript development
+
+**Observability**:
+- `observability-architect` - Monitoring setup
+- `sli-slo-engineer` - SLI/SLO implementation
+
+**Security**:
+- `security-analyzer` - Vulnerability scanning
+- `security-audit-orchestrator` - Comprehensive security audits
+
+**[See full agent catalog in plugins/](grey-haven-plugins/)**
+
+### 30+ Slash Commands
+
+**Development**:
+- `/tdd-implement` - TDD implementation workflow
+- `/code-review` - Comprehensive code review
+- `/refactor-clarity` - Clarity-focused refactoring
+
+**Documentation**:
+- `/doc-generate-api` - OpenAPI 3.1 generation
+- `/doc-coverage` - Documentation coverage validation
+
+**Security & Quality**:
+- `/security-scan` - Security audit
+- `/quality-pipeline` - Full quality check
+
+**[See full command catalog in plugins/](grey-haven-plugins/)**
+
+### 4 Production Hooks
+
+- `subagent-context-preparer.py` - Optimize subagent context
+- `security-validator.py` - Security validation
+- `prompt-enhancer.py` - Enhance user prompts
+- `work-completion-assistant.py` - Work completion tracking
+
+---
+
+## 🆚 v2.0.0 Changes
+
+| Feature | v1.x | v2.0.0 |
+|---------|------|--------|
+| **Plugin distribution** | ✅ npm | ❌ Git + marketplace |
+| **Hooks** | ✅ npm | ✅ npm (optional) |
+| **CLI tools** | ✅ npm | ✅ npm (optional) |
+| **Package size** | ~2 MB | ~500 KB |
+| **Update method** | `npm update` | `git pull` + `npm update` |
+
+**See [MIGRATION_V2.md](MIGRATION_V2.md) for complete migration guide.**
+
+---
+
+## 📋 System Requirements
+
+### Required
+- Claude Code installed
+- Git
+
+### Optional
+- Python 3.8+ (for hooks)
+- Node.js 14+ (for npm CLI tools)
+
+### Check Installation
+
+```bash
+claude-config doctor
+```
+
+---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit issues and pull requests.
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-1. Fork the repository
-2. Create a feature branch
-3. Test your changes
-4. Submit a pull request
+### Development Setup
+
+```bash
+git clone https://github.com/greyhaven-ai/grey-haven-claude-code-config.git
+cd grey-haven-claude-code-config
+npm install
+```
+
+---
 
 ## 📄 License
 
-MIT License - Copyright (c) 2025 Grey Haven Studio
+MIT © Grey Haven Studio
 
-See [LICENSE](LICENSE) file for details.
+---
+
+## 🔗 Links
+
+- **GitHub**: https://github.com/greyhaven-ai/grey-haven-claude-code-config
+- **npm**: https://www.npmjs.com/package/@greyhaven/claude-code-config
+- **Issues**: https://github.com/greyhaven-ai/grey-haven-claude-code-config/issues
 
 ---
 

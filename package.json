@@ -1,14 +1,16 @@
 {
   "name": "@greyhaven/claude-code-config",
-  "version": "1.2.8",
-  "description": "Comprehensive configuration manager for Claude Code - manage presets, hooks, agents, and commands",
+  "version": "2.0.0",
+  "description": "Hooks and configuration setup for Grey Haven's Claude Code environment",
   "main": "lib/index.js",
   "bin": {
     "claude-config": "./bin/claude-config.js"
   },
   "scripts": {
     "postinstall": "node scripts/postinstall.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "python3 -m pytest tests/ -v",
+    "lint": "eslint bin/ scripts/",
+    "validate": "node scripts/validate-hooks.js"
   },
   "repository": {
     "type": "git",
@@ -17,11 +19,13 @@
   "keywords": [
     "claude",
     "claude-code",
-    "ai",
-    "configuration",
-    "cli",
     "hooks",
-    "agents",
+    "configuration",
+    "setup",
+    "cli",
+    "mcp",
+    "grey-haven",
+    "ai",
     "developer-tools"
   ],
   "author": "Grey Haven Studio",
@@ -31,21 +35,26 @@
   },
   "homepage": "https://github.com/greyhaven-ai/claude-code-config#readme",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.0.0",
+    "python": ">=3.8.0"
   },
   "preferGlobal": true,
   "files": [
     "bin/",
     "scripts/",
-    "claude-config",
-    "setup-claude-code/",
-    "docs/cli/",
     ".claude/hooks/",
+    ".claude/settings.json.template",
+    "templates/",
+    "docs/cli/",
     "LICENSE",
-    "README-npm.md"
+    "README-npm.md",
+    "claude-config"
   ],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0"
   }
 }

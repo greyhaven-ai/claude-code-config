@@ -1,0 +1,17 @@
+{
+    "name": "grey-haven-core",
+    "description": "Core development tools including quality pipeline, TDD implementation, code review, and refactoring capabilities",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "keywords": [
+        "tdd",
+        "quality",
+        "refactoring",
+        "code-review",
+        "performance"
+    ],
+    "license": "MIT",
+    "category": "development"
+}

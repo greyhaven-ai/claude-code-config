@@ -1,0 +1,15 @@
+{
+    "name": "grey-haven-developer-experience",
+    "description": "Developer experience and team collaboration tools including onboarding automation, documentation generation, async standups with Linear integration, and knowledge management",
+    "version": "1.0.0",
+    "category": "productivity",
+    "keywords": [
+        "onboarding",
+        "documentation",
+        "collaboration",
+        "linear",
+        "team",
+        "productivity",
+        "knowledge-base"
+    ]
+}

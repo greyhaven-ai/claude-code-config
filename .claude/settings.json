@@ -1,0 +1,31 @@
+{
+  "plugin": {
+    "marketplaces": [
+      {
+        "name": "grey-haven-plugins",
+        "source": "./grey-haven-plugins"
+      }
+    ],
+    "install": [
+      "grey-haven-core@grey-haven-plugins",
+      "grey-haven-linear@grey-haven-plugins",
+      "grey-haven-testing@grey-haven-plugins",
+      "grey-haven-deployment@grey-haven-plugins",
+      "grey-haven-security@grey-haven-plugins",
+      "grey-haven-research@grey-haven-plugins",
+      "grey-haven-hooks@grey-haven-plugins",
+      "grey-haven-observability@grey-haven-plugins",
+      "grey-haven-incident-response@grey-haven-plugins",
+      "grey-haven-agent-orchestration@grey-haven-plugins",
+      "grey-haven-data-quality@grey-haven-plugins",
+      "grey-haven-developer-experience@grey-haven-plugins"
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "mcp__firecrawl-mcp__firecrawl_scrape"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
