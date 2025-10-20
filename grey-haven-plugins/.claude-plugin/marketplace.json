@@ -64,6 +64,11 @@
             "name": "grey-haven-developer-experience",
             "source": "./grey-haven-developer-experience",
             "description": "Developer experience and team collaboration: onboarding automation, Linear integration, async standups, documentation, knowledge management"
+        },
+        {
+            "name": "grey-haven-skills",
+            "source": "./grey-haven-skills",
+            "description": "Claude Skills for automatic code style, commit formatting, and PR templates"
         }
     ]
 }

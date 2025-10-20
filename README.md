@@ -1,6 +1,6 @@
 # Grey Haven Claude Code Configuration
 
-**Version 2.0.0** - Hooks, configuration, and plugin marketplace for Claude Code
+**Version 2.1.0** - Hooks, Skills, configuration, and plugin marketplace for Claude Code
 
 [![npm version](https://badge.fury.io/js/%40greyhaven%2Fclaude-code-config.svg)](https://www.npmjs.com/package/@greyhaven/claude-code-config)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -12,11 +12,20 @@
 This repository contains Grey Haven Studio's comprehensive Claude Code ecosystem:
 
 **12 Plugin Packages** with **26+ Agents** and **30+ Commands**
+
 - Distributed via local plugin marketplace (not npm)
 - Clone this repository and configure in Claude Code settings
 
+**3 Claude Skills** for automatic code assistance
+
+- Code style enforcement (TypeScript, React, Python)
+- Commit message formatting (Conventional Commits)
+- Pull request template generation
+
 **npm Package** (`@greyhaven/claude-code-config`) for:
+
 - ✅ Hook installation and management
+- ✅ Skills installation and management
 - ✅ MCP server configuration
 - ✅ Project initialization
 - ✅ Settings backup/restore
@@ -79,10 +88,11 @@ npm install -g @greyhaven/claude-code-config
 
 ## 🚀 Quick Start
 
-### 1. Install Hooks
+### 1. Install Hooks and Skills
 
 ```bash
 claude-config install-hooks
+claude-config install-skills
 ```
 
 ### 2. Test Installation
@@ -91,7 +101,17 @@ claude-config install-hooks
 claude-config doctor
 ```
 
-### 3. Use Plugins
+### 3. Use Skills and Plugins
+
+Skills work automatically - just code naturally:
+
+```
+"Write a React component"     → grey-haven-code-style applies
+"Create a commit message"     → grey-haven-commit-format applies
+"Generate a PR description"   → grey-haven-pr-template applies
+```
+
+Use plugins via commands:
 
 In Claude Code:
 ```bash

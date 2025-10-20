@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-Claude Config CLI v2.0.0 - Hooks and Configuration Setup
+Claude Config CLI v2.1.0 - Hooks, Skills, and Configuration Setup
 
 Focused on:
 - Hook installation and management
+- Skills installation and management
 - MCP server configuration
 - Project initialization
 - Settings backup/restore
@@ -20,7 +21,7 @@ import argparse
 from datetime import datetime
 
 # Version info
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 
 # ANSI color codes for terminal output
 class Colors:
@@ -43,6 +44,7 @@ class ClaudeConfigManager:
             self.repo_dir = Path(__file__).parent
 
         self.hooks_dir = self.repo_dir / '.claude' / 'hooks'
+        self.skills_dir = self.repo_dir / 'grey-haven-plugins' / 'grey-haven-skills'
         self.templates_dir = self.repo_dir / 'templates'
 
         # Configuration file paths
@@ -172,6 +174,101 @@ class ClaudeConfigManager:
             pass
         return None
 
+    # === SKILLS MANAGEMENT ===
+
+    def install_skills(self, target: Optional[str] = None, dry_run: bool = False):
+        """Install Skills to ~/.claude/skills/ or custom directory"""
+        self.print_header("Installing Claude Code Skills")
+
+        if not self.skills_dir.exists():
+            self.print_error(f"Skills directory not found: {self.skills_dir}")
+            self.print_info("Make sure you're running from a valid installation")
+            return False
+
+        target_dir = Path(target) if target else Path.home() / '.claude' / 'skills'
+
+        self.print_info(f"Target directory: {target_dir}")
+
+        if dry_run:
+            self.print_warning("DRY RUN - No files will be copied")
+        else:
+            target_dir.mkdir(parents=True, exist_ok=True)
+
+        # Get all skill directories (each contains SKILL.md)
+        skills = [d for d in self.skills_dir.iterdir() if d.is_dir() and (d / 'SKILL.md').exists()]
+
+        if not skills:
+            self.print_warning("No Skills found to install")
+            return False
+
+        print(f"\n{Colors.BOLD}Installing {len(skills)} Skills:{Colors.END}\n")
+
+        for skill in sorted(skills):
+            if dry_run:
+                print(f"  Would install: {skill.name}/")
+            else:
+                target_skill_dir = target_dir / skill.name
+                if target_skill_dir.exists():
+                    shutil.rmtree(target_skill_dir)
+                shutil.copytree(skill, target_skill_dir)
+                self.print_success(f"Installed {skill.name}/")
+
+        if not dry_run:
+            print(f"\n{Colors.GREEN}{Colors.BOLD}🎉 Installed {len(skills)} Skills to {target_dir}{Colors.END}")
+            self.print_info("\nSkills will be automatically loaded by Claude when relevant to your task.")
+            self.print_info("No additional configuration needed!")
+
+        return True
+
+    def list_skills(self):
+        """List available Skills"""
+        self.print_header("Available Claude Code Skills")
+
+        if not self.skills_dir.exists():
+            self.print_error(f"Skills directory not found: {self.skills_dir}")
+            return False
+
+        skills = [d for d in self.skills_dir.iterdir() if d.is_dir() and (d / 'SKILL.md').exists()]
+
+        if not skills:
+            self.print_warning("No Skills found")
+            return False
+
+        print(f"{Colors.BOLD}Found {len(skills)} Skills:{Colors.END}\n")
+
+        for skill in sorted(skills):
+            # Extract skill metadata from SKILL.md
+            skill_name, description = self._get_skill_metadata(skill / 'SKILL.md')
+            print(f"  {Colors.GREEN}•{Colors.END} {Colors.BOLD}{skill_name}{Colors.END}")
+            if description:
+                print(f"    {Colors.BLUE}{description}{Colors.END}")
+
+        print(f"\n{Colors.CYAN}Install Skills:{Colors.END} claude-config install-skills")
+        print(f"{Colors.CYAN}Install via Plugin:{Colors.END} /plugin install grey-haven-skills@grey-haven-plugins")
+        return True
+
+    def _get_skill_metadata(self, skill_path: Path) -> tuple[Optional[str], Optional[str]]:
+        """Extract name and description from SKILL.md frontmatter"""
+        try:
+            with open(skill_path) as f:
+                content = f.read()
+                # Extract YAML frontmatter
+                if content.startswith('---'):
+                    parts = content.split('---', 2)
+                    if len(parts) >= 3:
+                        frontmatter = parts[1]
+                        name = None
+                        description = None
+                        for line in frontmatter.split('\n'):
+                            if line.startswith('name:'):
+                                name = line.split(':', 1)[1].strip()
+                            elif line.startswith('description:'):
+                                description = line.split(':', 1)[1].strip()
+                        return name, description
+        except Exception:
+            pass
+        return None, None
+
     # === CONFIGURATION ===
 
     def init(self, target_dir: Optional[Path] = None):
@@ -291,6 +388,7 @@ Project initialized on {datetime.now().strftime('%Y-%m-%d')}
             "Python 3 installed": self._check_python(),
             "Node.js installed": self._check_node(),
             "Hooks installed": self._check_hooks(),
+            "Skills installed": self._check_skills(),
             "User settings.json exists": self._check_settings(),
             "Plugin marketplace configured": self._check_marketplace(),
         }
@@ -322,6 +420,11 @@ Project initialized on {datetime.now().strftime('%Y-%m-%d')}
             if not checks["Hooks installed"]:
                 print(f"\n  {Colors.YELLOW}Hooks:{Colors.END}")
                 print(f"    Run: claude-config install-hooks")
+
+            if not checks["Skills installed"]:
+                print(f"\n  {Colors.YELLOW}Skills:{Colors.END}")
+                print(f"    Run: claude-config install-skills")
+                print(f"    Or: /plugin install grey-haven-skills@grey-haven-plugins")
 
             if not checks["User settings.json exists"]:
                 print(f"\n  {Colors.YELLOW}Settings:{Colors.END}")
@@ -355,6 +458,15 @@ Project initialized on {datetime.now().strftime('%Y-%m-%d')}
         """Check if hooks are installed"""
         hooks_dir = Path.home() / '.claude' / 'hooks'
         return hooks_dir.exists() and len(list(hooks_dir.glob('*.py'))) > 0
+
+    def _check_skills(self) -> bool:
+        """Check if Skills are installed"""
+        skills_dir = Path.home() / '.claude' / 'skills'
+        if not skills_dir.exists():
+            return False
+        # Check if any skill directories with SKILL.md exist
+        skills = [d for d in skills_dir.iterdir() if d.is_dir() and (d / 'SKILL.md').exists()]
+        return len(skills) > 0
 
     def _check_settings(self) -> bool:
         """Check if settings.json exists and is valid JSON"""
@@ -416,18 +528,20 @@ def main():
     manager = ClaudeConfigManager()
 
     parser = argparse.ArgumentParser(
-        description='Claude Config v2.0.0 - Hooks and Configuration Setup',
+        description='Claude Config v2.1.0 - Hooks, Skills, and Configuration Setup',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=f"""
 {Colors.BOLD}Examples:{Colors.END}
   claude-config install-hooks              Install hooks to ~/.claude/hooks/
   claude-config list-hooks                 Show available hooks
+  claude-config install-skills             Install Skills to ~/.claude/skills/
+  claude-config list-skills                Show available Skills
   claude-config init                       Initialize .claude/ directory
   claude-config doctor                     Diagnose installation
   claude-config backup-settings            Backup user settings
 
 {Colors.BOLD}Plugin Marketplace:{Colors.END}
-  For agents and commands, use Git + plugin marketplace:
+  For agents, commands, and Skills, use Git + plugin marketplace:
 
   1. Clone repository:
      git clone https://github.com/greyhaven-ai/grey-haven-claude-code-config.git
@@ -457,6 +571,14 @@ def main():
 
     # list-hooks
     subparsers.add_parser('list-hooks', help='List available hooks')
+
+    # install-skills
+    install_skills_parser = subparsers.add_parser('install-skills', help='Install Skills to ~/.claude/skills/')
+    install_skills_parser.add_argument('--target', help='Custom target directory')
+    install_skills_parser.add_argument('--dry-run', action='store_true', help='Show what would be installed')
+
+    # list-skills
+    subparsers.add_parser('list-skills', help='List available Skills')
 
     # init
     init_parser = subparsers.add_parser('init', help='Initialize .claude/ directory')
@@ -492,6 +614,10 @@ def main():
             success = manager.install_hooks(args.target, args.dry_run)
         elif args.command == 'list-hooks':
             success = manager.list_hooks()
+        elif args.command == 'install-skills':
+            success = manager.install_skills(args.target, args.dry_run)
+        elif args.command == 'list-skills':
+            success = manager.list_skills()
         elif args.command == 'init':
             success = manager.init(args.target)
         elif args.command == 'backup-settings':

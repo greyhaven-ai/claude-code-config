@@ -1,7 +1,7 @@
 {
   "name": "@greyhaven/claude-code-config",
-  "version": "2.0.0",
-  "description": "Hooks and configuration setup for Grey Haven's Claude Code environment",
+  "version": "2.1.0",
+  "description": "Hooks, Skills, and configuration setup for Grey Haven's Claude Code environment",
   "main": "lib/index.js",
   "bin": {
     "claude-config": "./bin/claude-config.js"
@@ -20,13 +20,15 @@
     "claude",
     "claude-code",
     "hooks",
+    "skills",
     "configuration",
     "setup",
     "cli",
     "mcp",
     "grey-haven",
     "ai",
-    "developer-tools"
+    "developer-tools",
+    "code-quality"
   ],
   "author": "Grey Haven Studio",
   "license": "MIT",
@@ -43,7 +45,9 @@
     "bin/",
     "scripts/",
     ".claude/hooks/",
+    ".claude/skills/",
     ".claude/settings.json.template",
+    "grey-haven-plugins/grey-haven-skills/",
     "templates/",
     "docs/cli/",
     "LICENSE",
