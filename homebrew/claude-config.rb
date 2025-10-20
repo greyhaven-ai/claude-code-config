@@ -2,7 +2,7 @@ class ClaudeConfig < Formula
   desc "Hooks and configuration setup for Grey Haven's Claude Code environment"
   homepage "https://github.com/greyhaven-ai/claude-code-config"
   url "https://github.com/greyhaven-ai/claude-code-config/archive/v2.0.0.tar.gz"
-  sha256 "TBD_AFTER_RELEASE"
+  sha256 "540ee9105de4a9e97ad34f6a0b48ea72e7fed5bcf5e6df081be1e8d12488c17f"
   license "MIT"
   head "https://github.com/greyhaven-ai/claude-code-config.git", branch: "main"
 
