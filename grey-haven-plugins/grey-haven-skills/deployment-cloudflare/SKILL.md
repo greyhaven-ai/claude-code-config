@@ -228,14 +228,14 @@ jobs:
       - name: Notify deployment
         if: success()
         run: |
-          echo "✅ Deployment successful to https://app.greyhaven.studio"
+          echo "[OK] Deployment successful to https://app.greyhaven.studio"
 
       - name: Rollback on failure
         if: failure()
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          echo "❌ Deployment failed - rolling back"
+          echo "[X] Deployment failed - rolling back"
           npx wrangler rollback --config wrangler.production.toml
 ```
 
@@ -308,7 +308,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '✅ Preview deployed to https://staging.greyhaven.studio'
+              body: '[OK] Preview deployed to https://staging.greyhaven.studio'
             })
 ```
 

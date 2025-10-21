@@ -23,16 +23,16 @@ function Dashboard() {
     queryFn: fetchUsers,
   });
 
-  // ❌ Bad - Recalculates on every render
+  // [X] Bad - Recalculates on every render
   const activeUsers = users?.filter((u) => u.isActive);
 
-  // ✅ Good - Memoize expensive calculation
+  // [OK] Good - Memoize expensive calculation
   const activeUsers = useMemo(
     () => users?.filter((u) => u.isActive) ?? [],
     [users]
   );
 
-  // ✅ Good - Memoize complex transformations
+  // [OK] Good - Memoize complex transformations
   const usersByDepartment = useMemo(() => {
     if (!users) return {};
     return users.reduce((acc, user) => {
@@ -52,7 +52,7 @@ function Dashboard() {
 // app/components/UserCard.tsx
 import { memo } from "react";
 
-// ❌ Bad - Re-renders when parent re-renders (even if props unchanged)
+// [X] Bad - Re-renders when parent re-renders (even if props unchanged)
 function UserCard({ user }: { user: User }) {
   return (
     <div>
@@ -62,7 +62,7 @@ function UserCard({ user }: { user: User }) {
   );
 }
 
-// ✅ Good - Only re-renders when user prop changes
+// [OK] Good - Only re-renders when user prop changes
 export const UserCard = memo(function UserCard({ user }: { user: User }) {
   return (
     <div>
@@ -72,7 +72,7 @@ export const UserCard = memo(function UserCard({ user }: { user: User }) {
   );
 });
 
-// ✅ Good - Custom comparison for complex props
+// [OK] Good - Custom comparison for complex props
 export const UserCard = memo(
   function UserCard({ user }: { user: User }) {
     return (
@@ -95,12 +95,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 function UserList() {
   const queryClient = useQueryClient();
 
-  // ❌ Bad - New function on every render (causes child re-renders)
+  // [X] Bad - New function on every render (causes child re-renders)
   const handleDelete = (userId: string) => {
     deleteUser(userId);
   };
 
-  // ✅ Good - Stable function reference
+  // [OK] Good - Stable function reference
   const handleDelete = useCallback(
     (userId: string) => {
       deleteUser(userId);
@@ -250,7 +250,7 @@ function UserList() {
 // app/routes/index.tsx
 import { createFileRoute } from "@tanstack/react-router";
 
-// ✅ Automatic code splitting with TanStack Router
+// [OK] Automatic code splitting with TanStack Router
 export const Route = createFileRoute("/dashboard")({
   component: Dashboard, // Automatically code-split
 });
@@ -266,7 +266,7 @@ export const UsersRoute = createFileRoute("/users")({
 // app/routes/dashboard.tsx
 import { lazy, Suspense } from "react";
 
-// ✅ Lazy load heavy components
+// [OK] Lazy load heavy components
 const HeavyChart = lazy(() => import("~/components/HeavyChart"));
 const LargeTable = lazy(() => import("~/components/LargeTable"));
 
@@ -300,19 +300,19 @@ ls -lh .output/public/_build/
 
 #### Tree Shaking and Dead Code Elimination
 ```typescript
-// ❌ Bad - Imports entire library
+// [X] Bad - Imports entire library
 import _ from "lodash";
 const result = _.debounce(fn, 300);
 
-// ✅ Good - Import only what you need
+// [OK] Good - Import only what you need
 import debounce from "lodash/debounce";
 const result = debounce(fn, 300);
 
-// ❌ Bad - Large date library
+// [X] Bad - Large date library
 import moment from "moment";
 const date = moment().format("YYYY-MM-DD");
 
-// ✅ Good - Use native Date or smaller library
+// [OK] Good - Use native Date or smaller library
 const date = new Date().toISOString().split("T")[0];
 
 // OR use date-fns (tree-shakeable)
@@ -324,14 +324,14 @@ const date = format(new Date(), "yyyy-MM-dd");
 ```typescript
 // app/routes/export.tsx
 async function exportToExcel() {
-  // ✅ Only load XLSX when needed
+  // [OK] Only load XLSX when needed
   const XLSX = await import("xlsx");
   const workbook = XLSX.utils.book_new();
   // ... generate Excel file
 }
 
 async function generatePDF() {
-  // ✅ Only load jsPDF when needed
+  // [OK] Only load jsPDF when needed
   const { jsPDF } = await import("jspdf");
   const doc = new jsPDF();
   // ... generate PDF
@@ -349,7 +349,7 @@ from sqlmodel import Session, select
 from app.models.user import User
 from app.models.organization import Organization
 
-# ❌ Bad - N+1 query problem
+# [X] Bad - N+1 query problem
 async def get_users_with_orgs(db: Session) -> list[User]:
     # 1 query to fetch all users
     users = await db.execute(select(User))
@@ -365,7 +365,7 @@ async def get_users_with_orgs(db: Session) -> list[User]:
 
 #### Eager Loading with Joins (Good)
 ```python
-# ✅ Good - Single query with join
+# [OK] Good - Single query with join
 from sqlmodel import select
 from sqlalchemy.orm import selectinload
 
@@ -407,14 +407,14 @@ statement = select(User).options(selectinload(User.organization))
 from alembic import op
 from sqlalchemy import Index
 
-# ✅ Add index on frequently queried columns
+# [OK] Add index on frequently queried columns
 op.create_index("idx_users_email", "users", ["email"])
 op.create_index("idx_users_tenant_id", "users", ["tenant_id"])
 
-# ✅ Composite index for multi-column queries
+# [OK] Composite index for multi-column queries
 op.create_index("idx_users_tenant_email", "users", ["tenant_id", "email"])
 
-# ✅ Partial index for filtered queries
+# [OK] Partial index for filtered queries
 op.execute("""
     CREATE INDEX idx_users_active
     ON users (tenant_id, created_at)
@@ -424,12 +424,12 @@ op.execute("""
 
 #### Query Pagination
 ```python
-# ❌ Bad - Loads all records into memory
+# [X] Bad - Loads all records into memory
 async def list_users(db: Session) -> list[User]:
     result = await db.execute(select(User))
     return result.scalars().all()  # Could be millions of rows!
 
-# ✅ Good - Cursor-based pagination
+# [OK] Good - Cursor-based pagination
 async def list_users(
     db: Session,
     cursor: Optional[str] = None,
@@ -454,12 +454,12 @@ async def list_users(
 
 #### Select Only Required Fields
 ```python
-# ❌ Bad - Fetches all columns (including large text fields)
+# [X] Bad - Fetches all columns (including large text fields)
 async def list_users(db: Session) -> list[User]:
     result = await db.execute(select(User))
     return result.scalars().all()
 
-# ✅ Good - Select only needed columns
+# [OK] Good - Select only needed columns
 from sqlalchemy import select
 
 async def list_users(db: Session) -> list[dict]:
@@ -483,7 +483,7 @@ import os
 # Doppler provides DATABASE_URL
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# ✅ Configure connection pool
+# [OK] Configure connection pool
 engine = create_async_engine(
     DATABASE_URL,
     echo=False,  # Disable SQL logging in production
@@ -581,7 +581,7 @@ class UserRepository:
 export async function handleFetch(request: Request, env: Env) {
   const url = new URL(request.url);
 
-  // ✅ Cache static assets at edge
+  // [OK] Cache static assets at edge
   if (url.pathname.startsWith("/assets/")) {
     const cache = caches.default;
     let response = await cache.match(request);
@@ -654,7 +654,7 @@ export async function getSession(
   sessionId: string,
   env: Env
 ): Promise<Session | null> {
-  // ✅ Fast read from KV (edge cache)
+  // [OK] Fast read from KV (edge cache)
   const cached = await env.SESSIONS.get(sessionId, "json");
 
   if (cached) {
@@ -730,7 +730,7 @@ export async function GET({ request, context }: { request: Request; context: any
   const width = url.searchParams.get("width") || "800";
   const quality = url.searchParams.get("quality") || "85";
 
-  // ✅ Use Cloudflare Image Resizing
+  // [OK] Use Cloudflare Image Resizing
   const resizedUrl = `https://imagedelivery.net/${context.env.CLOUDFLARE_ACCOUNT_ID}/${imageUrl}/width=${width},quality=${quality}`;
 
   return fetch(resizedUrl);

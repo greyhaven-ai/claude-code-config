@@ -14,7 +14,7 @@ Follow Grey Haven Studio's database standards for both TypeScript (Drizzle ORM) 
 **CRITICAL**: Database column names use snake_case, not camelCase.
 
 ```typescript
-// ✅ Correct - Drizzle schema (TypeScript)
+// [OK] Correct - Drizzle schema (TypeScript)
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   created_at: timestamp("created_at").defaultNow().notNull(),
@@ -25,7 +25,7 @@ export const users = pgTable("users", {
   last_login_at: timestamp("last_login_at"),
 });
 
-// ❌ Wrong - Don't use camelCase
+// [X] Wrong - Don't use camelCase
 export const users = pgTable("users", {
   id: uuid("id").primaryKey(),
   createdAt: timestamp("createdAt"),        // WRONG!
@@ -36,7 +36,7 @@ export const users = pgTable("users", {
 ```
 
 ```python
-# ✅ Correct - SQLModel schema (Python)
+# [OK] Correct - SQLModel schema (Python)
 class User(SQLModel, table=True):
     """User database model."""
 
@@ -50,7 +50,7 @@ class User(SQLModel, table=True):
     is_active: bool = Field(default=True)
     last_login_at: Optional[datetime] = None
 
-# ❌ Wrong - Don't use camelCase
+# [X] Wrong - Don't use camelCase
 class User(SQLModel, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     createdAt: datetime = Field(default_factory=datetime.utcnow)  # WRONG!
@@ -172,13 +172,13 @@ class Team(TimestampMixin, SQLModel, table=True):
 Prefix with `is_`, `has_`, or `can_`:
 
 ```typescript
-// ✅ Good boolean names
+// [OK] Good boolean names
 is_active: boolean("is_active").default(true)
 is_verified: boolean("is_verified").default(false)
 has_access: boolean("has_access").default(false)
 can_edit: boolean("can_edit").default(false)
 
-// ❌ Bad boolean names
+// [X] Bad boolean names
 active: boolean("active")              // Missing 'is_' prefix
 verified: boolean("verified")          // Missing 'is_' prefix
 ```
@@ -188,7 +188,7 @@ verified: boolean("verified")          // Missing 'is_' prefix
 Use `_at` suffix for timestamps:
 
 ```typescript
-// ✅ Good timestamp names
+// [OK] Good timestamp names
 created_at: timestamp("created_at")
 updated_at: timestamp("updated_at")
 deleted_at: timestamp("deleted_at")      // Soft delete
@@ -196,7 +196,7 @@ last_login_at: timestamp("last_login_at")
 verified_at: timestamp("verified_at")
 expires_at: timestamp("expires_at")
 
-// ❌ Bad timestamp names
+// [X] Bad timestamp names
 created: timestamp("created")            // Missing '_at' suffix
 last_login: timestamp("last_login")      // Missing '_at' suffix
 ```
@@ -206,12 +206,12 @@ last_login: timestamp("last_login")      // Missing '_at' suffix
 Use singular form with `_id` suffix:
 
 ```typescript
-// ✅ Good foreign key names
+// [OK] Good foreign key names
 user_id: uuid("user_id").references(() => users.id)
 organization_id: uuid("organization_id").references(() => organizations.id)
 parent_id: uuid("parent_id").references(() => categories.id) // Self-reference
 
-// ❌ Bad foreign key names
+// [X] Bad foreign key names
 user: uuid("user")                      // Missing '_id' suffix
 users_id: uuid("users_id")              // Should be singular
 ```
@@ -221,12 +221,12 @@ users_id: uuid("users_id")              // Should be singular
 Use `_data` or descriptive name:
 
 ```typescript
-// ✅ Good JSON field names
+// [OK] Good JSON field names
 metadata: jsonb("metadata").default({})
 settings_data: jsonb("settings_data").default({})
 oauth_profile: jsonb("oauth_profile")
 
-// ❌ Bad JSON field names
+// [X] Bad JSON field names
 meta: jsonb("meta")                     // Too generic
 json: jsonb("json")                     // Not descriptive
 ```
@@ -454,7 +454,7 @@ def downgrade() -> None:
 import { eq, and } from "drizzle-orm";
 import { db } from "~/lib/server/db";
 
-// ✅ Correct - Always filter by tenant_id
+// [OK] Correct - Always filter by tenant_id
 export async function getUserById(userId: string, tenantId: string) {
   return await db.query.users.findFirst({
     where: and(
@@ -464,7 +464,7 @@ export async function getUserById(userId: string, tenantId: string) {
   });
 }
 
-// ✅ Correct - List query with tenant filter
+// [OK] Correct - List query with tenant filter
 export async function listUsers(tenantId: string, limit = 50, offset = 0) {
   return await db.query.users.findMany({
     where: eq(users.tenant_id, tenantId),
@@ -473,7 +473,7 @@ export async function listUsers(tenantId: string, limit = 50, offset = 0) {
   });
 }
 
-// ❌ Wrong - Missing tenant_id filter (security risk!)
+// [X] Wrong - Missing tenant_id filter (security risk!)
 export async function getUserById(userId: string) {
   return await db.query.users.findFirst({
     where: eq(users.id, userId), // Missing tenant_id check!
@@ -489,7 +489,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 from typing import Optional
 
-# ✅ Correct - Repository pattern with tenant isolation
+# [OK] Correct - Repository pattern with tenant isolation
 class UserRepository:
     """User repository with automatic tenant filtering."""
 
@@ -517,7 +517,7 @@ class UserRepository:
         )
         return list(result.scalars().all())
 
-# ❌ Wrong - Missing tenant_id filtering
+# [X] Wrong - Missing tenant_id filtering
 async def get_user(session: AsyncSession, user_id: UUID) -> Optional[User]:
     result = await session.execute(
         select(User).where(User.id == user_id)  # Missing tenant check!

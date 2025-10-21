@@ -91,8 +91,8 @@ Hooks will validate each phase of the TDD cycle
  - Average cycle time: Y minutes
 ### Code Quality
  - Functions tested: X/Y
- - Edge cases covered: ✓
- - Error scenarios tested: ✓
+ - Edge cases covered: [OK]
+ - Error scenarios tested: [OK]
 ### Next Steps
  - [ ] Integration tests
  - [ ] Performance tests

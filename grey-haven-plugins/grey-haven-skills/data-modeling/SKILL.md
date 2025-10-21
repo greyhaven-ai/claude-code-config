@@ -175,24 +175,24 @@ export const usersRelations = relations(usersTable, ({ one }) => ({
 **CRITICAL**: Always use `snake_case` for database column names, regardless of language.
 
 ```python
-# ✅ Correct - snake_case in database
+# [OK] Correct - snake_case in database
 class User(SQLModel, table=True):
     full_name: str = Field(sa_column_kwargs={"name": "full_name"})  # Explicit
     created_at: datetime  # Implicit snake_case
 
-# ❌ Wrong - camelCase in database
+# [X] Wrong - camelCase in database
 class User(SQLModel, table=True):
     fullName: str  # Will create "fullName" column (WRONG!)
 ```
 
 ```typescript
-// ✅ Correct - snake_case in Drizzle
+// [OK] Correct - snake_case in Drizzle
 export const usersTable = pgTable("users", {
   fullName: varchar("full_name", { length: 255 }),  // JS camelCase → DB snake_case
   createdAt: timestamp("created_at"),
 });
 
-// ❌ Wrong - camelCase in database
+// [X] Wrong - camelCase in database
 export const usersTable = pgTable("users", {
   fullName: varchar("fullName"),  // Creates "fullName" column (WRONG!)
 });
@@ -219,24 +219,24 @@ updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
 ### Boolean Fields
 ```python
-# ✅ Correct - is_* prefix for booleans
+# [OK] Correct - is_* prefix for booleans
 is_active: bool = Field(default=True)
 is_verified: bool = Field(default=False)
 is_deleted: bool = Field(default=False)  # Soft delete flag
 
-# ❌ Wrong - ambiguous names
+# [X] Wrong - ambiguous names
 active: bool  # Unclear type
 verified: bool
 ```
 
 ### Foreign Key Naming
 ```python
-# ✅ Correct - {table}_id format
+# [OK] Correct - {table}_id format
 tenant_id: str = Field(foreign_key="tenants.id")
 organization_id: str = Field(foreign_key="organizations.id")
 created_by_id: str = Field(foreign_key="users.id")
 
-# ❌ Wrong - inconsistent naming
+# [X] Wrong - inconsistent naming
 tenant: str = Field(foreign_key="tenants.id")  # Confusing with relationship
 org_id: str  # Abbreviated
 ```
@@ -470,13 +470,13 @@ export const usersTable = pgTable(
 ```sql
 -- migrations/002_composite_indexes.sql
 
--- ✅ Composite index for tenant + email queries
+-- [OK] Composite index for tenant + email queries
 CREATE INDEX idx_users_tenant_email ON users (tenant_id, email);
 
--- ✅ Composite index for tenant + created_at (sorting/filtering)
+-- [OK] Composite index for tenant + created_at (sorting/filtering)
 CREATE INDEX idx_users_tenant_created ON users (tenant_id, created_at DESC);
 
--- ✅ Partial index (only active users)
+-- [OK] Partial index (only active users)
 CREATE INDEX idx_users_active ON users (tenant_id, created_at)
 WHERE is_active = true;
 ```

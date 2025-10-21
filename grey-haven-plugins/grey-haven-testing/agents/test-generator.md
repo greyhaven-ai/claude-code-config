@@ -198,8 +198,8 @@ Work with the test-runner hook to:
    - Edge cases: W
 
 ### Test Execution Results
-- ✅ Passing: X
-- ❌ Failing: Y (if any, explain why)
+- [OK] Passing: X
+- [X] Failing: Y (if any, explain why)
 - ⏭️ Skipped: Z
 
 ### Next Steps

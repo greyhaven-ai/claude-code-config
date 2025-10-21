@@ -238,7 +238,7 @@ When you see hook output like:
 ```
 [Hook: performance-baseline] Baseline established: p95=120ms, error_rate=0.5%, throughput=1200rps
 [Hook: cost-estimator] New DataDog APM hosts: +5, estimated monthly cost increase: $450
-[Hook: compliance-validator] ✓ SOC2 control CC6.1 satisfied (audit logging enabled)
+[Hook: compliance-validator] [OK] SOC2 control CC6.1 satisfied (audit logging enabled)
 [Hook: alert-simulator] ⚠️ PagerDuty test alert failed (webhook unreachable)
 ```
 

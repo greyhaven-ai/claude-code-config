@@ -53,19 +53,19 @@ GITHUB_CLIENT_SECRET=...
 ### Accessing Secrets in Code
 
 ```typescript
-// ✅ Correct - Use process.env (Doppler provides at runtime)
+// [OK] Correct - Use process.env (Doppler provides at runtime)
 const apiKey = process.env.OPENAI_API_KEY!;
 
-// ❌ Wrong - Hardcoded secrets
+// [X] Wrong - Hardcoded secrets
 const apiKey = "sk-...";  // NEVER DO THIS!
 ```
 
 ```python
-# ✅ Correct - Use os.getenv (Doppler provides at runtime)
+# [OK] Correct - Use os.getenv (Doppler provides at runtime)
 import os
 api_key = os.getenv("OPENAI_API_KEY")
 
-# ❌ Wrong - Hardcoded secrets
+# [X] Wrong - Hardcoded secrets
 api_key = "sk-..."  # NEVER DO THIS!
 ```
 
@@ -76,7 +76,7 @@ api_key = "sk-..."  # NEVER DO THIS!
 ```typescript
 import { z } from "zod";
 
-// ✅ Validate all user input
+// [OK] Validate all user input
 const UserCreateSchema = z.object({
   email_address: z.string().email().max(255),
   name: z.string().min(1).max(100),
@@ -121,17 +121,17 @@ async def create_user(data: UserCreate):
 ### HTML Escaping (XSS Prevention)
 
 ```typescript
-// ✅ React automatically escapes in JSX
+// [OK] React automatically escapes in JSX
 function UserProfile({ user }: { user: User }) {
   return <div>{user.name}</div>;  // Safe, auto-escaped
 }
 
-// ❌ Dangerous - Raw HTML
+// [X] Dangerous - Raw HTML
 function UserProfile({ user }: { user: User }) {
   return <div dangerouslySetInnerHTML={{ __html: user.bio }} />;  // UNSAFE!
 }
 
-// ✅ If HTML needed, sanitize first
+// [OK] If HTML needed, sanitize first
 import DOMPurify from "isomorphic-dompurify";
 
 function UserProfile({ user }: { user: User }) {
@@ -143,24 +143,24 @@ function UserProfile({ user }: { user: User }) {
 ### SQL Injection Prevention
 
 ```typescript
-// ✅ Use parameterized queries (Drizzle)
+// [OK] Use parameterized queries (Drizzle)
 const user = await db.query.users.findFirst({
   where: eq(users.email_address, email),  // Safe, parameterized
 });
 
-// ❌ Never concatenate SQL
+// [X] Never concatenate SQL
 const user = await db.execute(
   `SELECT * FROM users WHERE email = '${email}'`  // SQL INJECTION!
 );
 ```
 
 ```python
-# ✅ Use ORM (SQLModel/SQLAlchemy)
+# [OK] Use ORM (SQLModel/SQLAlchemy)
 user = await session.execute(
     select(User).where(User.email_address == email)  # Safe, parameterized
 )
 
-# ❌ Never concatenate SQL
+# [X] Never concatenate SQL
 user = await session.execute(
     f"SELECT * FROM users WHERE email = '{email}'"  # SQL INJECTION!
 )
@@ -189,7 +189,7 @@ CREATE POLICY "Tenant isolation for users"
 ### Always Include tenant_id in Queries
 
 ```typescript
-// ✅ Correct - Tenant isolation enforced
+// [OK] Correct - Tenant isolation enforced
 export const getUser = createServerFn("GET", async (userId: string) => {
   const session = await getSession();
   const tenantId = session.user.tenant_id;
@@ -202,7 +202,7 @@ export const getUser = createServerFn("GET", async (userId: string) => {
   });
 });
 
-// ❌ Wrong - Missing tenant check (security vulnerability!)
+// [X] Wrong - Missing tenant check (security vulnerability!)
 export const getUser = createServerFn("GET", async (userId: string) => {
   return await db.query.users.findFirst({
     where: eq(users.id, userId),  // Can access ANY tenant's users!

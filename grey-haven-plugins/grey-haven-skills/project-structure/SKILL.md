@@ -109,13 +109,13 @@ project-root/
 #### Path Imports - Always Use ~/* Alias
 
 ```typescript
-// ✅ Correct - Use ~/* path alias
+// [OK] Correct - Use ~/* path alias
 import { Button } from "~/lib/components/ui/button";
 import { getUserById } from "~/lib/server/functions/users";
 import { env } from "~/lib/config/env";
 import { useAuth } from "~/lib/hooks/use-auth";
 
-// ❌ Wrong - Relative paths
+// [X] Wrong - Relative paths
 import { Button } from "../../lib/components/ui/button";
 import { getUserById } from "../../../lib/server/functions/users";
 ```

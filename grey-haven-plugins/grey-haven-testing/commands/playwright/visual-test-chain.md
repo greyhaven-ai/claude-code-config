@@ -404,33 +404,33 @@ Chaining agents for result analysis
     
     ## Visual Consistency Results
     ### Desktop (1920x1080)
-    - Baseline: ✅ Captured
+    - Baseline: [OK] Captured
     - Difference: ${results.find(r => r.name.includes('Desktop'))?.diffPercentage || 0}%
-    - Status: ${results.find(r => r.name.includes('Desktop'))?.diffPercentage < 1 ? '✅ PASS' : '❌ FAIL'}
+    - Status: ${results.find(r => r.name.includes('Desktop'))?.diffPercentage < 1 ? '[OK] PASS' : '[X] FAIL'}
     
     ### Tablet (768x1024)
-    - Baseline: ✅ Captured
+    - Baseline: [OK] Captured
     - Difference: ${results.find(r => r.name.includes('Tablet'))?.diffPercentage || 0}%
-    - Status: ${results.find(r => r.name.includes('Tablet'))?.diffPercentage < 1 ? '✅ PASS' : '❌ FAIL'}
+    - Status: ${results.find(r => r.name.includes('Tablet'))?.diffPercentage < 1 ? '[OK] PASS' : '[X] FAIL'}
     
     ### Mobile (375x667)
-    - Baseline: ✅ Captured
+    - Baseline: [OK] Captured
     - Difference: ${results.find(r => r.name.includes('Mobile'))?.diffPercentage || 0}%
-    - Status: ${results.find(r => r.name.includes('Mobile'))?.diffPercentage < 1 ? '✅ PASS' : '❌ FAIL'}
+    - Status: ${results.find(r => r.name.includes('Mobile'))?.diffPercentage < 1 ? '[OK] PASS' : '[X] FAIL'}
     
     ## Component Visual Tests
     ${components.map(c => `
     ### ${c.name}
-    - Screenshot: ✅ Captured
-    - Visual Consistency: ✅ PASS
-    - Accessibility: ${c.accessible ? '✅' : '⚠️'} 
+    - Screenshot: [OK] Captured
+    - Visual Consistency: [OK] PASS
+    - Accessibility: ${c.accessible ? '[OK]' : '⚠️'} 
     `).join('\n')}
     
     ## Interaction States
-    - Hover Effects: ✅ Tested
-    - Focus States: ✅ Tested
-    - Active States: ✅ Tested
-    - Form Validation: ✅ Tested
+    - Hover Effects: [OK] Tested
+    - Focus States: [OK] Tested
+    - Active States: [OK] Tested
+    - Form Validation: [OK] Tested
     
     ## Performance Metrics
     - Total Image Requests: ${networkRequests.filter(r => r.url.match(/\.(png|jpg|jpeg|gif|webp)/)).length}

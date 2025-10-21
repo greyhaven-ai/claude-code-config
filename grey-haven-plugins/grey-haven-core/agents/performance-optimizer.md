@@ -332,10 +332,10 @@ const apiMetrics = {
 4. Implement lazy loading for below-fold content
 
 ### Performance Budget
-- JavaScript bundle: < 200KB (currently: 180KB ✅)
-- CSS bundle: < 50KB (currently: 45KB ✅)
-- Initial load: < 3s (currently: 1.8s ✅)
-- Time to interactive: < 5s (currently: 3.2s ✅)
+- JavaScript bundle: < 200KB (currently: 180KB [OK])
+- CSS bundle: < 50KB (currently: 45KB [OK])
+- Initial load: < 3s (currently: 1.8s [OK])
+- Time to interactive: < 5s (currently: 3.2s [OK])
 ```
 
 ## Integration with Hooks

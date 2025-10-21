@@ -362,10 +362,10 @@ Generating tests with proper assertions
     - Screenshots captured: ${screenshots.length}
     
     ## Generated Tests
-    - ✅ Playwright test suite
-    - ✅ Cypress test suite
-    - ✅ Visual regression tests
-    - ✅ Test data fixtures
+    - [OK] Playwright test suite
+    - [OK] Cypress test suite
+    - [OK] Visual regression tests
+    - [OK] Test data fixtures
     
     ## Key Test Scenarios
     1. Happy path user flow

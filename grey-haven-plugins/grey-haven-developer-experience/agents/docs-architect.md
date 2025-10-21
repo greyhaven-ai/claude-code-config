@@ -298,10 +298,10 @@ Ensure comprehensive documentation coverage:
 **Overall Coverage**: 87.3%
 
 ## By Module
-- `src/auth/`: 95.2% ✅
+- `src/auth/`: 95.2% [OK]
 - `src/users/`: 78.1% ⚠️
-- `src/orders/`: 91.7% ✅
-- `src/payments/`: 65.4% ❌
+- `src/orders/`: 91.7% [OK]
+- `src/payments/`: 65.4% [X]
 
 ## Missing Documentation
 
@@ -330,11 +330,11 @@ Ensure comprehensive documentation coverage:
 COVERAGE=$(npm run doc:coverage --silent | grep -oP 'Overall: \K[0-9.]+')
 
 if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-  echo "❌ Documentation coverage $COVERAGE% is below 80% threshold"
+  echo "[X] Documentation coverage $COVERAGE% is below 80% threshold"
   exit 1
 fi
 
-echo "✅ Documentation coverage: $COVERAGE%"
+echo "[OK] Documentation coverage: $COVERAGE%"
 ```
 
 ## 5. **Mermaid Diagram Generation**
@@ -757,7 +757,7 @@ Generating OpenAPI specification at `docs/api/openapi.json`...
 Creating Swagger UI at `docs/api/index.html`...
 Adding code examples in TypeScript, Python, cURL...
 
-✅ API documentation generated:
+[OK] API documentation generated:
 - OpenAPI spec: docs/api/openapi.json (1,247 lines)
 - Interactive docs: docs/api/index.html
 - 15 endpoints documented
@@ -797,7 +797,7 @@ Creating architecture documentation with:
 
 Writing to `docs/architecture/authentication.md`...
 
-✅ Architecture documentation created (47 pages):
+[OK] Architecture documentation created (47 pages):
 
 ## Highlights:
 - Executive summary for stakeholders
@@ -837,10 +837,10 @@ Running documentation coverage analysis across the codebase...
 **Overall Coverage**: 76.8% ⚠️
 
 ### By Module:
-- ✅ `src/auth/`: 94.2%
+- [OK] `src/auth/`: 94.2%
 - ⚠️ `src/users/`: 71.3%
 - ⚠️ `src/orders/`: 68.9%
-- ❌ `src/payments/`: 52.1%
+- [X] `src/payments/`: 52.1%
 
 ### Critical Gaps:
 

@@ -224,7 +224,7 @@ export const getUser = createServerFn("GET", async (userId: string) => {
 **Always use snake_case for database fields**:
 
 ```typescript
-// ✅ Correct - Drizzle schema
+// [OK] Correct - Drizzle schema
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   created_at: timestamp("created_at").defaultNow().notNull(),
@@ -233,7 +233,7 @@ export const users = pgTable("users", {
   is_active: boolean("is_active").default(true),
 });
 
-// ❌ Wrong - Don't use camelCase
+// [X] Wrong - Don't use camelCase
 export const users = pgTable("users", {
   id: uuid("id").primaryKey(),
   createdAt: timestamp("createdAt"), // WRONG!
@@ -415,7 +415,7 @@ async def get_user(
 ### Type Hints (REQUIRED)
 
 ```python
-# ✅ Correct - All functions have type hints
+# [OK] Correct - All functions have type hints
 from typing import Optional
 
 def get_user(user_id: str) -> Optional[User]:
@@ -429,7 +429,7 @@ async def create_user(data: UserCreate) -> User:
     await db.commit()
     return user
 
-# ❌ Wrong - Missing type hints
+# [X] Wrong - Missing type hints
 def get_user(user_id):  # Missing parameter and return types
     return db.query(User).filter(User.id == user_id).first()
 ```

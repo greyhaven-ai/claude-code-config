@@ -129,7 +129,7 @@ When managing context:
 
 **Context Restore Confirmation:**
 ```
-✅ Context restored: feature-auth-api-20250113
+[OK] Context restored: feature-auth-api-20250113
 - Workflow: Feature development (authentication API)
 - Last active: 3 hours ago
 - Phase: design-complete
@@ -150,7 +150,7 @@ When managing context:
 
 ### Hook Output Recognition
 ```
-[Hook: context-validator] ✓ Context schema valid, no corruption detected
+[Hook: context-validator] [OK] Context schema valid, no corruption detected
 [Hook: state-compressor] Reduced context from 2400 to 800 tokens (67% compression)
 [Hook: context-archiver] Archived 5 contexts older than 30 days
 [Hook: handoff-notifier] Notified security-analyzer: context ready for review

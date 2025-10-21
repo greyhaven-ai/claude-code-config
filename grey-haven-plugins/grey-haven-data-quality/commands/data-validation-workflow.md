@@ -547,9 +547,9 @@ def validate_user_table():
     
     # Check results
     if results.success:
-        print("✓ Data quality validation passed")
+        print("[OK] Data quality validation passed")
     else:
-        print("✗ Data quality validation failed")
+        print("[X] Data quality validation failed")
         for result in results.results:
             if not result.success:
                 print(f"  - {result.expectation_config.expectation_type}")
@@ -742,49 +742,49 @@ if __name__ == '__main__':
 
 Use this checklist to track progress:
 
-### Phase 1: Requirements ✓
+### Phase 1: Requirements [OK]
 - [ ] Data fields identified
 - [ ] Validation rules defined
 - [ ] Database schema requirements clear
 - [ ] Business rules documented
 
-### Phase 2: Testing ✓
+### Phase 2: Testing [OK]
 - [ ] Test file structure created
 - [ ] Failing tests written (Red)
 - [ ] Tests passing (Green)
 - [ ] Code refactored (Blue)
 
-### Phase 3: Pydantic Models ✓
+### Phase 3: Pydantic Models [OK]
 - [ ] Field definitions with types
 - [ ] Field validators implemented
 - [ ] Model validators implemented
 - [ ] Configuration set (model_config)
 - [ ] Examples provided
 
-### Phase 4: Database ✓
+### Phase 4: Database [OK]
 - [ ] SQLAlchemy model created
 - [ ] Alembic migration generated
 - [ ] Migration tested on PlanetScale branch
 - [ ] Schema alignment validated
 
-### Phase 5: API Integration ✓
+### Phase 5: API Integration [OK]
 - [ ] Validation in request handlers
 - [ ] Error formatting implemented
 - [ ] Response schemas used
 - [ ] Error handling tested
 
-### Phase 6: Quality Monitoring ✓
+### Phase 6: Quality Monitoring [OK]
 - [ ] Great Expectations initialized
 - [ ] Expectation suite created
 - [ ] Validation script implemented
 - [ ] Monitoring scheduled
 
-### Phase 7: Observability ✓
+### Phase 7: Observability [OK]
 - [ ] Prometheus metrics added
 - [ ] Grafana dashboard created
 - [ ] Metrics tested
 
-### Phase 8: Documentation ✓
+### Phase 8: Documentation [OK]
 - [ ] OpenAPI spec generated
 - [ ] API docs published
 - [ ] Examples documented

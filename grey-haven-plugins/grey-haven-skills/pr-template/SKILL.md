@@ -51,7 +51,7 @@ Every pull request should follow this structure:
 
 **Examples**:
 
-✅ Good (Feature):
+[OK] Good (Feature):
 ```markdown
 ## Summary
 
@@ -61,7 +61,7 @@ and support requests. This addresses Linear issue GREY-234 and integrates with
 our existing multi-tenant RLS policies.
 ```
 
-✅ Good (Bug Fix):
+[OK] Good (Bug Fix):
 ```markdown
 ## Summary
 
@@ -69,7 +69,7 @@ Fixes race condition in user repository that caused duplicate email registration
 in multi-tenant environment. Resolves GREY-456.
 ```
 
-✅ Good (Database):
+[OK] Good (Database):
 ```markdown
 ## Summary
 
@@ -78,7 +78,7 @@ multi-tenant data isolation. Migration includes backfill from service_id.
 Related to GREY-890.
 ```
 
-❌ Bad:
+[X] Bad:
 ```markdown
 ## Summary
 
@@ -98,7 +98,7 @@ Updated some files and added new features and fixed bugs.
 
 **Examples**:
 
-✅ Good (Feature):
+[OK] Good (Feature):
 ```markdown
 ## Motivation
 
@@ -113,7 +113,7 @@ show 35% of users abandon signup at password creation. Magic links offer:
 This aligns with our Q1 goal of improving onboarding conversion by 20%.
 ```
 
-✅ Good (Technical Debt):
+[OK] Good (Technical Debt):
 ```markdown
 ## Motivation
 
@@ -142,7 +142,7 @@ Addresses technical debt flagged in architecture review (GREY-567).
 
 **Examples**:
 
-✅ Good (Frontend - TanStack Start):
+[OK] Good (Frontend - TanStack Start):
 ```markdown
 ## Implementation Details
 
@@ -172,7 +172,7 @@ Addresses technical debt flagged in architecture review (GREY-567).
 - JWT claims include tenant_id for server function isolation
 ```
 
-✅ Good (Backend - FastAPI):
+[OK] Good (Backend - FastAPI):
 ```markdown
 ## Implementation Details
 
@@ -222,15 +222,15 @@ class BaseRepository(Generic[T]):
 
 **Examples**:
 
-✅ Good (TypeScript - Vitest):
+[OK] Good (TypeScript - Vitest):
 ```markdown
 ## Testing
 
 ### Automated Tests (Vitest)
-- ✅ Unit tests for server functions (`lib/server/functions/auth.test.ts`)
-- ✅ Integration tests for magic link flow (`tests/integration/auth.test.ts`)
-- ✅ E2E tests with Playwright (`tests/e2e/magic-link.spec.ts`)
-- ✅ Test coverage: 92% (up from 87%)
+- [OK] Unit tests for server functions (`lib/server/functions/auth.test.ts`)
+- [OK] Integration tests for magic link flow (`tests/integration/auth.test.ts`)
+- [OK] E2E tests with Playwright (`tests/e2e/magic-link.spec.ts`)
+- [OK] Test coverage: 92% (up from 87%)
 
 ### Test Scenarios
 - Happy path: email → token → verification → login
@@ -258,19 +258,19 @@ class BaseRepository(Generic[T]):
 - Indexes verified with EXPLAIN ANALYZE
 ```
 
-✅ Good (Python - Pytest):
+[OK] Good (Python - Pytest):
 ```markdown
 ## Testing
 
 ### Automated Tests (Pytest)
 **IMPORTANT**: Activate virtual environment first: `source .venv/bin/activate`
 
-- ✅ Unit tests: `tests/unit/repositories/test_base.py` (`@pytest.mark.unit`)
-- ✅ Integration tests: `tests/integration/test_user_repository.py` (`@pytest.mark.integration`)
-- ✅ Benchmark tests: `tests/benchmark/test_repository_performance.py` (`@pytest.mark.benchmark`)
-- ✅ Test coverage: 94% (up from 88%)
-- ✅ Type checking: mypy passes with strict mode
-- ✅ Linting: ruff passes (130 char line length)
+- [OK] Unit tests: `tests/unit/repositories/test_base.py` (`@pytest.mark.unit`)
+- [OK] Integration tests: `tests/integration/test_user_repository.py` (`@pytest.mark.integration`)
+- [OK] Benchmark tests: `tests/benchmark/test_repository_performance.py` (`@pytest.mark.benchmark`)
+- [OK] Test coverage: 94% (up from 88%)
+- [OK] Type checking: mypy passes with strict mode
+- [OK] Linting: ruff passes (130 char line length)
 
 ### Test Scenarios
 - CRUD operations with tenant isolation

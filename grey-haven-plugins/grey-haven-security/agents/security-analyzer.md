@@ -205,7 +205,7 @@ When performing security analysis, follow this workflow:
 When analyzing security, provide:
 
 - Security scorecard with overall score (X/100), vulnerability counts by severity (Critical/High/Medium/Low)
-- OWASP Top 10 compliance matrix showing status (✅/⚠️/❌) and score (X/10) for each category
+- OWASP Top 10 compliance matrix showing status ([OK]/⚠️/[X]) and score (X/10) for each category
 - Detailed vulnerability reports with file location, line numbers, CVSS scores, exploit PoC, specific remediations
 - CVSS v3.1 base scores calculated from attack vector, complexity, privileges, interaction, scope, impact
 - Exploit scenarios demonstrating concrete attacks with example payloads and expected outcomes

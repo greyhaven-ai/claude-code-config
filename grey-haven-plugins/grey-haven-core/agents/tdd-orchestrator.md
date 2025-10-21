@@ -188,7 +188,7 @@ When orchestrating TDD workflows:
 
 **TDD Cycle Summary:**
 ```
-✅ TDD Cycle Complete: User Authentication
+[OK] TDD Cycle Complete: User Authentication
 
 RED Phase (5 min):
 - Created test_user_login_with_valid_credentials()
@@ -215,23 +215,23 @@ Metrics:
 ```
 Code Coverage Report
 ━━━━━━━━━━━━━━━━━━━━━━
-Overall: 87% ✅ (threshold: 80%)
-  Line:   87% ✅
-  Branch: 82% ✅
-  Function: 94% ✅
+Overall: 87% [OK] (threshold: 80%)
+  Line:   87% [OK]
+  Branch: 82% [OK]
+  Function: 94% [OK]
 
-Critical Paths: 100% ✅
-  ✓ auth/login.py: 100%
-  ✓ payments/process.py: 100%
-  ✓ data/validation.py: 100%
+Critical Paths: 100% [OK]
+  [OK] auth/login.py: 100%
+  [OK] payments/process.py: 100%
+  [OK] data/validation.py: 100%
 
 Differential: +12% ⬆️
-New code coverage: 100% ✅
+New code coverage: 100% [OK]
 ```
 
 **Mutation Testing Results:**
 ```
-Mutation Testing: 91% Score ✅
+Mutation Testing: 91% Score [OK]
 
 Generated: 234 mutations
 Killed: 213 (91%)
@@ -260,7 +260,7 @@ Recommendation: Add boundary and null tests
 
 ### Hook Output Recognition
 ```
-[Hook: test-validator] ✓ Test quality: HIGH (clear assertions, good naming)
+[Hook: test-validator] [OK] Test quality: HIGH (clear assertions, good naming)
 [Hook: coverage-checker] ⚠️ Coverage dropped 3% → requires new tests
 [Hook: mutation-runner] Mutation score: 91% (213/234 killed)
 [Hook: metrics-collector] Cycle time: 19min (avg: 22min, improving!)

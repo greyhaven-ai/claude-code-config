@@ -800,10 +800,10 @@ def validate(model_name: str, data_file: str):
     # Validate
     try:
         validated = model_class.model_validate(data)
-        click.echo(click.style('✓ Validation passed', fg='green'))
+        click.echo(click.style('[OK] Validation passed', fg='green'))
         click.echo(validated.model_dump_json(indent=2))
     except ValidationError as e:
-        click.echo(click.style('✗ Validation failed', fg='red'))
+        click.echo(click.style('[X] Validation failed', fg='red'))
         click.echo(e)
         raise SystemExit(1)
 
@@ -854,12 +854,12 @@ if __name__ == '__main__':
 
 ## Success Criteria
 
-1. ✅ **Zero invalid data in database**: All validation rules enforced
-2. ✅ **100% schema alignment**: Pydantic models match PlanetScale schemas
-3. ✅ **95%+ data quality score**: Great Expectations validations pass
-4. ✅ **Clear validation errors**: User-friendly error messages
-5. ✅ **Performance**: <10ms validation overhead per request
-6. ✅ **Test coverage**: 100% validation logic tested
+1. [OK] **Zero invalid data in database**: All validation rules enforced
+2. [OK] **100% schema alignment**: Pydantic models match PlanetScale schemas
+3. [OK] **95%+ data quality score**: Great Expectations validations pass
+4. [OK] **Clear validation errors**: User-friendly error messages
+5. [OK] **Performance**: <10ms validation overhead per request
+6. [OK] **Test coverage**: 100% validation logic tested
 
 ## Example Workflow
 

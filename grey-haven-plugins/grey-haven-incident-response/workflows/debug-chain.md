@@ -221,10 +221,10 @@ Each agent provides clues for next agent selection
     ```
     
     ## Validation Results
-    - Memory leak: Fixed ✓
-    - Tests: 5 new tests, all passing ✓
-    - Performance: No regression ✓
-    - Code quality: Improved ✓
+    - Memory leak: Fixed [OK]
+    - Tests: 5 new tests, all passing [OK]
+    - Performance: No regression [OK]
+    - Code quality: Improved [OK]
     ```
 
 11. **Meta-Learning from Chain**:

@@ -220,7 +220,7 @@ When you see hook output like:
 ```
 [Hook: test-framework] Detected pytest with fixtures in tests/
 [Hook: coverage] Current coverage: 87%, Gap: authentication module line 45-52
-[Hook: test-runner] ✓ 12 passed in 0.23s
+[Hook: test-runner] [OK] 12 passed in 0.23s
 ```
 
 Use this information to:

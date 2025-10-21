@@ -235,7 +235,7 @@ When you see hook output like:
 [Hook: complexity-analyzer] Function processPayment has cyclomatic complexity of 20 (threshold: 10)
 [Hook: security-validator] Potential SQL injection detected in query construction at line 45
 [Hook: dead-code] 3 unused imports, 2 unreachable functions in auth_service.py
-[Hook: test-runner] ✓ 127 passed, 3 failed after refactoring
+[Hook: test-runner] [OK] 127 passed, 3 failed after refactoring
 ```
 
 Use this information to:

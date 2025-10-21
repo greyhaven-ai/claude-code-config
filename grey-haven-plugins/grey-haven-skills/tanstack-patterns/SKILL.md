@@ -255,12 +255,12 @@ function UserProfile({ userId }: { userId: string }) {
 Use consistent query key structure:
 
 ```typescript
-// ✅ Good query keys (specific to general)
+// [OK] Good query keys (specific to general)
 queryKey: ["user", userId]                    // Single user
 queryKey: ["users", { tenantId, page: 1 }]   // List with filters
 queryKey: ["organizations", orgId, "teams"]  // Nested resource
 
-// ❌ Bad query keys (inconsistent, not cacheable)
+// [X] Bad query keys (inconsistent, not cacheable)
 queryKey: [userId]                            // Missing resource type
 queryKey: ["getUser", userId]                // Don't include function name
 queryKey: [{ id: userId, type: "user" }]     // Object first is confusing

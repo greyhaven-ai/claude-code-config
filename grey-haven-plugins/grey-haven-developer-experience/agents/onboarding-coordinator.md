@@ -83,7 +83,7 @@ Automate and personalize developer onboarding from pre-boarding through 90-day m
 - [ ] Deploy to staging environment
 - [ ] Present learnings in team standup
 
-### Milestone: First PR Merged ✅
+### Milestone: First PR Merged [OK]
 
 ## Week 2-4: Ramp Up
 **Goal**: Independent contribution on small features
@@ -95,7 +95,7 @@ Automate and personalize developer onboarding from pre-boarding through 90-day m
 - [ ] Document a process you learned
 - [ ] Lead daily standup once
 
-### Milestone: Shipped First Feature ✅
+### Milestone: Shipped First Feature [OK]
 
 ## 30-Day Milestone
 **Check-in with Manager**
@@ -184,7 +184,7 @@ linear issue create \
   --team "$TEAM_ID" \
   --label "onboarding,milestone"
 
-echo "✅ Created onboarding Linear issues for ${NEW_HIRE_NAME}"
+echo "[OK] Created onboarding Linear issues for ${NEW_HIRE_NAME}"
 ```
 
 ### 3. Environment Setup Automation
@@ -233,7 +233,7 @@ cd ../api && uv sync
 echo "Installing Claude Code plugins..."
 # Plugins auto-install from settings.json
 
-echo "✅ Development environment setup complete!"
+echo "[OK] Development environment setup complete!"
 echo ""
 echo "Next steps:"
 echo "  1. Open Claude Code and verify plugins loaded"
@@ -362,11 +362,11 @@ You're paired with [New Hire] to help them succeed in their first 90 days.
 
 ## Success Criteria
 
-1. ✅ **Fast Time-to-Productivity**: First PR within 3 days
-2. ✅ **High Satisfaction**: 4.5+/5 new hire feedback
-3. ✅ **Consistent Experience**: Every developer gets quality onboarding
-4. ✅ **Scalable**: Works for 1 or 10 new hires
-5. ✅ **Retention**: 95%+ 90-day retention
+1. [OK] **Fast Time-to-Productivity**: First PR within 3 days
+2. [OK] **High Satisfaction**: 4.5+/5 new hire feedback
+3. [OK] **Consistent Experience**: Every developer gets quality onboarding
+4. [OK] **Scalable**: Works for 1 or 10 new hires
+5. [OK] **Retention**: 95%+ 90-day retention
 
 ## Key Reminders
 

@@ -102,7 +102,7 @@ refactor(repositories): simplify user query logic
 feat(auth): add OAuth provider for Google authentication
 ^---------^ = 9 chars (type + scope)
             ^----------------------------------------^ = 45 chars (subject)
-Total: 54 characters (within 100 limit ✅)
+Total: 54 characters (within 100 limit [OK])
 ```
 
 ### Good Examples (Pass Commitlint)
@@ -118,12 +118,12 @@ chore(deps): upgrade TypeScript to v5.6.0
 
 ### Bad Examples (Fail Commitlint)
 ```
-❌ feat(auth): Add OAuth provider     # Uppercase 'A' (violates subject-case)
-❌ Fix bug in API                      # Uppercase 'F' (violates subject-case)
-❌ feat: add new feature.              # Period at end
-❌ WIP                                 # Not a valid type
-❌ added new endpoint                  # Missing type
-❌ feat(api): Added a new endpoint for user authentication and also updated the database schema and added validation logic and wrote tests and updated documentation
+[X] feat(auth): Add OAuth provider     # Uppercase 'A' (violates subject-case)
+[X] Fix bug in API                      # Uppercase 'F' (violates subject-case)
+[X] feat: add new feature.              # Period at end
+[X] WIP                                 # Not a valid type
+[X] added new endpoint                  # Missing type
+[X] feat(api): Added a new endpoint for user authentication and also updated the database schema and added validation logic and wrote tests and updated documentation
    # Exceeds 100 characters
 ```
 

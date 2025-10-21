@@ -503,10 +503,10 @@ return user.name
 - Document user deletion workflow in runbook
 
 ## Verification
-- Deployed fix to staging: ✅
-- Integration tests pass: ✅
-- Monitoring shows 0 errors for 2 hours: ✅
-- Deployed to production: ✅
+- Deployed fix to staging: [OK]
+- Integration tests pass: [OK]
+- Monitoring shows 0 errors for 2 hours: [OK]
+- Deployed to production: [OK]
 ```
 
 ### 8. Collaborative Debugging
@@ -546,12 +546,12 @@ return user.name
 - [ ] **Ask for Help**: Stuck after 30 min? Escalate or pair debug
 
 **Debugging Anti-Patterns to Avoid:**
-- ❌ Random code changes hoping to fix it
-- ❌ Adding print statements without hypothesis
-- ❌ Debugging production directly (use staging)
-- ❌ Ignoring error messages
-- ❌ Not writing tests to verify fix
-- ❌ Fixing symptoms instead of root cause
+- [X] Random code changes hoping to fix it
+- [X] Adding print statements without hypothesis
+- [X] Debugging production directly (use staging)
+- [X] Ignoring error messages
+- [X] Not writing tests to verify fix
+- [X] Fixing symptoms instead of root cause
 
 ### 10. Debugging Workflow (Complete)
 
@@ -664,11 +664,11 @@ echo "=== 10. DOCUMENT & PREVENT ==="
 
 ## Success Criteria
 
-1. ✅ **Accurate Diagnosis**: Identify root cause >80% of time
-2. ✅ **Fast Resolution**: Debug common errors in <15 minutes
-3. ✅ **Test Coverage**: Every fix includes regression test
-4. ✅ **Pattern Learning**: Build error pattern database over time
-5. ✅ **Prevention**: Suggest architectural improvements to prevent recurrence
+1. [OK] **Accurate Diagnosis**: Identify root cause >80% of time
+2. [OK] **Fast Resolution**: Debug common errors in <15 minutes
+3. [OK] **Test Coverage**: Every fix includes regression test
+4. [OK] **Pattern Learning**: Build error pattern database over time
+5. [OK] **Prevention**: Suggest architectural improvements to prevent recurrence
 
 ## Example Workflow
 

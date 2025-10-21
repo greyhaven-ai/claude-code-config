@@ -125,13 +125,13 @@ Estimate: 5 points
 ### Issue Naming Conventions
 
 ```
-✅ Good issue titles (specific, actionable):
+[OK] Good issue titles (specific, actionable):
 - Add magic link authentication
 - Fix race condition in user repository
 - Migrate organizations table to multi-tenant
 - Update TanStack Query to v5.62.0
 
-❌ Bad issue titles (vague, non-actionable):
+[X] Bad issue titles (vague, non-actionable):
 - Auth improvements
 - Fix bug
 - Update dependencies
@@ -225,13 +225,13 @@ git checkout -b GREY-456-fix-user-race-condition
 
 ```bash
 # Main branch protection:
-✓ Require pull request before merging
-✓ Require 1 approval
-✓ Require status checks to pass (tests, linting)
-✓ Require branches to be up to date
-✓ Require linear history (squash merges)
-✗ Do NOT allow force pushes
-✗ Do NOT allow deletions
+[OK] Require pull request before merging
+[OK] Require 1 approval
+[OK] Require status checks to pass (tests, linting)
+[OK] Require branches to be up to date
+[OK] Require linear history (squash merges)
+[X] Do NOT allow force pushes
+[X] Do NOT allow deletions
 ```
 
 ## Commit Message Integration
@@ -371,10 +371,10 @@ https://linear.app/grey-haven/issue/GREY-XXX/issue-title
 ## Testing
 
 ### Automated Tests
-- ✅ Unit tests: [files] (`@pytest.mark.unit` or Vitest)
-- ✅ Integration tests: [files] (`@pytest.mark.integration`)
-- ✅ E2E tests: [files] (Playwright or `@pytest.mark.e2e`)
-- ✅ Coverage: X% (target: >80%)
+- [OK] Unit tests: [files] (`@pytest.mark.unit` or Vitest)
+- [OK] Integration tests: [files] (`@pytest.mark.integration`)
+- [OK] E2E tests: [files] (Playwright or `@pytest.mark.e2e`)
+- [OK] Coverage: X% (target: >80%)
 
 ### Manual Testing Steps
 1. Setup: `doppler run --config dev -- [command]`
@@ -391,7 +391,7 @@ doppler run --config test -- pytest        # Python
 ## Database Changes
 [If applicable]
 - Migration: [file name]
-- Tested up/down: ✅
+- Tested up/down: [OK]
 - Indexes added: [list]
 - RLS policies: [list]
 
@@ -481,16 +481,16 @@ Grey Haven uses Linear's GitHub integration for automatic syncing:
 Linear automatically detects branches that start with issue ID:
 
 ```bash
-# ✅ Automatically linked to GREY-234
+# [OK] Automatically linked to GREY-234
 GREY-234-feat-magic-link-auth
 
-# ✅ Also automatically linked
+# [OK] Also automatically linked
 GREY-234-add-magic-link
 
-# ❌ NOT automatically linked (missing issue ID)
+# [X] NOT automatically linked (missing issue ID)
 feat-magic-link-auth
 
-# ❌ NOT automatically linked (wrong format)
+# [X] NOT automatically linked (wrong format)
 234-magic-link-auth
 ```
 

@@ -323,10 +323,10 @@ pscale branch create <db> rollback-$(date +%Y%m%d)
 # health-check.sh - Quick system health diagnostic
 
 echo "=== Cloudflare Workers Health ==="
-curl -s https://api.greyhaven.io/health || echo "❌ Worker unreachable"
+curl -s https://api.greyhaven.io/health || echo "[X] Worker unreachable"
 
 echo "\n=== Database Connectivity ==="
-pscale shell greyhaven-db main --execute "SELECT 1" || echo "❌ Database unreachable"
+pscale shell greyhaven-db main --execute "SELECT 1" || echo "[X] Database unreachable"
 
 echo "\n=== Recent Errors (last 100 logs) ==="
 wrangler tail --format json | tail -100 | grep -i "error"
@@ -340,7 +340,7 @@ wrangler deployments list | head -5
 echo "\n=== Database Branch Status ==="
 pscale branch list greyhaven-db
 
-echo "\n✅ Health check complete"
+echo "\n[OK] Health check complete"
 ```
 
 ### 8. Escalation Paths
@@ -375,11 +375,11 @@ echo "\n✅ Health check complete"
 
 ## Success Criteria
 
-1. ✅ **Fast Diagnosis**: Identify infrastructure issues within 10 minutes
-2. ✅ **Accurate Resolution**: Resolve >90% of common infrastructure problems
-3. ✅ **Runbook Coverage**: Document all recurring issues
-4. ✅ **Prevention**: Suggest monitoring/alerts to prevent recurrence
-5. ✅ **Grey Haven Expertise**: Deep knowledge of specific stack quirks
+1. [OK] **Fast Diagnosis**: Identify infrastructure issues within 10 minutes
+2. [OK] **Accurate Resolution**: Resolve >90% of common infrastructure problems
+3. [OK] **Runbook Coverage**: Document all recurring issues
+4. [OK] **Prevention**: Suggest monitoring/alerts to prevent recurrence
+5. [OK] **Grey Haven Expertise**: Deep knowledge of specific stack quirks
 
 ## Key Reminders
 

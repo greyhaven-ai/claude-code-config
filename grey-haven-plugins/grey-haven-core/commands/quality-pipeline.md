@@ -90,7 +90,7 @@ Hooks will enhance each stage of the process
    
    ## Documentation: X% complete
    - Files documented: X/Y
-   - API docs updated: ✓/✗
+   - API docs updated: [OK]/[X]
    ```
 
 9. **Hook Integration Points**:
