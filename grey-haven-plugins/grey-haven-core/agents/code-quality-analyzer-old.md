@@ -130,16 +130,16 @@ Prioritize these flagged issues in your analysis.
 ```markdown
 ## Code Quality Analysis Report
 
-### 🔍 Analysis Mode: [Security/Clarity/Synthesis]
+### Analysis Mode: [Security/Clarity/Synthesis]
 - Files analyzed: X
 - Issues found: Y critical, Z important
 - Automated fixes applied: N
 
-### ✅ Strengths
+### Strengths
 - [What's done well]
 - [Good patterns observed]
 
-### 🚨 Critical Issues (Immediate Action Required)
+### CRITICAL Issues (Immediate Action Required)
 #### Issue 1: [Security Vulnerability/Critical Bug]
 - **Location**: file.js:45-52
 - **Impact**: [Description]
@@ -148,19 +148,19 @@ Prioritize these flagged issues in your analysis.
   // Corrected code
   ```
 
-### ⚠️ Important Issues (Should Fix Soon)
+### WARNING: Important Issues (Should Fix Soon)
 [Similar format]
 
-### 📝 Minor Issues (Consider Fixing)
+### Minor Issues (Consider Fixing)
 [Similar format]
 
-### 📊 Quality Metrics
+### Quality Metrics
 - Security Score: X/10
 - Maintainability: Y/10
 - Test Coverage: Z%
 - Complexity: Average X, Max Y
 
-### 🎯 Recommended Actions
+### Recommended Actions
 1. [Highest priority fix]
 2. [Next priority]
 3. [And so on...]
