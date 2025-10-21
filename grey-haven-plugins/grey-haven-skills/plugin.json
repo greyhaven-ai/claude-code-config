@@ -1,7 +1,7 @@
 {
   "name": "grey-haven-skills",
-  "version": "1.0.0",
-  "description": "Claude Skills for Grey Haven Studio workflows - code style, commit formatting, PR templates, database conventions, project structure, and TanStack patterns",
+  "version": "3.0.0",
+  "description": "Claude Skills for Grey Haven Studio workflows - code style, testing, authentication, security, Linear workflow, database, project structure, TanStack patterns, deployment, API design, performance, data modeling, and observability",
   "author": "Grey Haven Studio",
   "license": "MIT",
   "skills": [
@@ -10,6 +10,15 @@
     "./pr-template",
     "./database-conventions",
     "./project-structure",
-    "./tanstack-patterns"
+    "./tanstack-patterns",
+    "./testing-strategy",
+    "./linear-workflow",
+    "./authentication-patterns",
+    "./security-practices",
+    "./deployment-cloudflare",
+    "./api-design-standards",
+    "./performance-optimization",
+    "./data-modeling",
+    "./observability-monitoring"
   ]
 }
