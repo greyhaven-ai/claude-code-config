@@ -1,17 +1,14 @@
 ---
 name: grey-haven-observability
-description: Implement observability and monitoring for Grey Haven applications - structured logging with Axiom, error tracking with Sentry, Cloudflare Workers analytics, OpenTelemetry tracing, health checks, alerts, and dashboards. Use when setting up monitoring.
 ---
 # Grey Haven Observability and Monitoring
-Implement **observability and monitoring** for Grey Haven Studio applications using Axiom (logging), Sentry (errors), Cloudflare Analytics, and OpenTelemetry (tracing).
 ## Observability Stack
 ### Grey Haven Monitoring Architecture
 - **Structured Logging**: Axiom for searchable, queryable logs
-- **Error Tracking**: Sentry for frontend and backend errors
+- **Error Tracking**: Axiom for error aggregation and analysis
 - **Metrics**: Cloudflare Workers Analytics for request/performance metrics
 - **Tracing**: OpenTelemetry for distributed tracing (optional)
 - **Uptime**: Cloudflare Health Checks for endpoint availability
-- **Alerts**: Axiom monitors + Sentry alerts for critical issues
 ## Structured Logging with Axiom
 ### Axiom Setup (TanStack Start)
 ```typescript
@@ -228,156 +225,6 @@ app.add_middleware(LoggingMiddleware)
 | project _time, message, url, duration_ms
 | order by duration_ms desc
 ```
-## Error Tracking with Sentry
-### Sentry Setup (TanStack Start)
-```typescript
-// app/utils/sentry.ts
-import * as Sentry from "@sentry/browser";
-import { BrowserTracing } from "@sentry/tracing";
-// Doppler provides SENTRY_DSN
-Sentry.init({
- dsn: process.env.SENTRY_DSN,
- environment: process.env.ENVIRONMENT,
- tracesSampleRate: 1.0, // 100% of transactions
- integrations: [
- new BrowserTracing(),
- new Sentry.Replay({
- // Session replay for debugging
- maskAllText: true,
- blockAllMedia: true,
- }),
- ],
- replaysSessionSampleRate: 0.1, // 10% of sessions
- replaysOnErrorSampleRate: 1.0, // 100% of sessions with errors
-});
-// Set user context (after login)
-export function setUserContext(user: { id: string; email: string; tenantId: string }) {
- Sentry.setUser({
- id: user.id,
- email: user.email,
- tenantId: user.tenantId,
- });
-}
-// Clear user context (after logout)
-export function clearUserContext() {
- Sentry.setUser(null);
-}
-// Capture exception with context
-export function captureException(error: Error, context?: Record<string, unknown>) {
- Sentry.captureException(error, {
- extra: context,
- });
-}
-```
-### Sentry Setup (FastAPI)
-```python
-# app/utils/sentry.py
-import sentry_sdk
-from sentry_sdk.integrations.fastapi import FastApiIntegration
-from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
-import os
-# Doppler provides SENTRY_DSN
-SENTRY_DSN = os.getenv("SENTRY_DSN")
-ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
-sentry_sdk.init(
- dsn=SENTRY_DSN,
- environment=ENVIRONMENT,
- traces_sample_rate=1.0, # 100% of transactions
- integrations=[
- FastApiIntegration(),
- SqlalchemyIntegration(),
- ],
-)
-def set_user_context(user_id: str, email: str, tenant_id: str):
- """Set user context for Sentry."""
- sentry_sdk.set_user({
- "id": user_id,
- "email": email,
- "tenant_id": tenant_id,
- })
-def clear_user_context():
- """Clear user context from Sentry."""
- sentry_sdk.set_user(None)
-def capture_exception(error: Exception, context: dict | None = None):
- """Capture exception with additional context."""
- with sentry_sdk.push_scope() as scope:
- if context:
- for key, value in context.items():
- scope.set_extra(key, value)
- sentry_sdk.capture_exception(error)
-```
-### Error Boundaries (React)
-```typescript
-// app/components/ErrorBoundary.tsx
-import { Component, ReactNode } from "react";
-import * as Sentry from "@sentry/browser";
-interface Props {
- children: ReactNode;
- fallback?: ReactNode;
-}
-interface State {
- hasError: boolean;
-}
-export class ErrorBoundary extends Component<Props, State> {
- constructor(props: Props) {
- super(props);
- this.state = { hasError: false };
- }
- static getDerivedStateFromError(error: Error) {
- return { hasError: true };
- }
- componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
- // Log error to Sentry
- Sentry.captureException(error, {
- extra: {
- componentStack: errorInfo.componentStack,
- },
- });
- }
- render() {
- if (this.state.hasError) {
- return (
- this.props.fallback || (
- <div className="error-boundary">
- <h2>Something went wrong</h2>
- <button onClick={() => this.setState({ hasError: false })}>
- Try again
- </button>
- </div>
- )
- );
- }
- return this.props.children;
- }
-}
-```
-### Catch Errors in Server Functions
-```typescript
-// app/routes/api/users.ts
-import { createServerFn } from "@tanstack/start";
-import { captureException } from "~/utils/sentry";
-import { logger } from "~/utils/logger";
-export const createUser = createServerFn({ method: "POST" })
- .validator(createUserSchema)
- .handler(async ({ data, context }) => {
- try {
- const user = await db.insert(usersTable).values(data).returning();
- return user;
- } catch (error) {
- // Log to Axiom
- await logger.error("Failed to create user", {
- error: error.message,
- data,
- });
- // Send to Sentry
- captureException(error, {
- operation: "createUser",
- data,
- });
- throw error;
- }
- });
-```
 ## Cloudflare Workers Analytics
 ### Cloudflare Dashboard Metrics
 - **Requests**: Total requests per second, requests by status code
@@ -585,8 +432,6 @@ Create monitors in Axiom dashboard:
 ```
 - **Threshold**: > 5 slow requests (> 5s) in 10 minutes
 - **Notification**: Email
-### Sentry Alerts
-Configure in Sentry dashboard:
 1. **Project Settings** → **Alerts**
 2. Create alert rule:
  - **Condition**: Error count > 10 in 1 hour
@@ -664,8 +509,6 @@ try {
 # Axiom (structured logging)
 AXIOM_TOKEN=xaat-...
 AXIOM_ORG_ID=grey-haven-...
-# Sentry (error tracking)
-SENTRY_DSN=https://...@sentry.io/...
 # Slack (alerts)
 SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
 # OpenTelemetry (optional tracing)
@@ -676,7 +519,6 @@ CLOUDFLARE_ACCOUNT_ID=...
 ## When to Apply This Skill
 Use this observability skill when:
 - Setting up logging for new applications or services
-- Implementing error tracking with Sentry
 - Creating health check endpoints for monitoring
 - Configuring alerts for high error rates or slow requests
 - Debugging production issues (query logs in Axiom)
@@ -687,17 +529,12 @@ Use this observability skill when:
 - Integrating Slack notifications for critical alerts
 ## Template References
 These observability patterns come from Grey Haven's actual templates:
-- **Frontend**: `cvi-template` (Sentry + Axiom logging)
-- **Backend**: `cvi-backend-template` (Sentry + Axiom + OpenTelemetry)
 - **Cloudflare**: Workers Analytics + Health Checks
 ## Critical Reminders
 1. **Structured logging** - Log JSON with consistent fields (level, message, context)
 2. **Flush logs in serverless** - Call `axiom.flush()` before function returns
-3. **Set user context** - Include user_id and tenant_id in logs and Sentry
 4. **Log request duration** - Track duration_ms for performance analysis
 5. **Query logs efficiently** - Use APL queries with time filters and aggregations
-6. **Set up error boundaries** - Catch React errors and send to Sentry
 7. **Health check dependencies** - Check database, Redis, external APIs
 8. **Configure alerts** - Set thresholds for error rate, slow requests, downtime
-9. **Use Doppler for secrets** - Store AXIOM_TOKEN, SENTRY_DSN in Doppler
 10. **Monitor production only** - Separate datasets for dev/staging/production

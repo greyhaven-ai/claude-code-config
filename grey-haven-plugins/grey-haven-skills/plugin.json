@@ -1,7 +1,7 @@
 {
   "name": "grey-haven-skills",
-  "version": "3.0.0",
-  "description": "Claude Skills for Grey Haven Studio workflows - code style, testing, authentication, security, Linear workflow, database, project structure, TanStack patterns, deployment, API design, performance, data modeling, and observability",
+  "version": "3.1.0",
+  "description": "Claude Skills for Grey Haven Studio workflows - code style, testing, authentication, security, Linear workflow, database, project structure, TanStack patterns, deployment, API design, performance, data modeling, observability, and ontological documentation",
   "author": "Grey Haven Studio",
   "license": "MIT",
   "skills": [
@@ -19,6 +19,7 @@
     "./api-design-standards",
     "./performance-optimization",
     "./data-modeling",
-    "./observability-monitoring"
+    "./observability-monitoring",
+    "./ontological-documentation"
   ]
 }
