@@ -18,7 +18,8 @@
       "grey-haven-incident-response@grey-haven-plugins",
       "grey-haven-agent-orchestration@grey-haven-plugins",
       "grey-haven-data-quality@grey-haven-plugins",
-      "grey-haven-developer-experience@grey-haven-plugins"
+      "grey-haven-developer-experience@grey-haven-plugins",
+      "grey-haven-skills@grey-haven-plugins"
     ]
   },
   "permissions": {
