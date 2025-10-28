@@ -1,0 +1,202 @@
+{
+  "name": "grey-haven-plugins",
+  "owner": {
+    "name": "Grey Haven Studio",
+    "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+  },
+  "metadata": {
+    "description": "Grey Haven Studio's comprehensive plugin marketplace with 13 plugins covering development, testing, deployment, security, observability, and team collaboration",
+    "version": "2.0.0",
+    "homepage": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+    "pluginRoot": ".."
+  },
+  "plugins": [
+    {
+      "name": "grey-haven-core",
+      "description": "Core development tools including quality pipeline, TDD implementation, code review, and refactoring capabilities",
+      "source": "./grey-haven-core",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["development"],
+      "keywords": ["tdd", "quality", "refactoring", "code-review", "performance"],
+      "featured": true
+    },
+    {
+      "name": "grey-haven-developer-experience",
+      "description": "Developer experience and team collaboration tools including onboarding automation, documentation generation, async standups with Linear integration, and knowledge management",
+      "source": "./grey-haven-developer-experience",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["productivity"],
+      "keywords": ["onboarding", "documentation", "collaboration", "linear", "team", "productivity", "knowledge-base"]
+    },
+    {
+      "name": "grey-haven-testing",
+      "description": "Comprehensive testing automation with Playwright visual regression, Chrome E2E testing, and frontend debugging tools",
+      "source": "./grey-haven-testing",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["testing"],
+      "keywords": ["testing", "playwright", "e2e", "chrome", "visual-testing", "debugging"],
+      "featured": true
+    },
+    {
+      "name": "grey-haven-deployment",
+      "description": "Cloudflare Workers and Pages deployment with integrated debugging and troubleshooting chains",
+      "source": "./grey-haven-deployment",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["deployment", "devops"],
+      "keywords": ["cloudflare", "deployment", "workers", "pages", "debugging"]
+    },
+    {
+      "name": "grey-haven-security",
+      "description": "Security scanning and vulnerability auditing following OWASP Top 10 guidelines with automated remediation",
+      "source": "./grey-haven-security",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["security"],
+      "keywords": ["security", "vulnerability", "owasp", "audit", "scanning"],
+      "featured": true
+    },
+    {
+      "name": "grey-haven-research",
+      "description": "API research and documentation retrieval using Firecrawl and Context7, with multi-agent synthesis capabilities",
+      "source": "./grey-haven-research",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["documentation", "research"],
+      "keywords": ["research", "documentation", "firecrawl", "context7", "api"]
+    },
+    {
+      "name": "grey-haven-hooks",
+      "description": "Comprehensive hook system with 37 automation hooks for validation, formatting, testing, and workflow enhancement",
+      "source": "./grey-haven-hooks",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["automation"],
+      "keywords": ["hooks", "automation", "validation", "workflow", "pre-commit"]
+    },
+    {
+      "name": "grey-haven-observability",
+      "description": "Production observability tools for monitoring, SLO implementation, alerting, and performance tracking. Includes monitoring setup, SLO configuration, distributed tracing, metrics collection, and observability best practices.",
+      "source": "./grey-haven-observability",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["operations", "monitoring"],
+      "keywords": ["observability", "monitoring", "slo", "metrics", "tracing", "alerting", "performance", "datadog", "opentelemetry"],
+      "featured": true
+    },
+    {
+      "name": "grey-haven-incident-response",
+      "description": "Production incident response system with incident management workflows, intelligent debugging, runbook automation, and postmortem generation. Handles incident detection, triage, mitigation, and learning.",
+      "source": "./grey-haven-incident-response",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["operations", "incident-management"],
+      "keywords": ["incident-response", "debugging", "postmortem", "runbook", "incident-management", "on-call", "sre", "reliability", "troubleshooting"]
+    },
+    {
+      "name": "grey-haven-agent-orchestration",
+      "description": "Multi-agent orchestration with context management, workflow composition, and agent coordination. Enables complex multi-step tasks through systematic agent delegation, context handoff, and workflow automation.",
+      "source": "./grey-haven-agent-orchestration",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["development", "automation"],
+      "keywords": ["orchestration", "context-management", "workflow", "multi-agent", "coordination", "automation", "delegation", "handoff"]
+    },
+    {
+      "name": "grey-haven-data-quality",
+      "description": "Data validation and quality assurance tools using Pydantic v2, schema validation, data contracts, and quality monitoring for PlanetScale PostgreSQL databases",
+      "source": "./grey-haven-data-quality",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["quality", "database"],
+      "keywords": ["data-quality", "validation", "pydantic", "schema", "contracts", "postgresql", "planetscale"]
+    },
+    {
+      "name": "grey-haven-linear",
+      "description": "Linear issue tracking integration with commands for debugging, testing, planning, and workflow management",
+      "source": "./grey-haven-linear",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["project-management"],
+      "keywords": ["linear", "issue-tracking", "workflow", "project-management"]
+    },
+    {
+      "name": "grey-haven-skills",
+      "description": "Claude Skills for Grey Haven Studio workflows - code style, testing, authentication, security, Linear workflow, database, project structure, TanStack patterns, deployment, API design, performance, data modeling, observability, and ontological documentation",
+      "source": "./grey-haven-skills",
+      "version": "3.1.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/grey-haven-claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/grey-haven-claude-code-config",
+      "license": "MIT",
+      "categories": ["productivity", "documentation"],
+      "keywords": ["skills", "standards", "conventions", "best-practices", "documentation", "workflows"],
+      "featured": true
+    }
+  ]
+}
