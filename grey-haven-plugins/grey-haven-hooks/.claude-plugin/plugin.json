@@ -12,6 +12,5 @@
         "workflow",
         "pre-commit"
     ],
-    "license": "MIT",
-    "category": "automation"
+    "license": "MIT"
 }

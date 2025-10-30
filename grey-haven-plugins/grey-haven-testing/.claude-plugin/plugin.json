@@ -13,6 +13,5 @@
         "visual-testing",
         "debugging"
     ],
-    "license": "MIT",
-    "category": "testing"
+    "license": "MIT"
 }

@@ -12,6 +12,5 @@
         "audit",
         "scanning"
     ],
-    "license": "MIT",
-    "category": "security"
+    "license": "MIT"
 }
