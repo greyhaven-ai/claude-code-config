@@ -2,6 +2,10 @@
     "name": "grey-haven-data-quality",
     "description": "Data validation and quality assurance tools using Pydantic v2, schema validation, data contracts, and quality monitoring for PlanetScale PostgreSQL databases",
     "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "license": "MIT",
     "category": "quality",
     "keywords": [
         "data-quality",

@@ -2,6 +2,10 @@
     "name": "grey-haven-developer-experience",
     "description": "Developer experience and team collaboration tools including onboarding automation, documentation generation, async standups with Linear integration, and knowledge management",
     "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "license": "MIT",
     "category": "productivity",
     "keywords": [
         "onboarding",
