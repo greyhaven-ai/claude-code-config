@@ -7,14 +7,13 @@
   "metadata": {
     "description": "Grey Haven Studio's comprehensive plugin marketplace with 13 plugins covering development, testing, deployment, security, observability, and team collaboration",
     "version": "2.0.0",
-    "homepage": "https://github.com/greyhaven-ai/claude-code-config",
-    "pluginRoot": "./grey-haven-plugins"
+    "homepage": "https://github.com/greyhaven-ai/claude-code-config"
   },
   "plugins": [
     {
       "name": "grey-haven-core",
       "description": "Core development tools including quality pipeline, TDD implementation, code review, and refactoring capabilities",
-      "source": "./grey-haven-plugins/grey-haven-core",
+      "source": "grey-haven-plugins/grey-haven-core",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -33,7 +32,7 @@
     {
       "name": "grey-haven-developer-experience",
       "description": "Developer experience and team collaboration tools including onboarding automation, documentation generation, async standups with Linear integration, and knowledge management",
-      "source": "./grey-haven-plugins/grey-haven-developer-experience",
+      "source": "grey-haven-plugins/grey-haven-developer-experience",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -54,7 +53,7 @@
     {
       "name": "grey-haven-testing",
       "description": "Comprehensive testing automation with Playwright visual regression, Chrome E2E testing, and frontend debugging tools",
-      "source": "./grey-haven-plugins/grey-haven-testing",
+      "source": "grey-haven-plugins/grey-haven-testing",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -74,7 +73,7 @@
     {
       "name": "grey-haven-deployment",
       "description": "Cloudflare Workers and Pages deployment with integrated debugging and troubleshooting chains",
-      "source": "./grey-haven-plugins/grey-haven-deployment",
+      "source": "grey-haven-plugins/grey-haven-deployment",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -93,7 +92,7 @@
     {
       "name": "grey-haven-security",
       "description": "Security scanning and vulnerability auditing following OWASP Top 10 guidelines with automated remediation",
-      "source": "./grey-haven-plugins/grey-haven-security",
+      "source": "grey-haven-plugins/grey-haven-security",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -112,7 +111,7 @@
     {
       "name": "grey-haven-research",
       "description": "API research and documentation retrieval using Firecrawl and Context7, with multi-agent synthesis capabilities",
-      "source": "./grey-haven-plugins/grey-haven-research",
+      "source": "grey-haven-plugins/grey-haven-research",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -131,7 +130,7 @@
     {
       "name": "grey-haven-hooks",
       "description": "Comprehensive hook system with 37 automation hooks for validation, formatting, testing, and workflow enhancement",
-      "source": "./grey-haven-plugins/grey-haven-hooks",
+      "source": "grey-haven-plugins/grey-haven-hooks",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -150,7 +149,7 @@
     {
       "name": "grey-haven-observability",
       "description": "Production observability tools for monitoring, SLO implementation, alerting, and performance tracking. Includes monitoring setup, SLO configuration, distributed tracing, metrics collection, and observability best practices.",
-      "source": "./grey-haven-plugins/grey-haven-observability",
+      "source": "grey-haven-plugins/grey-haven-observability",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -173,7 +172,7 @@
     {
       "name": "grey-haven-incident-response",
       "description": "Production incident response system with incident management workflows, intelligent debugging, runbook automation, and postmortem generation. Handles incident detection, triage, mitigation, and learning.",
-      "source": "./grey-haven-plugins/grey-haven-incident-response",
+      "source": "grey-haven-plugins/grey-haven-incident-response",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -196,7 +195,7 @@
     {
       "name": "grey-haven-agent-orchestration",
       "description": "Multi-agent orchestration with context management, workflow composition, and agent coordination. Enables complex multi-step tasks through systematic agent delegation, context handoff, and workflow automation.",
-      "source": "./grey-haven-plugins/grey-haven-agent-orchestration",
+      "source": "grey-haven-plugins/grey-haven-agent-orchestration",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -218,7 +217,7 @@
     {
       "name": "grey-haven-data-quality",
       "description": "Data validation and quality assurance tools using Pydantic v2, schema validation, data contracts, and quality monitoring for PlanetScale PostgreSQL databases",
-      "source": "./grey-haven-plugins/grey-haven-data-quality",
+      "source": "grey-haven-plugins/grey-haven-data-quality",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -239,7 +238,7 @@
     {
       "name": "grey-haven-linear",
       "description": "Linear issue tracking integration with commands for debugging, testing, planning, and workflow management",
-      "source": "./grey-haven-plugins/grey-haven-linear",
+      "source": "grey-haven-plugins/grey-haven-linear",
       "version": "1.0.0",
       "author": {
         "name": "Grey Haven Studio",
@@ -257,7 +256,7 @@
     {
       "name": "grey-haven-skills",
       "description": "Claude Skills for Grey Haven Studio workflows - code style, testing, authentication, security, Linear workflow, database, project structure, TanStack patterns, deployment, API design, performance, data modeling, observability, and ontological documentation",
-      "source": "./grey-haven-plugins/grey-haven-skills",
+      "source": "grey-haven-plugins/grey-haven-skills",
       "version": "3.1.0",
       "author": {
         "name": "Grey Haven Studio",
