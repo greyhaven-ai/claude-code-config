@@ -27,6 +27,17 @@
         "refactoring",
         "code-review",
         "performance"
+      ],
+      "commands": [
+        "./commands/tdd-implement/",
+        "./commands/code-review/",
+        "./commands/quality-pipeline/",
+        "./commands/debug-chain/",
+        "./commands/doc-align/",
+        "./commands/feature-full-cycle/",
+        "./commands/performance-optimize-chain/",
+        "./commands/pre-compact/",
+        "./commands/refactor-clarity/"
       ]
     },
     {
@@ -48,6 +59,11 @@
         "team",
         "productivity",
         "knowledge-base"
+      ],
+      "commands": [
+        "./commands/doc-coverage/",
+        "./commands/async-standup/",
+        "./commands/doc-generate-api/"
       ]
     },
     {
@@ -68,6 +84,10 @@
         "chrome",
         "visual-testing",
         "debugging"
+      ],
+      "commands": [
+        "./commands/chrome-server/",
+        "./commands/playwright/"
       ]
     },
     {
@@ -87,6 +107,9 @@
         "workers",
         "pages",
         "debugging"
+      ],
+      "commands": [
+        "./commands/cloudflare/"
       ]
     },
     {
@@ -106,6 +129,9 @@
         "owasp",
         "audit",
         "scanning"
+      ],
+      "commands": [
+        "./commands/security/"
       ]
     },
     {
@@ -125,6 +151,10 @@
         "firecrawl",
         "context7",
         "api"
+      ],
+      "commands": [
+        "./commands/context7/",
+        "./commands/firecrawl/"
       ]
     },
     {
@@ -167,6 +197,11 @@
         "performance",
         "datadog",
         "opentelemetry"
+      ],
+      "commands": [
+        "./commands/monitor-setup/",
+        "./commands/slo-implement/",
+        "./commands/performance-optimize-chain/"
       ]
     },
     {
@@ -190,6 +225,9 @@
         "sre",
         "reliability",
         "troubleshooting"
+      ],
+      "commands": [
+        "./commands/smart-fix/"
       ]
     },
     {
@@ -212,6 +250,11 @@
         "automation",
         "delegation",
         "handoff"
+      ],
+      "commands": [
+        "./commands/context-save/",
+        "./commands/context-restore/",
+        "./commands/workflow-composer/"
       ]
     },
     {
@@ -233,6 +276,9 @@
         "contracts",
         "postgresql",
         "planetscale"
+      ],
+      "commands": [
+        "./commands/data-validation-workflow/"
       ]
     },
     {
@@ -251,6 +297,9 @@
         "issue-tracking",
         "workflow",
         "project-management"
+      ],
+      "commands": [
+        "./commands/linear/"
       ]
     },
     {
