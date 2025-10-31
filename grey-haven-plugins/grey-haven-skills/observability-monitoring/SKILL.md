@@ -1,5 +1,6 @@
 ---
-name: grey-haven-observability
+name: observability-monitoring
+description: Implement observability and monitoring using Axiom for logging, Cloudflare Analytics for metrics, and OpenTelemetry for tracing. Use when setting up monitoring, implementing logging, configuring alerts, or debugging production issues.
 ---
 # Grey Haven Observability and Monitoring
 ## Observability Stack
