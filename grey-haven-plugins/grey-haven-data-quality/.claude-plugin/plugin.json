@@ -14,5 +14,9 @@
         "contracts",
         "postgresql",
         "planetscale"
+    ],
+    "skills": [
+        "./skills/database-conventions",
+        "./skills/data-modeling"
     ]
 }

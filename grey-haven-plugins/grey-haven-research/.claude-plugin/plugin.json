@@ -12,5 +12,8 @@
         "context7",
         "api"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "skills": [
+        "./skills/tanstack-patterns"
+    ]
 }

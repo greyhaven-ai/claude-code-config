@@ -13,5 +13,8 @@
         "visual-testing",
         "debugging"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "skills": [
+        "./skills/testing-strategy"
+    ]
 }

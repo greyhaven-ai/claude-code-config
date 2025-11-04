@@ -301,26 +301,6 @@
       "commands": [
         "./commands/linear/"
       ]
-    },
-    {
-      "name": "grey-haven-skills",
-      "description": "Claude Skills for Grey Haven Studio workflows - code style, testing, authentication, security, Linear workflow, database, project structure, TanStack patterns, deployment, API design, performance, data modeling, observability, and ontological documentation",
-      "source": "./grey-haven-plugins/grey-haven-skills",
-      "version": "3.1.0",
-      "author": {
-        "name": "Grey Haven Studio",
-        "url": "https://github.com/greyhaven-ai/claude-code-config"
-      },
-      "repository": "https://github.com/greyhaven-ai/claude-code-config",
-      "license": "MIT",
-      "keywords": [
-        "skills",
-        "standards",
-        "conventions",
-        "best-practices",
-        "documentation",
-        "workflows"
-      ]
     }
   ]
 }

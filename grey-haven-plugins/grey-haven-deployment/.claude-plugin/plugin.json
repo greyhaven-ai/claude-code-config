@@ -12,5 +12,8 @@
         "pages",
         "debugging"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "skills": [
+        "./skills/deployment-cloudflare"
+    ]
 }

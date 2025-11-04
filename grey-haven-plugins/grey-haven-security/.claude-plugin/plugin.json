@@ -12,5 +12,9 @@
         "audit",
         "scanning"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "skills": [
+        "./skills/security-practices",
+        "./skills/authentication-patterns"
+    ]
 }

@@ -18,5 +18,9 @@
         "sentry",
         "opentelemetry"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "skills": [
+        "./skills/observability-monitoring",
+        "./skills/performance-optimization"
+    ]
 }

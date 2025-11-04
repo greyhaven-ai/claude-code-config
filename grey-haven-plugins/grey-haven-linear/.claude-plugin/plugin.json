@@ -11,5 +11,9 @@
         "workflow",
         "project-management"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "skills": [
+        "./skills/linear-workflow",
+        "./skills/commit-format"
+    ]
 }

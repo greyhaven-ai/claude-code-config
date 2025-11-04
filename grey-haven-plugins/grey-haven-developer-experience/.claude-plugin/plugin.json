@@ -14,5 +14,12 @@
         "team",
         "productivity",
         "knowledge-base"
+    ],
+    "skills": [
+        "./skills/code-style",
+        "./skills/pr-template",
+        "./skills/project-structure",
+        "./skills/api-design-standards",
+        "./skills/ontological-documentation"
     ]
 }

@@ -12,5 +12,11 @@
         "code-review",
         "performance"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "skills": [
+        "./skills/code-style",
+        "./skills/commit-format",
+        "./skills/pr-template",
+        "./skills/testing-strategy"
+    ]
 }
