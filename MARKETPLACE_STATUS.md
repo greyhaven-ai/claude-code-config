@@ -60,20 +60,33 @@ All 13 plugins are properly configured with complete metadata:
 
 ### Recent Fixes
 
-**Commit 5942998** (just completed):
-- Added `category` field to grey-haven-skills
-- Fixed `author` field format in grey-haven-skills (string → object)
+**Commit a13132a** (November 4, 2025 - CRITICAL FIX):
+- **Moved all 16 skills into `skills/` subdirectory** - Required by Claude Code documentation
+- Skills were incorrectly at plugin root, now properly in `plugin-root/skills/skill-name/`
+- Updated plugin.json paths from `./skill-name` to `./skills/skill-name`
+- **This fix is essential for skills to load correctly**
+
+**Commit b0a416a**:
+- Added missing `description` to observability-monitoring skill
+- Fixed skill name to match directory
+- All 16 skills now have valid YAML frontmatter
+
+**Commit 26e3675**:
+- Removed invalid `category` field from all 13 plugin.json files
+- `category` only belongs in marketplace.json, not plugin manifests
+
+**Commit 5942998**:
 - Added missing `author` and `license` to grey-haven-data-quality
 - Added missing `author` and `license` to grey-haven-developer-experience
 
-**Commit fa29b63** (previous):
+**Commit fa29b63**:
 - Added explicit `commands` arrays to all 11 plugins with command subdirectories
 
 **Commit 6fcf202**:
 - Restructured 20 command files from flat structure to subdirectories
 
 **Commit 88e0324**:
-- Removed unsupported `categories` and `featured` fields
+- Removed unsupported `categories` and `featured` fields from marketplace.json
 
 ## Command Structure
 
@@ -101,6 +114,40 @@ Commands are explicitly declared in marketplace.json:
   ]
 }
 ```
+
+## Skills Structure
+
+Skills follow the required subdirectory pattern per Claude Code documentation:
+
+```
+grey-haven-plugins/grey-haven-skills/
+├── .claude-plugin/
+│   └── plugin.json
+└── skills/                      ← Required subdirectory
+    ├── code-style/
+    │   └── SKILL.md
+    ├── testing-strategy/
+    │   └── SKILL.md
+    └── ... (14 more skills)
+```
+
+Skills are declared in plugin.json with paths to skills/ subdirectory:
+```json
+{
+  "name": "grey-haven-skills",
+  "skills": [
+    "./skills/code-style",
+    "./skills/testing-strategy",
+    ...
+  ]
+}
+```
+
+**All 16 skills validated:**
+- Valid YAML frontmatter with `name` and `description` fields
+- Names use lowercase letters, numbers, and hyphens only
+- Descriptions include what the skill does AND when to use it
+- Proper directory structure: `plugin-root/skills/skill-name/SKILL.md`
 
 ## Testing Instructions
 
