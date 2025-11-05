@@ -1,0 +1,26 @@
+{
+    "name": "observability",
+    "description": "Production observability tools for monitoring, SLO implementation, alerting, and performance tracking. Includes monitoring setup, SLO configuration, distributed tracing, metrics collection, and observability best practices.",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/claude-code-config"
+    },
+    "keywords": [
+        "observability",
+        "monitoring",
+        "slo",
+        "metrics",
+        "tracing",
+        "alerting",
+        "performance",
+        "datadog",
+        "sentry",
+        "opentelemetry"
+    ],
+    "license": "MIT",
+    "skills": [
+        "./skills/observability-monitoring",
+        "./skills/performance-optimization"
+    ]
+}

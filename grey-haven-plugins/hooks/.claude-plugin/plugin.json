@@ -1,0 +1,16 @@
+{
+    "name": "hooks",
+    "description": "Comprehensive hook system with 37 automation hooks for validation, formatting, testing, and workflow enhancement",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "keywords": [
+        "hooks",
+        "automation",
+        "validation",
+        "workflow",
+        "pre-commit"
+    ],
+    "license": "MIT"
+}

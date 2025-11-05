@@ -1,0 +1,20 @@
+{
+    "name": "agent-orchestration",
+    "description": "Multi-agent orchestration with context management, workflow composition, and agent coordination. Enables complex multi-step tasks through systematic agent delegation, context handoff, and workflow automation.",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/claude-code-config"
+    },
+    "keywords": [
+        "orchestration",
+        "context-management",
+        "workflow",
+        "multi-agent",
+        "coordination",
+        "automation",
+        "delegation",
+        "handoff"
+    ],
+    "license": "MIT"
+}

@@ -1,0 +1,20 @@
+{
+    "name": "testing",
+    "description": "Comprehensive testing automation with Playwright visual regression, Chrome E2E testing, and frontend debugging tools",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "keywords": [
+        "testing",
+        "playwright",
+        "e2e",
+        "chrome",
+        "visual-testing",
+        "debugging"
+    ],
+    "license": "MIT",
+    "skills": [
+        "./skills/testing-strategy"
+    ]
+}

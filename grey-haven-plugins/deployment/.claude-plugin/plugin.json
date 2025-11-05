@@ -1,0 +1,19 @@
+{
+    "name": "deployment",
+    "description": "Cloudflare Workers and Pages deployment with integrated debugging and troubleshooting chains",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "keywords": [
+        "cloudflare",
+        "deployment",
+        "workers",
+        "pages",
+        "debugging"
+    ],
+    "license": "MIT",
+    "skills": [
+        "./skills/deployment-cloudflare"
+    ]
+}
