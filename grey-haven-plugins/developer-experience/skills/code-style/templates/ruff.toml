@@ -1,0 +1,73 @@
+# Grey Haven Studio - Ruff Configuration Template
+# Copy this to your project root as pyproject.toml or ruff.toml
+
+[tool.ruff]
+# CRITICAL: Line length is 130, not 80 or 88!
+line-length = 130
+indent-width = 4
+
+# Auto-fix issues without showing unfixable errors
+fix-only = true
+show-fixes = true
+
+# Python version
+target-version = "py312"
+
+[tool.ruff.lint]
+# Enable specific linter rules
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort (import sorting)
+    "B",   # flake8-bugbear (bug detection)
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade (automatic upgrades)
+]
+
+# Ignore specific rules if needed
+ignore = []
+
+[tool.ruff.format]
+# Use double quotes for strings
+quote-style = "double"
+
+# Use spaces for indentation
+indent-style = "space"
+
+# Use Unix-style line endings
+line-ending = "lf"
+
+[tool.ruff.lint.isort]
+# Configure import sorting
+known-first-party = ["app"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+# MyPy Configuration (add to pyproject.toml)
+# [tool.mypy]
+# python_version = "3.12"
+# warn_return_any = true
+# warn_unused_configs = true
+# disallow_untyped_defs = true  # REQUIRED: Type hints on all functions!
+# check_untyped_defs = true
+# ignore_missing_imports = false
+# strict_optional = true
+# warn_redundant_casts = true
+# warn_unused_ignores = true
+
+# Pytest Configuration (add to pyproject.toml)
+# [tool.pytest.ini_options]
+# pythonpath = ["."]
+# asyncio_mode = "auto"
+# testpaths = ["tests"]
+# markers = [
+#     "unit: Unit tests",
+#     "integration: Integration tests",
+#     "e2e: End-to-end tests",
+# ]

@@ -1,0 +1,12 @@
+# Commit with Body Template
+# Copy and customize for commits needing explanation
+
+type(scope): subject line here
+
+Explain why this change was made and any important context.
+
+- Key point 1
+- Key point 2
+- Key point 3
+
+Fixes GREY-123

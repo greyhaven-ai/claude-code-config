@@ -1,0 +1,210 @@
+{
+  "dashboard": {
+    "title": "Golden Signals - [Service Name]",
+    "tags": ["golden-signals", "production", "slo"],
+    "timezone": "UTC",
+    "refresh": "30s",
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request Rate (RPS)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{service=\"YOUR_SERVICE\"}[5m]))",
+            "legendFormat": "Total RPS",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(http_requests_total{service=\"YOUR_SERVICE\"}[5m])) by (method)",
+            "legendFormat": "{{method}}",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests/sec"},
+          {"format": "short"}
+        ],
+        "legend": {"show": true, "alignAsTable": true, "avg": true, "max": true, "current": true}
+      },
+      {
+        "id": 2,
+        "title": "Error Rate (%)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "targets": [
+          {
+            "expr": "(sum(rate(http_requests_total{service=\"YOUR_SERVICE\",status=~\"5..\"}[5m])) / sum(rate(http_requests_total{service=\"YOUR_SERVICE\"}[5m]))) * 100",
+            "legendFormat": "Error Rate %",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "Error %", "max": 5},
+          {"format": "short"}
+        ],
+        "alert": {
+          "name": "High Error Rate",
+          "conditions": [
+            {
+              "evaluator": {"params": [1], "type": "gt"},
+              "operator": {"type": "and"},
+              "query": {"params": ["A", "5m", "now"]},
+              "type": "query"
+            }
+          ],
+          "frequency": "1m",
+          "for": "5m",
+          "message": "Error rate > 1% for 5 minutes",
+          "noDataState": "no_data",
+          "notifications": []
+        },
+        "thresholds": [
+          {"value": 1, "colorMode": "critical", "op": "gt", "fill": true, "line": true}
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Request Latency (p50/p95/p99)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{service=\"YOUR_SERVICE\"}[5m])) by (le)) * 1000",
+            "legendFormat": "p50",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=\"YOUR_SERVICE\"}[5m])) by (le)) * 1000",
+            "legendFormat": "p95",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{service=\"YOUR_SERVICE\"}[5m])) by (le)) * 1000",
+            "legendFormat": "p99",
+            "refId": "C"
+          }
+        ],
+        "yaxes": [
+          {"format": "ms", "label": "Latency (ms)"},
+          {"format": "short"}
+        ],
+        "thresholds": [
+          {"value": 200, "colorMode": "warning", "op": "gt"},
+          {"value": 500, "colorMode": "critical", "op": "gt"}
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Resource Saturation (CPU/Memory %)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "targets": [
+          {
+            "expr": "100 - (avg(irate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+            "legendFormat": "CPU %",
+            "refId": "A"
+          },
+          {
+            "expr": "100 * (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes))",
+            "legendFormat": "Memory %",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "Usage %", "max": 100},
+          {"format": "short"}
+        ],
+        "thresholds": [
+          {"value": 80, "colorMode": "warning", "op": "gt"},
+          {"value": 90, "colorMode": "critical", "op": "gt"}
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Top 10 Slowest Endpoints",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+        "targets": [
+          {
+            "expr": "topk(10, histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=\"YOUR_SERVICE\"}[5m])) by (le, path))) * 1000",
+            "legendFormat": "",
+            "format": "table",
+            "instant": true,
+            "refId": "A"
+          }
+        ],
+        "transformations": [
+          {"id": "organize", "options": {"excludeByName": {}, "indexByName": {}, "renameByName": {"path": "Endpoint", "Value": "p95 Latency (ms)"}}}
+        ]
+      },
+      {
+        "id": 6,
+        "title": "SLO Status (30-day)",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 16},
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{service=\"YOUR_SERVICE\",status=~\"2..|3..\"}[30d])) / sum(rate(http_requests_total{service=\"YOUR_SERVICE\"}[30d])) * 100",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "none",
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 3,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 99.5, "color": "yellow"},
+                {"value": 99.9, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "Error Budget Remaining",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 16},
+        "targets": [
+          {
+            "expr": "(1 - ((1 - (sum(rate(http_requests_total{service=\"YOUR_SERVICE\",status=~\"2..|3..\"}[30d])) / sum(rate(http_requests_total{service=\"YOUR_SERVICE\"}[30d])))) / (1 - 0.999))) * 100",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 25, "color": "yellow"},
+                {"value": 50, "color": "green"}
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}

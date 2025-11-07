@@ -1,0 +1,332 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Multi-Agent Workflow Context Schema",
+  "description": "Standard schema for context persistence across agent handoffs",
+  "type": "object",
+  "required": [
+    "version",
+    "workflow_id",
+    "timestamp",
+    "current_agent",
+    "phase"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Context schema version for migration compatibility",
+      "pattern": "^\\d+\\.\\d+$",
+      "examples": ["1.0", "2.1"]
+    },
+
+    "workflow_id": {
+      "type": "string",
+      "description": "Unique identifier for this workflow instance",
+      "pattern": "^[a-z0-9-]+$",
+      "examples": ["feature-auth-api-20250115", "incident-db-crash-20250115"]
+    },
+
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this context was saved (ISO 8601)",
+      "examples": ["2025-01-15T10:30:00Z"]
+    },
+
+    "current_agent": {
+      "type": "string",
+      "description": "Agent that saved this context",
+      "examples": ["backend-architect", "tdd-typescript", "security-analyzer"]
+    },
+
+    "next_agent": {
+      "type": ["string", "null"],
+      "description": "Agent that should load this context next (null if workflow complete)",
+      "examples": ["test-generator", "devops-troubleshooter", null]
+    },
+
+    "phase": {
+      "type": "string",
+      "description": "Current phase of the workflow",
+      "examples": ["design", "implementation", "testing", "deployment", "complete"]
+    },
+
+    "files_modified": {
+      "type": "array",
+      "description": "List of files created or modified in this workflow",
+      "items": {
+        "type": "string",
+        "description": "Relative file path from project root",
+        "examples": ["src/api/routes/auth.ts", "docs/api/authentication.md"]
+      }
+    },
+
+    "decisions": {
+      "type": "array",
+      "description": "Key decisions made during workflow",
+      "items": {
+        "type": "string",
+        "description": "Decision with rationale",
+        "examples": [
+          "Use JWT with 15min expiry for security",
+          "PostgreSQL over MongoDB for ACID guarantees"
+        ]
+      }
+    },
+
+    "pending_actions": {
+      "type": "array",
+      "description": "Tasks remaining for next agent or phase",
+      "items": {
+        "type": "string",
+        "description": "Actionable task",
+        "examples": [
+          "Implement rate limiting on login endpoint",
+          "Add integration tests for OAuth flow"
+        ]
+      }
+    },
+
+    "constraints": {
+      "type": "array",
+      "description": "Requirements and limitations to respect",
+      "items": {
+        "type": "string",
+        "examples": [
+          "Must maintain backward compatibility with v1 API",
+          "Response time must be < 100ms",
+          "Must work with existing PostgreSQL schema"
+        ]
+      }
+    },
+
+    "context_summary": {
+      "type": "string",
+      "description": "Human-readable summary of workflow state (max 500 chars)",
+      "maxLength": 500,
+      "examples": [
+        "Completed API design for authentication service. JWT-based with refresh tokens. Ready for TDD implementation."
+      ]
+    },
+
+    "metadata": {
+      "type": "object",
+      "description": "Additional workflow-specific data",
+      "properties": {
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"],
+          "description": "Workflow priority level"
+        },
+        "estimated_completion": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Expected completion time"
+        },
+        "owner": {
+          "type": "string",
+          "description": "Team or person responsible"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Categorization tags",
+          "examples": [["backend", "authentication", "security"]]
+        }
+      }
+    },
+
+    "error_log": {
+      "type": "array",
+      "description": "Errors encountered during workflow",
+      "items": {
+        "type": "object",
+        "required": ["timestamp", "agent", "error"],
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "agent": {
+            "type": "string",
+            "description": "Agent that encountered error"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message"
+          },
+          "resolved": {
+            "type": "boolean",
+            "description": "Whether error was resolved"
+          }
+        }
+      }
+    },
+
+    "checkpoints": {
+      "type": "array",
+      "description": "Workflow checkpoints for rollback",
+      "items": {
+        "type": "object",
+        "required": ["id", "timestamp", "phase"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Checkpoint identifier",
+            "examples": ["checkpoint-001", "pre-deployment"]
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "phase": {
+            "type": "string",
+            "description": "Phase when checkpoint created"
+          },
+          "context_snapshot": {
+            "type": "object",
+            "description": "Minimal context state at checkpoint"
+          }
+        }
+      }
+    },
+
+    "conversation_history": {
+      "type": "array",
+      "description": "Optional: Full agent conversation history (can be large)",
+      "items": {
+        "type": "object",
+        "required": ["timestamp", "agent", "message"],
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time" },
+          "agent": { "type": "string" },
+          "message": { "type": "string" },
+          "message_type": {
+            "type": "string",
+            "enum": ["user_input", "agent_response", "system_message"]
+          }
+        }
+      }
+    },
+
+    "test_results": {
+      "type": "object",
+      "description": "Test execution results (if applicable)",
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "passing": { "type": "integer", "minimum": 0 },
+        "failing": { "type": "integer", "minimum": 0 },
+        "coverage": {
+          "type": "object",
+          "properties": {
+            "line": { "type": "number", "minimum": 0, "maximum": 100 },
+            "branch": { "type": "number", "minimum": 0, "maximum": 100 },
+            "function": { "type": "number", "minimum": 0, "maximum": 100 }
+          }
+        }
+      }
+    },
+
+    "deployment_info": {
+      "type": "object",
+      "description": "Deployment details (if applicable)",
+      "properties": {
+        "environment": {
+          "type": "string",
+          "enum": ["development", "staging", "production"]
+        },
+        "deployed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deployment_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "rollback_available": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "version": "1.0",
+      "workflow_id": "feature-user-prefs-20250115",
+      "timestamp": "2025-01-15T10:30:00Z",
+      "current_agent": "backend-architect",
+      "next_agent": "tdd-typescript",
+      "phase": "design-complete",
+
+      "files_modified": [
+        "docs/api/user-preferences.md",
+        "docs/architecture/decisions/adr-012.md"
+      ],
+
+      "decisions": [
+        "Use JSONB for flexible preferences storage",
+        "Implement both PUT and PATCH for updates"
+      ],
+
+      "pending_actions": [
+        "Implement API endpoints with TDD",
+        "Create database migration",
+        "Add input validation"
+      ],
+
+      "constraints": [
+        "Must maintain backward compatibility",
+        "Performance: GET < 50ms"
+      ],
+
+      "context_summary": "API design complete. Data model uses JSONB. Three endpoints planned (GET/PUT/PATCH). Ready for implementation.",
+
+      "metadata": {
+        "priority": "high",
+        "owner": "backend-team",
+        "tags": ["api", "user-preferences", "backend"]
+      }
+    },
+
+    {
+      "version": "1.0",
+      "workflow_id": "incident-db-crash-20250115",
+      "timestamp": "2025-01-15T03:15:00Z",
+      "current_agent": "incident-responder",
+      "next_agent": "devops-troubleshooter",
+      "phase": "investigation-complete",
+
+      "files_modified": [
+        "runbooks/database-recovery.md",
+        "incidents/2025-01-15-db-crash.md"
+      ],
+
+      "decisions": [
+        "Root cause: Out of memory due to connection leak",
+        "Immediate fix: Restart with connection pool limit",
+        "Long-term: Implement connection timeout monitoring"
+      ],
+
+      "pending_actions": [
+        "Deploy connection pool fix",
+        "Set up monitoring alerts",
+        "Schedule postmortem meeting"
+      ],
+
+      "error_log": [
+        {
+          "timestamp": "2025-01-15T03:00:00Z",
+          "agent": "incident-responder",
+          "error": "Database connection pool exhausted",
+          "resolved": true
+        }
+      ],
+
+      "metadata": {
+        "priority": "critical",
+        "owner": "sre-team",
+        "tags": ["incident", "database", "production"]
+      }
+    }
+  ]
+}
