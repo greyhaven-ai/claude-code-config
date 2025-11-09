@@ -51,9 +51,10 @@ git clone https://github.com/greyhaven-ai/grey-haven-claude-code-config.git ~/gr
       "source": "/Users/YOU/grey-haven-plugins/grey-haven-plugins"
     }],
     "install": [
-      "grey-haven-core@grey-haven-plugins",
-      "grey-haven-developer-experience@grey-haven-plugins",
-      "grey-haven-observability@grey-haven-plugins"
+      "core@grey-haven-plugins",
+      "developer-experience@grey-haven-plugins",
+      "observability@grey-haven-plugins",
+      "cc-trace@grey-haven-plugins"
     ]
   }
 }
@@ -130,6 +131,7 @@ In Claude Code:
 | `grey-haven-core` | 3 | 5 | Core functionality (research, context, git) |
 | `grey-haven-developer-experience` | 5 | 8 | DX tools (TDD, code review, docs) |
 | `grey-haven-observability` | 2 | 3 | Monitoring, logging, metrics |
+| `cc-trace` | 1 | 0 | Claude Code API debugging with mitmproxy |
 | `grey-haven-infrastructure` | 3 | 4 | IaC, deployment, scaling |
 | `grey-haven-quality-assurance` | 2 | 3 | Testing, E2E, visual regression |
 | `grey-haven-security` | 2 | 2 | Security scanning, vulnerability analysis |
@@ -140,7 +142,7 @@ In Claude Code:
 | `grey-haven-linear-integration` | 1 | 1 | Linear project management |
 | `grey-haven-hooks` | 0 | 0 | Hook documentation |
 
-**Total**: 26+ agents, 30+ commands across 12 plugins
+**Total**: 27+ agents, 30+ commands across 13 plugins
 
 ---
 
