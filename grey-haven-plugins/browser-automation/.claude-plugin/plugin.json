@@ -1,0 +1,23 @@
+{
+    "name": "browser-automation",
+    "description": "Automate web browser interactions using natural language. Browse websites, navigate web pages, extract data from websites, take screenshots, fill forms, click buttons, and interact with web applications using Stagehand AI browser automation.",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio",
+        "original": "Browserbase"
+    },
+    "keywords": [
+        "browser",
+        "automation",
+        "web-scraping",
+        "stagehand",
+        "screenshots",
+        "testing",
+        "qa"
+    ],
+    "category": "automation",
+    "license": "MIT",
+    "skills": [
+        "./skills/browser-automation"
+    ]
+}

@@ -5,7 +5,7 @@
     "url": "https://github.com/greyhaven-ai/claude-code-config"
   },
   "metadata": {
-    "description": "Grey Haven Studio's comprehensive plugin marketplace with 13 plugins covering development, testing, deployment, security, observability, and team collaboration",
+    "description": "Grey Haven Studio's comprehensive plugin marketplace with 14 plugins covering development, testing, deployment, security, observability, browser automation, and team collaboration",
     "version": "2.0.0",
     "homepage": "https://github.com/greyhaven-ai/claude-code-config"
   },
@@ -300,6 +300,30 @@
       ],
       "commands": [
         "./commands/linear/"
+      ]
+    },
+    {
+      "name": "browser-automation",
+      "description": "Automate web browser interactions using natural language. Browse websites, navigate web pages, extract data from websites, take screenshots, fill forms, click buttons, and interact with web applications using Stagehand AI browser automation.",
+      "source": "./grey-haven-plugins/browser-automation",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/claude-code-config",
+      "license": "MIT",
+      "keywords": [
+        "browser",
+        "automation",
+        "web-scraping",
+        "stagehand",
+        "screenshots",
+        "testing",
+        "qa"
+      ],
+      "skills": [
+        "./skills/browser-automation"
       ]
     }
   ]
