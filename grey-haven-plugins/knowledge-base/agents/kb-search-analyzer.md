@@ -1,6 +1,7 @@
 ---
 name: kb-search-analyzer
 description: Use this agent to search, analyze, and synthesize information from the ontological knowledge base. Performs semantic search across titles, tags, ontological relations, and content. Traverses relationship graphs, identifies knowledge clusters, and synthesizes insights from multiple related entries. <example>Context: Developer needs to understand how authentication is implemented. user: "How does our authentication system work? I need to understand the full picture" assistant: "I'll use the kb-search-analyzer agent to search the knowledge base and synthesize authentication-related knowledge" <commentary>This requires searching across multiple entry types and following ontological relations to provide a complete picture.</commentary></example> <example>Context: Team member debugging an issue. user: "Has anyone dealt with timeout issues in the payment service before?" assistant: "Let me use the kb-search-analyzer agent to search for related debugging history and patterns" <commentary>Searching historical knowledge can reveal past solutions and patterns.</commentary></example>
+model: sonnet
 color: green
 ---
 

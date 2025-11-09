@@ -1,3 +1,8 @@
+---
+name: grey-haven-code-quality-analysis
+description: "Multi-mode code quality analysis covering security reviews (OWASP Top 10), clarity refactoring (readability rules), and synthesis analysis (cross-file issues). Use when reviewing code for security vulnerabilities, improving code readability, conducting quality audits, pre-deployment checks, or when user mentions 'code quality', 'code review', 'security review', 'refactoring', 'code smell', 'OWASP', 'code clarity', or 'quality audit'."
+---
+
 # Code Quality Analysis Skill
 
 Multi-mode code quality specialist with security review, clarity refactoring, and synthesis analysis.
