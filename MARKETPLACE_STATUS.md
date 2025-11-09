@@ -1,8 +1,8 @@
 # Grey Haven Plugins Marketplace - Status Report
 
-**Date:** October 30, 2025
+**Date:** November 9, 2025
 **Marketplace Version:** 2.0.0
-**Total Plugins:** 13
+**Total Plugins:** 14
 
 ## Marketplace Configuration
 
@@ -19,28 +19,29 @@ The Grey Haven Plugins marketplace is configured and ready for distribution via 
 
 ## Plugin Inventory
 
-All 13 plugins are properly configured with complete metadata:
+All 14 plugins are properly configured with complete metadata:
 
 | # | Plugin Name | Version | Category | Commands | Skills | Hooks |
 |---|-------------|---------|----------|----------|--------|-------|
-| 1 | grey-haven-core | 1.0.0 | development | 9 | - | - |
-| 2 | grey-haven-developer-experience | 1.0.0 | productivity | 3 | - | - |
-| 3 | grey-haven-testing | 1.0.0 | testing | 2 | - | - |
-| 4 | grey-haven-deployment | 1.0.0 | deployment | 1 | - | - |
-| 5 | grey-haven-security | 1.0.0 | security | 1 | - | - |
-| 6 | grey-haven-research | 1.0.0 | documentation | 2 | - | - |
-| 7 | grey-haven-hooks | 1.0.0 | automation | - | - | 37 |
-| 8 | grey-haven-observability | 1.0.0 | operations | 3 | - | - |
-| 9 | grey-haven-incident-response | 1.0.0 | operations | 1 | - | - |
-| 10 | grey-haven-agent-orchestration | 1.0.0 | development | 3 | - | - |
-| 11 | grey-haven-data-quality | 1.0.0 | quality | 1 | - | - |
-| 12 | grey-haven-linear | 1.0.0 | project-management | 1 | - | - |
-| 13 | grey-haven-skills | 3.1.0 | standards | - | 16 | - |
+| 1 | core | 1.0.0 | development | 9 | - | - |
+| 2 | developer-experience | 1.0.0 | productivity | 3 | - | - |
+| 3 | testing | 1.0.0 | testing | 2 | - | - |
+| 4 | deployment | 1.0.0 | deployment | 1 | - | - |
+| 5 | security | 1.0.0 | security | 1 | - | - |
+| 6 | research | 1.0.0 | documentation | 2 | - | - |
+| 7 | hooks | 1.0.0 | automation | - | - | 37 |
+| 8 | observability | 1.0.0 | operations | 3 | - | - |
+| 9 | incident-response | 1.0.0 | operations | 1 | - | - |
+| 10 | agent-orchestration | 1.0.0 | development | 3 | - | - |
+| 11 | data-quality | 1.0.0 | quality | 1 | - | - |
+| 12 | linear | 1.0.0 | project-management | 1 | - | - |
+| 13 | browser-automation | 1.0.0 | automation | - | 1 | - |
+| 14 | skills | 3.1.0 | standards | - | 16 | - |
 
 **Total Resources:**
 - **26 Commands** across 11 plugins
-- **16 Skills** in grey-haven-skills
-- **37 Hooks** in grey-haven-hooks
+- **17 Skills** (16 in skills plugin + 1 browser-automation)
+- **37 Hooks** in hooks plugin
 
 ## Validation Status
 
@@ -48,7 +49,7 @@ All 13 plugins are properly configured with complete metadata:
 
 ### Checks Performed
 
-1. ✅ All 13 plugins have `.claude-plugin/plugin.json` files
+1. ✅ All 14 plugins have `.claude-plugin/plugin.json` files
 2. ✅ All required metadata fields present:
    - `name`, `version`, `description`
    - `author` (object format)
@@ -58,7 +59,14 @@ All 13 plugins are properly configured with complete metadata:
 5. ✅ No unsupported schema fields (`categories`, `featured`)
 6. ✅ Plugin structure follows Claude Code conventions
 
-### Recent Fixes
+### Recent Updates
+
+**November 9, 2025 - NEW PLUGIN**:
+- **Added browser-automation plugin** - Integration of Browserbase's agent-browse tool
+- Provides AI-powered browser automation using Stagehand framework
+- Enables natural language web browsing, data extraction, and QA testing
+- Includes complete skill documentation (SKILL.md, EXAMPLES.md, REFERENCE.md)
+- Total plugin count: 13 → 14
 
 **Commit a13132a** (November 4, 2025 - CRITICAL FIX):
 - **Moved all 16 skills into `skills/` subdirectory** - Required by Claude Code documentation
@@ -163,7 +171,7 @@ Skills are declared in plugin.json with paths to skills/ subdirectory:
    ```
    /plugin marketplace add greyhaven-ai/claude-code-config
    ```
-5. Verify all 13 plugins appear:
+5. Verify all 14 plugins appear:
    ```
    /plugin
    ```
@@ -175,7 +183,7 @@ Skills are declared in plugin.json with paths to skills/ subdirectory:
 
 ### Expected Result
 
-All 13 plugins should appear in the marketplace browser with:
+All 14 plugins should appear in the marketplace browser with:
 - Complete descriptions
 - Correct categories
 - All commands/skills/hooks discoverable
