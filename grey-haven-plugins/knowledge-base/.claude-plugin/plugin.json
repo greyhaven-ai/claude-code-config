@@ -1,0 +1,17 @@
+{
+    "name": "knowledge-base",
+    "description": "Ontological knowledge management system for capturing institutional memory, debugging sessions, architectural decisions, and team learnings in version-controlled Markdown with enforced metadata structure",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "keywords": [
+        "knowledge-management",
+        "ontology",
+        "documentation",
+        "institutional-memory",
+        "semantic-organization",
+        "knowledge-graph"
+    ],
+    "license": "MIT"
+}
