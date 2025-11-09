@@ -20,6 +20,8 @@
     ],
     "license": "MIT",
     "skills": [
+        "./skills/devops-troubleshooting",
+        "./skills/observability-engineering",
         "./skills/observability-monitoring",
         "./skills/performance-optimization"
     ]

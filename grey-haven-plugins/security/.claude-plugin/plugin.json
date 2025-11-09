@@ -14,7 +14,8 @@
     ],
     "license": "MIT",
     "skills": [
-        "./skills/security-practices",
-        "./skills/authentication-patterns"
+        "./skills/authentication-patterns",
+        "./skills/security-analysis",
+        "./skills/security-practices"
     ]
 }

@@ -17,5 +17,9 @@
         "reliability",
         "troubleshooting"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "skills": [
+        "./skills/incident-response",
+        "./skills/smart-debugging"
+    ]
 }
