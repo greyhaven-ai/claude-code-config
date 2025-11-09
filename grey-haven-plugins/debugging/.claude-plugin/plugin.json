@@ -1,0 +1,20 @@
+{
+    "name": "debugging",
+    "description": "Advanced debugging and API tracing tools including cc-trace for intercepting and analyzing Claude Code API requests using mitmproxy",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "keywords": [
+        "debugging",
+        "api-tracing",
+        "mitmproxy",
+        "traffic-analysis",
+        "diagnostics",
+        "inspection"
+    ],
+    "license": "MIT",
+    "skills": [
+        "./skills/cc-trace"
+    ]
+}
