@@ -25,9 +25,7 @@ Complete specifications for all report output formats.
 
 ### [ci-cd-patterns.md](ci-cd-patterns.md)
 CI/CD integration patterns and workflow examples.
-- **GitHub Actions Integration** - Complete workflow with PR comments
-- **GitLab CI Integration** - Pipeline configuration with coverage gates
-- **CircleCI Integration** - Config.yml with coverage enforcement
+- **GitHub Actions Integration** - Complete workflow with PR comments and coverage gates
 - **Pre-Commit Hooks** - Git hooks for local validation
 - **Pre-Push Hooks** - Remote validation before pushing
 - **Coverage Gates** - Threshold enforcement and failure modes

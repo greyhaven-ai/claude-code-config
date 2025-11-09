@@ -123,7 +123,7 @@ This workflow provides end-to-end incident management from detection through pos
  → Create action items for prevention
  → Assign owners and due dates
  → Prioritize by impact and effort
- → Track in Jira/Linear
+ → Track in Linear
 4. Use Task tool with relevant specialists for preventative measures:
  - "test-generator" → Create regression tests
  - "code-quality-analyzer" → Review code for similar patterns

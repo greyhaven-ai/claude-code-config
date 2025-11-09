@@ -68,7 +68,7 @@
         "description": "Decision with rationale",
         "examples": [
           "Use JWT with 15min expiry for security",
-          "PostgreSQL over MongoDB for ACID guarantees"
+          "PostgreSQL for ACID guarantees and reliability"
         ]
       }
     },

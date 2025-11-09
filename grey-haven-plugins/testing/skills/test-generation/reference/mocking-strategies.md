@@ -289,23 +289,26 @@ def test_create_user():
     assert mock_session.commit.called
 ```
 
-**Better approach: Use in-memory database**:
+**Better approach: Use test database**:
 ```python
 @pytest.fixture
 def session():
-    """Create in-memory SQLite database for testing"""
-    engine = create_engine("sqlite:///:memory:")
+    """Create test PostgreSQL database session"""
+    # Use test database URL from environment
+    test_db_url = os.getenv("TEST_DATABASE_URL", "postgresql://localhost/test_db")
+    engine = create_engine(test_db_url)
     SQLModel.metadata.create_all(engine)
 
     with Session(engine) as session:
         yield session
+        session.rollback()  # Rollback after each test
 
 def test_create_user(session):
     """Should create user in database"""
     service = UserService(session)
     user = service.create_user('John Doe', 'john@example.com')
 
-    # Test against real database (fast in-memory)
+    # Test against real PostgreSQL database
     assert user.id is not None
     assert user.name == 'John Doe'
 ```

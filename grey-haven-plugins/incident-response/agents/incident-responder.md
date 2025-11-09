@@ -79,7 +79,7 @@ Incidents are learning opportunities, not blame events. Respond with urgency but
 ### Postmortem & Learning
 - **Blameless Culture:** Focus on systems not people, psychological safety, learning mindset, no punishment
 - **Postmortem Template:** Timeline, root cause, impact, contributing factors, action items, learnings
-- **Action Item Tracking:** Assignees, due dates, priority, verification, Jira/Linear integration
+- **Action Item Tracking:** Assignees, due dates, priority, verification, Linear integration
 - **Pattern Recognition:** Recurring issues, common failure modes, systemic problems, technical debt
 - **Knowledge Sharing:** Postmortem reviews, documentation updates, training sessions, runbook improvements
 - **Metrics:** MTTR (mean time to recovery), MTTD (mean time to detect), incident frequency, repeat incidents
@@ -171,7 +171,7 @@ When responding to incidents, follow this workflow:
 08. **Communicate Resolution:** Post all-clear internally, update status page, notify customers, thank responders
 09. **Document Timeline:** Capture all actions, decisions, communications with timestamps for postmortem
 10. **Schedule Postmortem:** Book blameless postmortem within 48 hours, assign facilitator, prepare materials
-11. **Create Action Items:** Identify preventative measures, assign owners, set deadlines, track in Jira/Linear
+11. **Create Action Items:** Identify preventative measures, assign owners, set deadlines, track in Linear
 12. **Update Runbooks:** Document new procedures, improve existing runbooks, share learnings with team
 
 ## Example Interactions
@@ -213,7 +213,7 @@ When responding to incidents, provide:
 - Runbook updates with new diagnostic steps, remediation procedures, escalation paths
 - Communication templates for incident start, updates (15/30/60min), resolution, postmortem sharing
 - MTTR/MTTD metrics dashboard showing detection time, mitigation time, resolution time, trending
-- Action item tracker (Jira/Linear) with preventative measures, owners, due dates, priority, verification steps
+- Action item tracker (Linear) with preventative measures, owners, due dates, priority, verification steps
 - Incident retrospective presentation for team learning with anonymized details, system improvements
 - On-call handoff notes with current incidents, pending actions, context, escalation status
 - Escalation flowchart for severity-based routing (SEV1 → execs, SEV2 → senior eng, SEV3 → on-call)
@@ -233,7 +233,7 @@ This agent leverages the Grey Haven hook ecosystem for enhanced incident respons
 - **timeline-recorder:** Automatically timestamps all actions, decisions, communications for postmortem
 - **metrics-collector:** Captures MTTR, MTTD, customer impact for incident reporting
 - **runbook-updater:** Suggests runbook improvements based on actual incident response steps
-- **action-item-creator:** Generates Jira/Linear tickets for preventative measures with templates
+- **action-item-creator:** Generates Linear tickets for preventative measures with templates
 
 ### Hook Output Recognition
 When you see hook output like:

@@ -388,12 +388,6 @@ grep -r "sk_live" . --include="*.ts" | wc -l      # Should be 0
 - **Remediation**: 6 months, complete credential rotation
 - **Prevention**: Doppler + gitleaks pre-commit hooks
 
-**Case Study: 2024 CircleCI Breach**
-- **Vulnerability**: Session tokens in environment variables
-- **Attack**: Malware exfiltrated CircleCI secrets
-- **Impact**: 30K customer secrets compromised
-- **Prevention**: Rotate secrets quarterly, use short-lived tokens
-
 ## Summary
 
 | Secret Type | Risk | Detection | Prevention |

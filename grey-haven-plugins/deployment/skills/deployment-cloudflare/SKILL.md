@@ -12,7 +12,7 @@ Deploy **TanStack Start** applications to Cloudflare Workers using GitHub Action
 ### TanStack Start on Cloudflare Workers
 - **SSR**: Server-side rendering with TanStack Start server functions
 - **Edge Runtime**: Global deployment on Cloudflare's edge network
-- **Database**: PostgreSQL (Neon/Supabase) with connection pooling
+- **Database**: PostgreSQL (PlanetScale) with connection pooling
 - **Cache**: Cloudflare KV for sessions, R2 for file uploads
 - **Secrets**: Managed via Doppler, injected in GitHub Actions
 
@@ -73,7 +73,7 @@ BETTER_AUTH_SECRET=<random-secret>
 BETTER_AUTH_URL=https://app.greyhaven.studio
 JWT_SECRET_KEY=<random-secret>
 
-# Database (Neon/Supabase)
+# Database (PlanetScale)
 DATABASE_URL=postgresql://user:pass@host/db
 DATABASE_URL_ADMIN=postgresql://admin:pass@host/db
 

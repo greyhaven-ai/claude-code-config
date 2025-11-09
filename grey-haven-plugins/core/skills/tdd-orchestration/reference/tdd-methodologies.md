@@ -582,7 +582,7 @@ def test_stripe_adapter_charges_card():
 
 ✅ **Good for**:
 - Complex domain logic
-- Multiple infrastructure options (Postgres, MySQL, MongoDB)
+- Multiple infrastructure options (database drivers, cache layers, APIs)
 - Microservices
 - Clean architecture
 

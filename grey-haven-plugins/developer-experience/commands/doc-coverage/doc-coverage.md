@@ -121,10 +121,7 @@ Add coverage checks to pull requests with automatic PR comments showing coverage
 ### Pre-Commit Hook
 Prevent commits with documentation coverage below threshold.
 
-### GitLab CI, CircleCI, etc.
-Similar integration patterns available for all major CI/CD platforms.
-
-**See [reference/ci-cd-patterns.md](reference/ci-cd-patterns.md)** for complete workflows and configuration examples.
+**See [reference/ci-cd-patterns.md](reference/ci-cd-patterns.md)** for complete GitHub Actions workflows and configuration examples.
 
 ## Coverage Tracking
 

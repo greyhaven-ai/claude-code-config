@@ -18,7 +18,6 @@ Real-world supply chain and dependency security vulnerabilities with CVE exploit
   "dependencies": {
     "axios": "0.21.1",           // ❌ CVE-2021-3749 (SSRF, CVSS 7.5)
     "lodash": "4.17.19",         // ❌ CVE-2020-28500 (Prototype Pollution, CVSS 5.3)
-    "express": "4.17.0",         // ❌ CVE-2022-24999 (Path Traversal, CVSS 7.5)
     "jsonwebtoken": "8.5.0",     // ❌ CVE-2022-23529 (Algorithm Confusion, CVSS 7.6)
     "node-fetch": "2.6.6",       // ❌ CVE-2022-0235 (SSRF, CVSS 6.1)
     "@tanstack/react-query": "4.0.0"  // ✅ No known CVEs
@@ -28,7 +27,7 @@ Real-world supply chain and dependency security vulnerabilities with CVE exploit
 
 ```python
 # requirements.txt - VULNERABLE
-Flask==1.1.1              # ❌ CVE-2023-30861 (Session Cookie Leak, CVSS 7.5)
+fastapi==0.68.0           # ❌ Outdated (missing security fixes)
 requests==2.25.0          # ❌ CVE-2023-32681 (Header Injection, CVSS 6.1)
 Pillow==8.3.2             # ❌ CVE-2022-22817 (Buffer Overflow, CVSS 9.8)
 cryptography==36.0.0      # ❌ CVE-2023-23931 (NULL Pointer, CVSS 7.5)
@@ -62,7 +61,6 @@ axios.get(userInput)  // userInput = maliciousUrl
   "dependencies": {
     "axios": "^1.6.0",           // ✅ Latest, no known CVEs
     "lodash": "^4.17.21",        // ✅ Patched
-    "express": "^4.18.2",        // ✅ Latest
     "jsonwebtoken": "^9.0.2",    // ✅ Patched
     "node-fetch": "^3.3.0",      // ✅ Latest
     "@tanstack/react-query": "^5.17.0"
@@ -76,7 +74,7 @@ axios.get(userInput)  // userInput = maliciousUrl
 
 ```python
 # requirements.txt - SECURE (pinned to secure versions)
-Flask==3.0.0              # ✅ Latest stable
+fastapi==0.109.0          # ✅ Latest stable
 requests==2.31.0          # ✅ Patched
 Pillow==10.1.0            # ✅ Latest
 cryptography==41.0.7      # ✅ Patched
@@ -224,12 +222,12 @@ pip-audit
 # Found 3 vulnerabilities in 2 packages
 # Name         Version  ID              Fix Versions
 # ------------ -------- --------------- -------------
-# Flask        1.1.1    CVE-2023-30861  2.2.5,2.3.2
+# fastapi      0.68.0   (outdated)      0.109.0+
 # cryptography 36.0.0   CVE-2023-23931  39.0.1
 # Pillow       8.3.2    CVE-2022-22817  9.0.0
 
 # Fix by updating requirements.txt
-pip install --upgrade Flask cryptography Pillow
+pip install --upgrade fastapi cryptography Pillow
 pip freeze > requirements.txt
 ```
 
@@ -410,7 +408,6 @@ describe('Dependency Security', () => {
 | **CVE-2021-3749** | axios | 7.5 | Server-Side Request Forgery |
 | **CVE-2022-23529** | jsonwebtoken | 7.6 | Algorithm Confusion |
 | **CVE-2020-28500** | lodash | 5.3 | Prototype Pollution |
-| **CVE-2023-30861** | Flask | 7.5 | Session Cookie Leak |
 
 ## Summary
 

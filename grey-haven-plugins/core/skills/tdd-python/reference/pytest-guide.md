@@ -514,16 +514,16 @@ def pytest_collection_modifyitems(items):
 ### Parameterized Fixtures
 
 ```python
-@pytest.fixture(params=["sqlite", "postgres", "mysql"])
+@pytest.fixture(params=["postgres", "test"])
 def database(request):
-    """Test runs 3 times with different databases."""
+    """Test runs with different database configs (production vs test)."""
     db_type = request.param
     db = create_database(db_type)
     yield db
     db.close()
 
 def test_query(database):
-    """Runs once per database type."""
+    """Runs for each database configuration."""
     result = database.query("SELECT 1")
     assert result is not None
 ```

@@ -355,15 +355,15 @@ SQL Version:
 [Your SQL query with JOIN explanation]
 ```
 
-NoSQL Version:
-```javascript
-[Your MongoDB/DynamoDB query]
+PostgreSQL with ORM (Drizzle):
+```typescript
+[Your Drizzle query with relations]
 ```
 
 Comparison:
-- Performance: [Which is faster and why]
-- Maintainability: [Which is easier to change]
-- Correctness: [Which guarantees data integrity]
+- Performance: [Raw SQL vs ORM overhead]
+- Maintainability: [Type safety and developer experience]
+- Correctness: [Compile-time checks vs runtime validation]
 
 **4. Decision Framework**
 Help me create a decision tree:
@@ -376,10 +376,10 @@ Start: What type of data?
 **5. Real-World Recommendation**
 
 Based on my use case, recommend:
-- Specific database (PostgreSQL? MongoDB?)
+- Query approach (raw SQL vs Drizzle ORM)
 - Architecture approach
 - Potential pitfalls to avoid
-- Migration strategy if I need to change later
+- Migration strategy for schema changes
 
 ###Teaching Approach###
 

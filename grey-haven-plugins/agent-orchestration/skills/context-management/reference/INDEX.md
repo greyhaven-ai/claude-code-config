@@ -214,7 +214,7 @@ Agent A (Design) → Context Save → Agent B (Implement)
   "current_agent": "tdd-typescript",
   "next_agent": "test-generator",
   "phase": "implementation-complete",
-  "decisions": [...previous, "Express.js framework", "Zod validation"],
+  "decisions": [...previous, "FastAPI framework", "Pydantic validation"],
   "pending_actions": ["Generate integration tests", "Test error cases"]
 }
 ```

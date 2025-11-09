@@ -307,8 +307,8 @@ We will use Cloudflare Workers for edge computing with KV for session storage.
 ## Alternatives Considered
 
 1. **AWS Lambda@Edge**: Good performance but vendor lock-in, higher cost
-2. **Vercel Edge Functions**: Limited to Vercel platform, no KV equivalent
-3. **Traditional Load Balancer**: Single region, no edge caching
+2. **Traditional Load Balancer**: Single region, no edge caching
+3. **Self-hosted Edge Nodes**: Complex deployment, maintenance overhead
 
 ## Consequences
 

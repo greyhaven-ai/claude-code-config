@@ -22,7 +22,7 @@
 - [ ] Migration reversible (has downgrade)
 - [ ] Seed data prepared for production (if needed)
 - [ ] DATABASE_URL_ADMIN has elevated permissions for migrations
-- [ ] Connection pooling configured (Neon/Supabase)
+- [ ] Connection pooling configured (PlanetScale)
 
 ### Application
 - [ ] All tests passing locally

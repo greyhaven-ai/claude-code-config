@@ -459,23 +459,6 @@ comment:
   behavior: default
 ```
 
-### GitLab CI
-
-```yaml
-# .gitlab-ci.yml
-test:
-  stage: test
-  script:
-    - pip install pytest pytest-cov
-    - pytest --cov=app --cov-report=xml --cov-report=term
-  coverage: '/TOTAL.*\s+(\d+%)$/'
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage.xml
-```
-
 ---
 
 ## Advanced Patterns

@@ -15,7 +15,7 @@ Fast, focused vulnerability scanning with immediate results.
 grep -r -E "(api[_-]?key|secret|password|token|private[_-]?key)" \
  --exclude-dir=node_modules --exclude-dir=.git
 # Find hardcoded credentials
-grep -r -E "(mongodb|mysql|postgres|redis)://[^/]*:[^@]*@" \
+grep -r -E "(postgres|redis)://[^/]*:[^@]*@" \
  --exclude-dir=node_modules
 # Identify dangerous functions
 grep -r -E "(eval|exec|system|shell_exec|os.system|subprocess)" \

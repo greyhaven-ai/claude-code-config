@@ -261,7 +261,7 @@ describe('POST /api/users', () => {
 
 ```typescript
 // src/api/users.ts
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { eq } from 'drizzle-orm';
 
 export const createUser = createServerFn('POST', async (input: { data: unknown }) => {
   const validation = CreateUserSchema.safeParse(input.data);
@@ -277,26 +277,25 @@ export const createUser = createServerFn('POST', async (input: { data: unknown }
   }
 
   try {
-    const user = await db.users.create({
-      data: {
-        id: crypto.randomUUID(),
-        ...validation.data,
-        createdAt: new Date()
-      }
-    });
+    const user = await db.insert(users).values({
+      id: crypto.randomUUID(),
+      ...validation.data,
+      createdAt: new Date()
+    }).returning();
 
     return {
       status: 201,
       body: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        createdAt: user.createdAt.toISOString()
+        id: user[0].id,
+        name: user[0].name,
+        email: user[0].email,
+        role: user[0].role,
+        createdAt: user[0].createdAt.toISOString()
       }
     };
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
+    // Drizzle/PostgreSQL unique constraint violation
+    if (error instanceof Error && error.message.includes('unique constraint')) {
       return {
         status: 409,
         body: {
@@ -322,7 +321,7 @@ _Cycle 5 (database error handling) omitted for brevity._
 import { createServerFn } from '@tanstack/start';
 import { z } from 'zod';
 import { db } from '../lib/db';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { users } from '../db/schema';
 
 const CreateUserSchema = z.object({
   name: z.string().min(1),
@@ -376,18 +375,16 @@ export const createUser = createServerFn('POST', async (input: { data: unknown }
 
   try {
     // Create user
-    const user = await db.users.create({
-      data: {
-        id: crypto.randomUUID(),
-        ...validation.data,
-        createdAt: new Date()
-      }
-    });
+    const [user] = await db.insert(users).values({
+      id: crypto.randomUUID(),
+      ...validation.data,
+      createdAt: new Date()
+    }).returning();
 
     return created(user);
   } catch (error) {
-    // Handle duplicate email
-    if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
+    // Handle duplicate email (Drizzle/PostgreSQL unique constraint)
+    if (error instanceof Error && error.message.includes('unique constraint')) {
       return conflictError('User with this email already exists');
     }
 

@@ -42,7 +42,7 @@
 - [ ] Verify Shadcn UI components
 
 ### Database Setup
-- [ ] Create PostgreSQL database (Neon/Supabase)
+- [ ] Create PostgreSQL database (PlanetScale)
 - [ ] Add DATABASE_URL to Doppler
 - [ ] Add DATABASE_URL_ADMIN to Doppler
 - [ ] Generate initial migration: `bun run db:generate`
@@ -80,7 +80,7 @@
 - [ ] Verify Alembic installed
 
 ### Database Setup
-- [ ] Create PostgreSQL database (Neon/Supabase)
+- [ ] Create PostgreSQL database (PlanetScale)
 - [ ] Add DATABASE_URL to Doppler
 - [ ] Add DATABASE_URL_ADMIN to Doppler
 - [ ] Generate initial migration: `alembic revision --autogenerate -m "Initial"`

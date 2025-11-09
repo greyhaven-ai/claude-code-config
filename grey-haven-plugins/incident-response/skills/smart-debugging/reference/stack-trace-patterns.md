@@ -85,7 +85,7 @@ Error: User not found
     at UserService.findById (/app/services/user.service.ts:42:11)
     at async getUserProfile (/app/api/users.controller.ts:23:18)
     at async /app/middleware/auth.ts:67:5
-    at async Layer.handle [as handle_request] (/node_modules/express/lib/router/layer.js:95:5)
+    at async handleRequest (/app/server/request-handler.ts:15:3)
 ```
 
 **Reading Order**: Top-down (error → call chain)
@@ -95,7 +95,7 @@ Error: User not found
 | **Error Type** | Error class | `Error` |
 | **Error Message** | Description | `"User not found"` |
 | **Root Frame** | Where thrown | `user.service.ts:42:11` |
-| **Call Stack** | Caller chain | `getUserProfile` → middleware → Express |
+| **Call Stack** | Caller chain | `getUserProfile` → middleware → request handler |
 
 ### Browser Stack Traces
 
@@ -278,10 +278,10 @@ sqlalchemy.exc.IntegrityError: UNIQUE constraint failed
 sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection refused
 ```
 
-**Prisma/Drizzle**:
+**Drizzle ORM**:
 ```
-PrismaClientKnownRequestError: Unique constraint failed on the fields: (`email`)
-PrismaClientInitializationError: Can't reach database server
+DrizzleError: Unique constraint failed on column: email
+DrizzleError: Connection to database server failed
 ```
 
 ## Analysis Workflow

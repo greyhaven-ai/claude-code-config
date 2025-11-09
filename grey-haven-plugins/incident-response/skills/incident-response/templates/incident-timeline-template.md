@@ -132,7 +132,7 @@
 ## Next Steps
 
 - [ ] Full postmortem scheduled: [Date/Time]
-- [ ] Action items created in Linear/Jira
+- [ ] Action items created in Linear
 - [ ] Runbook updated with new learnings
 - [ ] Monitoring improvements identified
 

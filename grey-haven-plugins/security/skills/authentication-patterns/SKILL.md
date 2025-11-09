@@ -9,7 +9,7 @@ Follow Grey Haven Studio's authentication patterns using better-auth for TanStac
 
 ## Stack
 
-- **better-auth**: Authentication library for Next.js/TanStack Start
+- **better-auth**: Authentication library for TanStack Start
 - **Drizzle ORM**: Database adapter for better-auth
 - **Doppler**: Secret management (BETTER_AUTH_SECRET, OAuth keys)
 - **Redis**: Session storage (via Upstash)

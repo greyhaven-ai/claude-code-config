@@ -84,7 +84,7 @@ HIGH PRIORITY (P1):
 13. Password transmitted in plaintext logs
 14. Missing HTTPS enforcement
 15. No CSRF protection
-16. Outdated dependencies (Flask 0.12, 4 years old)
+16. Outdated dependencies (fastapi 0.68.0, missing security updates)
 
 MEDIUM PRIORITY (P2):
 17-23. [Additional issues...]
