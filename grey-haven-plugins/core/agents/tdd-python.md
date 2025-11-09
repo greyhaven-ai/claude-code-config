@@ -198,7 +198,7 @@ When implementing through TDD, provide:
 - Coverage gaps identification and recommendations
 - Integration test examples where appropriate
 - pytest.ini or setup.cfg configuration for test discovery
-- CI configuration for automated test execution (GitHub Actions, GitLab CI)
+- CI configuration for automated test execution (GitHub Actions)
 - Test documentation showing test organization and patterns used
 
 ## Hook Integration

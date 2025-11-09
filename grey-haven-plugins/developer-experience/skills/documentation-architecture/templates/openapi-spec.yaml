@@ -1,0 +1,429 @@
+openapi: 3.1.0
+
+info:
+  title: [Your API Name]
+  version: 1.0.0
+  description: |
+    [Brief description of your API]
+    
+    ## Authentication
+    All endpoints require JWT authentication via Bearer token in Authorization header.
+    
+    ## Rate Limiting
+    - Authenticated: 1000 requests/hour
+    - Unauthenticated: 100 requests/hour
+    
+    ## Base URL
+    Production: https://api.yourdomain.com
+    Staging: https://api-staging.yourdomain.com
+  
+  contact:
+    name: [Your Team Name]
+    email: support@yourdomain.com
+    url: https://docs.yourdomain.com
+  
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.yourdomain.com
+    description: Production
+  - url: https://api-staging.yourdomain.com
+    description: Staging
+  - url: http://localhost:3000
+    description: Local development
+
+# Global security requirement (can be overridden per endpoint)
+security:
+  - BearerAuth: []
+
+tags:
+  - name: users
+    description: User management operations
+  - name: authentication
+    description: Authentication and authorization
+
+paths:
+  /auth/login:
+    post:
+      summary: User login
+      description: Authenticate user with email and password
+      operationId: login
+      tags:
+        - authentication
+      security: []  # No auth required for login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /users:
+    get:
+      summary: List users
+      description: Retrieve a paginated list of users
+      operationId: listUsers
+      tags:
+        - users
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PerPageParam'
+        - name: role
+          in: query
+          description: Filter by user role
+          schema:
+            type: string
+            enum: [admin, member, guest]
+      responses:
+        '200':
+          description: Users retrieved successfully
+          headers:
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUsers'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    
+    post:
+      summary: Create user
+      description: Create a new user account
+      operationId: createUser
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: User created successfully
+          headers:
+            Location:
+              description: URL of created user
+              schema:
+                type: string
+                example: /users/usr_1234567890abcdef
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /users/{user_id}:
+    get:
+      summary: Get user by ID
+      description: Retrieve a single user by their unique identifier
+      operationId: getUser
+      tags:
+        - users
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from /auth/login endpoint
+
+  parameters:
+    UserIdParam:
+      name: user_id
+      in: path
+      required: true
+      description: User identifier
+      schema:
+        type: string
+        pattern: ^usr_[a-z0-9]{16}$
+        example: usr_1234567890abcdef
+    
+    PageParam:
+      name: page
+      in: query
+      description: Page number (1-indexed)
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+        example: 1
+    
+    PerPageParam:
+      name: per_page
+      in: query
+      description: Items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+        example: 20
+
+  headers:
+    X-RateLimit-Limit:
+      description: Maximum requests per hour
+      schema:
+        type: integer
+        example: 1000
+    
+    X-RateLimit-Remaining:
+      description: Remaining requests in current window
+      schema:
+        type: integer
+        example: 847
+    
+    X-RateLimit-Reset:
+      description: Unix timestamp when limit resets
+      schema:
+        type: integer
+        example: 1699564800
+
+  schemas:
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          examples: [user@example.com]
+        password:
+          type: string
+          minLength: 8
+          examples: [secure123]
+    
+    LoginResponse:
+      type: object
+      required: [token, user]
+      properties:
+        token:
+          type: string
+          description: JWT authentication token
+        user:
+          $ref: '#/components/schemas/User'
+    
+    UserCreate:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          examples: [user@example.com]
+        password:
+          type: string
+          minLength: 8
+          examples: [secure123]
+        name:
+          type: string
+          examples: [John Doe]
+        role:
+          type: string
+          enum: [admin, member, guest]
+          default: member
+    
+    User:
+      type: object
+      required: [id, email, role, created_at]
+      properties:
+        id:
+          type: string
+          pattern: ^usr_[a-z0-9]{16}$
+          examples: [usr_1234567890abcdef]
+        email:
+          type: string
+          format: email
+          examples: [user@example.com]
+        name:
+          type: [string, 'null']
+          examples: [John Doe]
+        role:
+          type: string
+          enum: [admin, member, guest]
+          examples: [member]
+        created_at:
+          type: string
+          format: date-time
+          examples: ["2024-01-15T10:30:00Z"]
+        updated_at:
+          type: string
+          format: date-time
+          examples: ["2024-01-15T10:30:00Z"]
+    
+    PaginatedUsers:
+      type: object
+      required: [data, pagination]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+    
+    PaginationMeta:
+      type: object
+      required: [page, per_page, total, total_pages]
+      properties:
+        page:
+          type: integer
+          minimum: 1
+          examples: [1]
+        per_page:
+          type: integer
+          minimum: 1
+          maximum: 100
+          examples: [20]
+        total:
+          type: integer
+          examples: [145]
+        total_pages:
+          type: integer
+          examples: [8]
+        next_page:
+          type: [integer, 'null']
+          examples: [2]
+        prev_page:
+          type: [integer, 'null']
+          examples: [null]
+    
+    ErrorResponse:
+      type: object
+      required: [error, message]
+      properties:
+        error:
+          type: string
+          description: Error code (UPPERCASE_SNAKE_CASE)
+          examples: [VALIDATION_ERROR, UNAUTHORIZED, NOT_FOUND]
+        message:
+          type: string
+          description: Human-readable error message
+          examples: [Validation failed for field 'email']
+        details:
+          type: object
+          description: Additional error context
+          additionalProperties: true
+          examples:
+            - field: email
+              reason: Invalid format
+
+  responses:
+    BadRequest:
+      description: Bad request (validation error)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            validation_error:
+              value:
+                error: VALIDATION_ERROR
+                message: Validation failed for field 'email'
+                details:
+                  field: email
+                  reason: Invalid email format
+    
+    Unauthorized:
+      description: Unauthorized (invalid or missing authentication)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            missing_token:
+              value:
+                error: UNAUTHORIZED
+                message: Authentication token required
+            invalid_token:
+              value:
+                error: UNAUTHORIZED
+                message: Invalid or expired authentication token
+    
+    Forbidden:
+      description: Forbidden (insufficient permissions)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            insufficient_role:
+              value:
+                error: FORBIDDEN
+                message: User lacks required role
+    
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            not_found:
+              value:
+                error: NOT_FOUND
+                message: Resource with id 'xyz' not found
+    
+    Conflict:
+      description: Conflict (resource already exists)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            already_exists:
+              value:
+                error: CONFLICT
+                message: Resource with this identifier already exists
+    
+    TooManyRequests:
+      description: Rate limit exceeded
+      headers:
+        X-RateLimit-Reset:
+          $ref: '#/components/headers/X-RateLimit-Reset'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            rate_limit:
+              value:
+                error: RATE_LIMIT_EXCEEDED
+                message: Rate limit exceeded, retry after 60 seconds

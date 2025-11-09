@@ -1,8 +1,0 @@
-{
-    "name": "sample-plugin",
-    "description": "A sample plugin to demonstrate structure",
-    "version": "1.0.0",
-    "author": {
-        "name": "Plugin Author"
-    }
-}

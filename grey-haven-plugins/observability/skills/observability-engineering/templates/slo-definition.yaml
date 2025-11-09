@@ -1,0 +1,173 @@
+# SLO Definition Template
+# Replace YOUR_SERVICE with actual service name
+# Replace 99.9 with your target SLO (99.5, 99.9, or 99.95)
+
+apiVersion: monitoring.greyhaven.io/v1
+kind: ServiceLevelObjective
+metadata:
+  name: YOUR_SERVICE-slo
+  namespace: production
+spec:
+  # Service identification
+  service: YOUR_SERVICE
+  environment: production
+
+  # SLO tier (critical, essential, standard)
+  tier: essential
+
+  # Time window (30 days recommended)
+  window: 30d
+
+  # SLO targets
+  objectives:
+    - name: availability
+      target: 99.9  # 99.9% = 43.2 min downtime/month
+      indicator:
+        type: ratio
+        success_query: |
+          sum(rate(http_requests_total{service="YOUR_SERVICE",status=~"2..|3.."}[{{.window}}]))
+        total_query: |
+          sum(rate(http_requests_total{service="YOUR_SERVICE"}[{{.window}}]))
+
+    - name: latency
+      target: 95  # 95% of requests < 200ms
+      indicator:
+        type: ratio
+        success_query: |
+          sum(rate(http_request_duration_seconds_bucket{service="YOUR_SERVICE",le="0.2"}[{{.window}}]))
+        total_query: |
+          sum(rate(http_request_duration_seconds_count{service="YOUR_SERVICE"}[{{.window}}]))
+
+    - name: error_rate
+      target: 99.5  # <0.5% error rate
+      indicator:
+        type: ratio
+        success_query: |
+          sum(rate(http_requests_total{service="YOUR_SERVICE",status!~"5.."}[{{.window}}]))
+        total_query: |
+          sum(rate(http_requests_total{service="YOUR_SERVICE"}[{{.window}}]))
+
+  # Error budget policy
+  errorBudget:
+    policy:
+      - budget_range: [75%, 100%]
+        action: "Normal feature development"
+        approval: "Engineering team"
+
+      - budget_range: [50%, 75%]
+        action: "Monitor closely, increase testing"
+        approval: "Engineering team"
+
+      - budget_range: [25%, 50%]
+        action: "Prioritize reliability work, reduce risky changes"
+        approval: "Engineering manager"
+
+      - budget_range: [0%, 25%]
+        action: "Feature freeze, all hands on reliability"
+        approval: "VP Engineering"
+        requirements:
+          - "Daily reliability standup"
+          - "Postmortem for all incidents"
+          - "No new features until budget >50%"
+
+      - budget_range: [0%, 0%]
+        action: "SLO violation - mandatory postmortem"
+        approval: "VP Engineering + CTO"
+        requirements:
+          - "Complete postmortem within 48 hours"
+          - "Action items with owners and deadlines"
+          - "Present to exec team"
+
+  # Multi-window burn rate alerts
+  alerts:
+    - name: error-budget-burn-rate-critical
+      severity: critical
+      windows:
+        short: 1h
+        long: 6h
+      burn_rate_threshold: 14.4  # Budget exhausted in 2 hours
+      for: 2m
+      annotations:
+        summary: "Critical burn rate - budget exhausted in 2 hours"
+        description: "Service {{ $labels.service }} is burning error budget 14.4x faster than expected"
+        runbook: "https://runbooks.greyhaven.io/slo-burn-rate"
+      notifications:
+        - type: pagerduty
+          severity: critical
+
+    - name: error-budget-burn-rate-high
+      severity: warning
+      windows:
+        short: 6h
+        long: 24h
+      burn_rate_threshold: 6  # Budget exhausted in 5 days
+      for: 15m
+      annotations:
+        summary: "High burn rate - budget exhausted in 5 days"
+        description: "Service {{ $labels.service }} is burning error budget 6x faster than expected"
+      notifications:
+        - type: slack
+          channel: "#alerts-reliability"
+
+    - name: error-budget-burn-rate-medium
+      severity: warning
+      windows:
+        short: 24h
+        long: 24h
+      burn_rate_threshold: 3  # Budget exhausted in 10 days
+      for: 1h
+      annotations:
+        summary: "Medium burn rate - budget exhausted in 10 days"
+      notifications:
+        - type: slack
+          channel: "#alerts-reliability"
+
+    - name: error-budget-low
+      severity: warning
+      threshold: 0.25  # 25% remaining
+      for: 5m
+      annotations:
+        summary: "Error budget low ({{ $value | humanizePercentage }} remaining)"
+        description: "Consider feature freeze per error budget policy"
+      notifications:
+        - type: slack
+          channel: "#engineering-managers"
+
+    - name: error-budget-depleted
+      severity: critical
+      threshold: 0  # 0% remaining
+      for: 5m
+      annotations:
+        summary: "Error budget depleted - feature freeze required"
+        description: "SLO violated. Postmortem required within 48 hours."
+      notifications:
+        - type: pagerduty
+          severity: critical
+        - type: slack
+          channel: "#exec-alerts"
+
+  # Review cadence
+  review:
+    frequency: weekly
+    participants:
+      - team: engineering
+      - team: product
+      - team: sre
+    agenda:
+      - "Current error budget status"
+      - "Burn rate trends"
+      - "Recent incidents and impact"
+      - "Upcoming risky changes"
+
+  # Reporting
+  reporting:
+    dashboard:
+      grafana_uid: YOUR_SERVICE_slo_dashboard
+      panels:
+        - slo_status
+        - error_budget_remaining
+        - burn_rate_multiwindow
+        - incident_timeline
+    export:
+      format: prometheus
+      recording_rules: true

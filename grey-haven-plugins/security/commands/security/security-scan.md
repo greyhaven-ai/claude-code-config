@@ -33,7 +33,7 @@ Hooks will enhance detection and validation
  --exclude-dir=node_modules --exclude-dir=.git \
  --exclude="*.md" $ARGUMENTS | head -20
 # Check for hardcoded credentials
- grep -r -E "(mongodb|mysql|postgres|redis)://[^/]*:[^@]*@" \
+ grep -r -E "(postgres|redis)://[^/]*:[^@]*@" \
  --exclude-dir=node_modules $ARGUMENTS
 # Find dangerous functions
  grep -r -E "(eval|exec|system|shell_exec|os\.system|subprocess\.call)" \

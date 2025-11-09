@@ -30,10 +30,10 @@ class PromptEnhancer {
             refactor: /refactor|optimize|improve|clean/.test(promptLower),
             documentation: /document|docs|readme|comment/.test(promptLower),
             api: /api|endpoint|route|request|response/.test(promptLower),
-            database: /database|query|sql|migration|schema|prisma|typeorm/.test(promptLower),
+            database: /database|query|sql|migration|schema|drizzle/.test(promptLower),
             security: /security|auth|permission|vulnerability|cors/.test(promptLower),
             performance: /performance|speed|optimize|slow|bundle/.test(promptLower),
-            component: /component|react|vue|svelte|angular/.test(promptLower),
+            component: /component|react/.test(promptLower),
             styling: /css|style|sass|tailwind|styled/.test(promptLower),
         };
     }
@@ -123,14 +123,8 @@ class PromptEnhancer {
             
             const frameworks = [];
             if (deps['react']) frameworks.push('React');
-            if (deps['vue']) frameworks.push('Vue');
-            if (deps['@angular/core']) frameworks.push('Angular');
-            if (deps['svelte']) frameworks.push('Svelte');
-            if (deps['next']) frameworks.push('Next.js');
-            if (deps['nuxt']) frameworks.push('Nuxt');
-            if (deps['express']) frameworks.push('Express');
-            if (deps['fastify']) frameworks.push('Fastify');
-            if (deps['@nestjs/core']) frameworks.push('NestJS');
+            if (deps['@tanstack/start']) frameworks.push('TanStack Start');
+            if (deps['fastapi']) frameworks.push('FastAPI');
             
             if (frameworks.length) {
                 context.push(`Frameworks: ${frameworks.join(', ')}`);
@@ -138,11 +132,9 @@ class PromptEnhancer {
             
             // Detect test runners
             const testRunners = [];
-            if (deps['jest']) testRunners.push('Jest');
             if (deps['vitest']) testRunners.push('Vitest');
-            if (deps['mocha']) testRunners.push('Mocha');
             if (deps['@playwright/test']) testRunners.push('Playwright');
-            if (deps['cypress']) testRunners.push('Cypress');
+            if (deps['pytest']) testRunners.push('pytest');
             
             if (testRunners.length) {
                 context.push(`Test runners: ${testRunners.join(', ')}`);
@@ -150,11 +142,8 @@ class PromptEnhancer {
             
             // Check for build tools
             const buildTools = [];
-            if (deps['webpack']) buildTools.push('Webpack');
             if (deps['vite']) buildTools.push('Vite');
             if (deps['esbuild']) buildTools.push('esbuild');
-            if (deps['rollup']) buildTools.push('Rollup');
-            if (deps['parcel']) buildTools.push('Parcel');
             
             if (buildTools.length) {
                 context.push(`Build tools: ${buildTools.join(', ')}`);

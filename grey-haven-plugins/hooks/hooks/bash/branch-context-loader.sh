@@ -42,7 +42,7 @@ load_branch_context() {
             done
         fi
         
-        # Check for related Linear/Jira tickets
+        # Check for related Linear tickets
         echo ""
         echo "💡 Tips for feature development:"
         echo "  • Check acceptance criteria in ticket"

@@ -1,188 +1,51 @@
 ---
 name: monitor-setup
-description: Set up comprehensive monitoring and observability infrastructure with Prometheus, Grafana, OpenTelemetry, and Fluentd. Configure metrics collection, distributed tracing, log aggregation, and alerting for production systems.
+description: Set up comprehensive monitoring and observability infrastructure with Prometheus, Grafana, OpenTelemetry, and structured logging. Configure metrics collection, distributed tracing, and alerting for production systems.
 ---
 
 # Monitor Setup - Production Observability Infrastructure
 
 Comprehensive monitoring and observability setup implementing the three pillars (metrics, logs, traces) with best practices for production systems.
 
-## Overview
+## What This Command Does
 
-This command guides you through setting up a complete observability stack including:
-- **Prometheus** for metrics collection and alerting
-- **Grafana** for visualization and dashboards
-- **OpenTelemetry** for distributed tracing
-- **Fluentd** for log aggregation
-- **AlertManager** for alert routing and escalation
+Guides you through setting up complete observability infrastructure:
+- **Prometheus** - Metrics collection, recording rules, and alerting
+- **Grafana** - Visualization dashboards for Golden Signals
+- **OpenTelemetry** - Distributed tracing across services
+- **Structured Logging** - JSON-formatted logs with trace correlation
+- **AlertManager** - Alert routing and escalation
+
+## When to Use
+
+- Setting up monitoring for new production services
+- Implementing SRE observability best practices
+- Replacing ad-hoc monitoring with structured approach
+- Establishing baseline metrics before SLO implementation
+- After deploying services to production
 
 ## Prerequisites
 
-- Kubernetes cluster (or Docker Compose for local development)
-- Basic understanding of observability concepts
+- Production service deployed (Cloudflare Workers, Kubernetes, or traditional infrastructure)
+- Basic understanding of observability concepts (metrics, logs, traces)
 - Access to deploy infrastructure components
-- (Optional) DataDog or Sentry accounts for SaaS integration
+- (Optional) Kubernetes cluster for Prometheus Operator
 
-## Output Format
+## Core Capabilities
 
-When implementing monitoring setup, provide:
+### 1. Prometheus Metrics Setup
 
-1. **Infrastructure Assessment**
-   - Current monitoring state
-   - Identified gaps and risks
-   - Service inventory with criticality
+**Golden Signals** (The Four Key Metrics):
+- **Rate** - Requests per second
+- **Errors** - Error rate percentage
+- **Duration** - Latency (p50, p95, p99)
+- **Saturation** - Resource utilization (CPU, memory, connections)
 
-2. **Monitoring Architecture**
-   - Component diagram (Mermaid)
-   - Data flow and retention policies
-   - Technology stack selections
-
-3. **Implementation Plan**
-   - Phased rollout strategy
-   - Timeline and resource requirements
-   - Risk mitigation approaches
-
-4. **Metric Definitions**
-   - Golden Signals (rate, errors, latency)
-   - Custom business metrics
-   - Resource utilization metrics
-
-5. **Dashboard Templates**
-   - Service overview dashboards
-   - Infrastructure dashboards
-   - Executive/business dashboards
-
-6. **Alert Runbooks**
-   - Alert rule definitions
-   - Diagnostic procedures
-   - Escalation policies
-
-7. **SLO Definitions**
-   - Service-level indicators
-   - Target percentiles and thresholds
-   - Error budget calculations
-
-8. **Integration Guide**
-   - CI/CD integration
-   - Incident management tools
-   - Documentation and training
-
-## Technology Stack
-
-### Option 1: Open Source Stack (Recommended for Cost Control)
-
-```yaml
-# Prometheus Stack
-- Prometheus Server (metrics storage + querying)
-- Prometheus Operator (Kubernetes-native deployment)
-- node-exporter (host metrics)
-- kube-state-metrics (Kubernetes metrics)
-- AlertManager (alert routing)
-
-# Visualization
-- Grafana (dashboards + alerting)
-- Grafana Loki (log aggregation)
-
-# Tracing
-- Jaeger (distributed tracing)
-- OpenTelemetry Collector (telemetry pipeline)
-
-# Logging
-- Fluentd or Fluent Bit (log shipping)
-- Elasticsearch (optional, log storage)
-```
-
-### Option 2: Hybrid Stack (SaaS + Open Source)
-
-```yaml
-# Metrics & APM
-- DataDog (SaaS metrics + APM)
-- Prometheus (supplemental, cost optimization)
-
-# Error Tracking
-- Sentry (application errors + performance)
-
-# Logs
-- DataDog Logs or ELK Stack
-
-# Distributed Tracing
-- DataDog APM or Jaeger
-```
-
-## Implementation Guide
-
-### Phase 1: Prometheus Metrics Setup
-
-#### 1.1 Deploy Prometheus Operator (Kubernetes)
-
-```yaml
-# prometheus-operator.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: monitoring
-
----
-apiVersion: helm.sh/v1
-kind: HelmRelease
-metadata:
-  name: kube-prometheus-stack
-  namespace: monitoring
-spec:
-  chart:
-    repository: https://prometheus-community.github.io/helm-charts
-    name: kube-prometheus-stack
-    version: 45.x.x
-  values:
-    prometheus:
-      prometheusSpec:
-        retention: 15d
-        retentionSize: "50GB"
-        storageSpec:
-          volumeClaimTemplate:
-            spec:
-              accessModes: ["ReadWriteOnce"]
-              resources:
-                requests:
-                  storage: 100Gi
-        resources:
-          requests:
-            memory: 2Gi
-            cpu: 1000m
-          limits:
-            memory: 4Gi
-            cpu: 2000m
-    
-    grafana:
-      adminPassword: <SET_SECURE_PASSWORD>
-      persistence:
-        enabled: true
-        size: 10Gi
-      
-    alertmanager:
-      config:
-        route:
-          group_by: ['alertname', 'cluster', 'service']
-          group_wait: 10s
-          group_interval: 10s
-          repeat_interval: 12h
-          receiver: 'slack-notifications'
-        receivers:
-        - name: 'slack-notifications'
-          slack_configs:
-          - api_url: <SLACK_WEBHOOK_URL>
-            channel: '#alerts'
-            title: 'Alert: {{ .GroupLabels.alertname }}'
-            text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
-```
-
-#### 1.2 Application Instrumentation (TypeScript/Node.js)
-
+**Application Instrumentation (TypeScript/Cloudflare Workers)**:
 ```typescript
-// metrics.ts - Custom Prometheus Metrics
-import { Registry, Counter, Histogram, Gauge } from 'prom-client';
+// metrics.ts - Prometheus-style metrics for Cloudflare
+import { Registry, Counter, Histogram } from 'prom-client';
 
-// Create registry
 const register = new Registry();
 
 // HTTP Request Counter
@@ -202,109 +65,85 @@ const httpRequestDuration = new Histogram({
   registers: [register]
 });
 
-// Active Connections
-const activeConnections = new Gauge({
-  name: 'active_connections',
-  help: 'Number of active connections',
-  registers: [register]
-});
-
 // Business Metrics
 const checkoutCompletedTotal = new Counter({
   name: 'checkout_completed_total',
-  help: 'Total number of completed checkouts',
+  help: 'Total completed checkouts',
   labelNames: ['payment_method', 'currency'],
   registers: [register]
 });
 
-// Express Middleware
+// Middleware for automatic tracking
 export function metricsMiddleware(req, res, next) {
   const start = Date.now();
-  
-  // Track active connections
-  activeConnections.inc();
-  
+
   res.on('finish', () => {
     const duration = (Date.now() - start) / 1000;
-    const route = req.route?.path || 'unknown';
     const labels = {
       method: req.method,
-      route: route,
+      route: req.route?.path || 'unknown',
       status_code: res.statusCode
     };
-    
+
     httpRequestsTotal.inc(labels);
     httpRequestDuration.observe(labels, duration);
-    activeConnections.dec();
   });
-  
+
   next();
 }
 
-// Metrics Endpoint
+// Metrics endpoint
 export function metricsHandler(req, res) {
   res.set('Content-Type', register.contentType);
   res.end(register.metrics());
 }
 ```
 
-#### 1.3 Recording Rules (Prometheus)
-
+**Recording Rules** (Prometheus):
 ```yaml
 # prometheus-recording-rules.yaml
-apiVersion: monitoring.coreos.com/v1
-kind: PrometheusRule
-metadata:
-  name: service-recording-rules
-  namespace: monitoring
-spec:
-  groups:
+groups:
   - name: service_metrics
     interval: 30s
     rules:
     # Request Rate (per second)
     - record: service:request_rate:5m
       expr: rate(http_requests_total[5m])
-    
+
     # Success Rate (percentage)
     - record: service:success_rate:5m
       expr: |
-        sum(rate(http_requests_total{status_code=~"2.."}[5m])) 
-        / 
+        sum(rate(http_requests_total{status_code=~"2.."}[5m]))
+        /
         sum(rate(http_requests_total[5m])) * 100
-    
+
     # Error Rate (percentage)
     - record: service:error_rate:5m
       expr: |
-        sum(rate(http_requests_total{status_code=~"5.."}[5m])) 
-        / 
+        sum(rate(http_requests_total{status_code=~"5.."}[5m]))
+        /
         sum(rate(http_requests_total[5m])) * 100
-    
+
     # Latency Percentiles
     - record: service:latency_p50:5m
       expr: histogram_quantile(0.50, rate(http_request_duration_seconds_bucket[5m]))
-    
+
     - record: service:latency_p95:5m
       expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
-    
+
     - record: service:latency_p99:5m
       expr: histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))
 ```
 
-#### 1.4 Alert Rules
+### 2. Alert Rules Configuration
 
+**Key Pattern** (Multi-Window Burn Rate Alerts):
 ```yaml
 # prometheus-alert-rules.yaml
-apiVersion: monitoring.coreos.com/v1
-kind: PrometheusRule
-metadata:
-  name: service-alert-rules
-  namespace: monitoring
-spec:
-  groups:
+groups:
   - name: service_alerts
     rules:
-    # High Error Rate
+    # High Error Rate (Critical)
     - alert: HighErrorRate
       expr: service:error_rate:5m > 5
       for: 5m
@@ -314,9 +153,9 @@ spec:
       annotations:
         summary: "High error rate detected"
         description: "Service {{ $labels.service }} has error rate of {{ $value }}% (threshold: 5%)"
-        runbook_url: "https://runbooks.example.com/high-error-rate"
-    
-    # Slow Response Time
+        runbook_url: "https://runbooks.greyhaven.com/high-error-rate"
+
+    # Slow Response Time (Warning)
     - alert: SlowResponseTime
       expr: service:latency_p95:5m > 1
       for: 10m
@@ -326,8 +165,8 @@ spec:
       annotations:
         summary: "Slow API response time"
         description: "Service {{ $labels.service }} p95 latency is {{ $value }}s (threshold: 1s)"
-        runbook_url: "https://runbooks.example.com/slow-response"
-    
+        runbook_url: "https://runbooks.greyhaven.com/slow-response"
+
     # High CPU Usage
     - alert: HighCPUUsage
       expr: rate(process_cpu_seconds_total[5m]) > 0.8
@@ -338,7 +177,7 @@ spec:
       annotations:
         summary: "High CPU usage detected"
         description: "Pod {{ $labels.pod }} CPU usage is {{ $value | humanizePercentage }}"
-    
+
     # High Memory Usage
     - alert: HighMemoryUsage
       expr: process_resident_memory_bytes / node_memory_MemTotal_bytes > 0.9
@@ -351,10 +190,9 @@ spec:
         description: "Pod {{ $labels.pod }} memory usage is {{ $value | humanizePercentage }}"
 ```
 
-### Phase 2: Grafana Dashboards
+### 3. Grafana Dashboards
 
-#### 2.1 Golden Signals Dashboard (JSON)
-
+**Golden Signals Dashboard Structure**:
 ```json
 {
   "dashboard": {
@@ -377,26 +215,16 @@ spec:
         "type": "graph",
         "alert": {
           "conditions": [{
-            "evaluator": { "type": "gt", "params": [5] },
-            "query": { "params": ["A", "5m", "now"] }
+            "evaluator": { "type": "gt", "params": [5] }
           }]
         }
       },
       {
         "title": "Latency (p50, p95, p99)",
         "targets": [
-          {
-            "expr": "service:latency_p50:5m",
-            "legendFormat": "p50"
-          },
-          {
-            "expr": "service:latency_p95:5m",
-            "legendFormat": "p95"
-          },
-          {
-            "expr": "service:latency_p99:5m",
-            "legendFormat": "p99"
-          }
+          { "expr": "service:latency_p50:5m", "legendFormat": "p50" },
+          { "expr": "service:latency_p95:5m", "legendFormat": "p95" },
+          { "expr": "service:latency_p99:5m", "legendFormat": "p99" }
         ],
         "type": "graph"
       }
@@ -405,10 +233,15 @@ spec:
 }
 ```
 
-### Phase 3: OpenTelemetry Distributed Tracing
+**Dashboard Categories**:
+- **Golden Signals** - Rate, errors, duration, saturation
+- **Service Overview** - Per-service health and performance
+- **Infrastructure** - CPU, memory, disk, network
+- **Business Metrics** - Checkouts, signups, revenue
 
-#### 3.1 OpenTelemetry Collector Configuration
+### 4. OpenTelemetry Distributed Tracing
 
+**OpenTelemetry Collector Configuration**:
 ```yaml
 # otel-collector-config.yaml
 receivers:
@@ -423,189 +256,100 @@ processors:
   batch:
     timeout: 10s
     send_batch_size: 1024
-  
+
   resource:
     attributes:
     - key: environment
       value: production
       action: upsert
-  
+
   probabilistic_sampler:
-    sampling_percentage: 10  # Sample 10% of traces
+    sampling_percentage: 10  # Sample 10% of traces, 100% of errors
 
 exporters:
   jaeger:
     endpoint: jaeger-collector:14250
     tls:
       insecure: true
-  
-  datadog:
-    api:
-      key: ${DD_API_KEY}
-    hostname: ${HOSTNAME}
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch, resource, probabilistic_sampler]
-      exporters: [jaeger, datadog]
+      exporters: [jaeger]
 ```
 
-#### 3.2 Application Tracing (TypeScript)
-
+**Application Tracing (TypeScript)**:
 ```typescript
 // tracing.ts - OpenTelemetry Setup
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-import { Resource } from '@opentelemetry/resources';
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 
 const sdk = new NodeSDK({
-  resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'my-service',
-    [SemanticResourceAttributes.SERVICE_VERSION]: '1.0.0',
-    [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: process.env.NODE_ENV || 'development'
-  }),
+  resource: {
+    'service.name': 'my-service',
+    'service.version': '1.0.0',
+    'deployment.environment': process.env.NODE_ENV || 'development'
+  },
   traceExporter: new OTLPTraceExporter({
     url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'http://otel-collector:4318/v1/traces',
   }),
   instrumentations: [
     getNodeAutoInstrumentations({
       '@opentelemetry/instrumentation-http': {
-        enabled: true,
         ignoreIncomingPaths: ['/health', '/metrics']
-      },
-      '@opentelemetry/instrumentation-express': { enabled: true },
-      '@opentelemetry/instrumentation-pg': { enabled: true },
-      '@opentelemetry/instrumentation-redis': { enabled: true }
+      }
     })
   ]
 });
 
 sdk.start();
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  sdk.shutdown()
-    .then(() => console.log('Tracing terminated'))
-    .catch((error) => console.log('Error terminating tracing', error));
-});
 ```
 
-### Phase 4: Log Aggregation with Fluentd
+### 5. Structured Logging
 
-#### 4.1 Fluentd Configuration (Kubernetes)
-
-```yaml
-# fluentd-daemonset.yaml
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: fluentd
-  namespace: kube-system
-spec:
-  selector:
-    matchLabels:
-      app: fluentd
-  template:
-    metadata:
-      labels:
-        app: fluentd
-    spec:
-      containers:
-      - name: fluentd
-        image: fluent/fluentd-kubernetes-daemonset:v1-debian-elasticsearch
-        env:
-        - name: FLUENT_ELASTICSEARCH_HOST
-          value: "elasticsearch.logging.svc.cluster.local"
-        - name: FLUENT_ELASTICSEARCH_PORT
-          value: "9200"
-        volumeMounts:
-        - name: varlog
-          mountPath: /var/log
-        - name: varlibdockercontainers
-          mountPath: /var/lib/docker/containers
-          readOnly: true
-        - name: fluentd-config
-          mountPath: /fluentd/etc/fluent.conf
-          subPath: fluent.conf
-      volumes:
-      - name: varlog
-        hostPath:
-          path: /var/log
-      - name: varlibdockercontainers
-        hostPath:
-          path: /var/lib/docker/containers
-      - name: fluentd-config
-        configMap:
-          name: fluentd-config
-```
-
-#### 4.2 Structured Logging (Python)
-
+**JSON Logging with Trace Correlation (Python)**:
 ```python
-# logging_config.py - Structured JSON Logging
+# logging_config.py
 import logging
 import json
-import traceback
 from datetime import datetime
 from opentelemetry import trace
 
 class JSONFormatter(logging.Formatter):
     """Format logs as JSON with trace context"""
-    
+
     def format(self, record):
         log_data = {
             'timestamp': datetime.utcnow().isoformat(),
             'level': record.levelname,
-            'logger': record.name,
             'message': record.getMessage(),
             'service': 'my-service',
-            'version': '1.0.0',
             'environment': os.getenv('ENVIRONMENT', 'development')
         }
-        
-        # Add trace context if available
+
+        # Add trace context
         span = trace.get_current_span()
         if span:
             span_context = span.get_span_context()
             log_data['trace_id'] = format(span_context.trace_id, '032x')
             log_data['span_id'] = format(span_context.span_id, '016x')
-        
+
         # Add exception info
         if record.exc_info:
             log_data['exception'] = {
                 'type': record.exc_info[0].__name__,
-                'message': str(record.exc_info[1]),
-                'stacktrace': traceback.format_exception(*record.exc_info)
+                'message': str(record.exc_info[1])
             }
-        
-        # Add custom fields
-        if hasattr(record, 'user_id'):
-            log_data['user_id'] = record.user_id
-        if hasattr(record, 'request_id'):
-            log_data['request_id'] = record.request_id
-        
-        return json.dumps(log_data)
 
-# Configure logger
-def setup_logging():
-    handler = logging.StreamHandler()
-    handler.setFormatter(JSONFormatter())
-    
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
-    logger.addHandler(handler)
-    
-    return logger
+        return json.dumps(log_data)
 ```
 
-## Runbook Templates
+### 6. Alert Runbook Template
 
-### High Error Rate Runbook
-
+**Runbook Example** (High Error Rate):
 ```markdown
 # Runbook: High Error Rate
 
@@ -616,13 +360,10 @@ def setup_logging():
 ## Diagnostic Steps
 
 1. Check Grafana dashboard for affected services
-2. Query recent errors in logs:
-   ```
-   kubectl logs -l app=my-service --tail=100 | grep -i error
-   ```
+2. Query recent errors: `kubectl logs -l app=my-service --tail=100 | grep -i error`
 3. Check Jaeger for failed traces
-4. Verify database connectivity and health
-5. Check external API status (status pages)
+4. Verify database connectivity
+5. Check external API status
 
 ## Common Causes
 
@@ -633,15 +374,47 @@ def setup_logging():
 
 ## Remediation
 
-1. **Immediate:** Rollback recent deployment if correlation exists
-2. **Short-term:** Scale up service if resource constrained
-3. **Investigation:** Analyze error logs and traces for root cause
+1. **Immediate:** Rollback recent deployment if correlated
+2. **Short-term:** Scale up if resource constrained
+3. **Investigation:** Analyze logs and traces for root cause
 
 ## Escalation
 
-- **After 15 minutes:** Page on-call engineer
-- **After 30 minutes:** Escalate to senior engineer
-- **After 1 hour:** Incident commander + engineering manager
+- After 15 min: Page on-call engineer
+- After 30 min: Escalate to senior engineer
+- After 1 hour: Incident commander + engineering manager
+```
+
+## Technology Stack Options
+
+### Option 1: Open Source Stack (Recommended)
+```yaml
+Metrics & Alerting:
+  - Prometheus (metrics storage + querying)
+  - Grafana (dashboards)
+  - AlertManager (alert routing)
+
+Tracing:
+  - Jaeger (distributed tracing)
+  - OpenTelemetry Collector
+
+Logging:
+  - Structured JSON logs to stdout
+  - Fluentd/Fluent Bit (log shipping)
+```
+
+### Option 2: Cloudflare-Native Stack
+```yaml
+Metrics:
+  - Cloudflare Workers Analytics
+  - Custom Analytics Engine
+
+Logging:
+  - Console logging (JSON.stringify)
+  - Wrangler tail for real-time logs
+
+Tracing:
+  - OpenTelemetry with custom exporter
 ```
 
 ## SLO Definitions
@@ -656,7 +429,7 @@ slos:
     window: 30d
     calculation: |
       (sum(http_requests_total{status_code!~"5.."}) / sum(http_requests_total)) * 100
-  
+
   - name: api-latency
     service: api-gateway
     sli_type: latency
@@ -665,33 +438,57 @@ slos:
     window: 30d
     calculation: |
       histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
-  
-  - name: checkout-success-rate
-    service: checkout-service
-    sli_type: success_rate
-    target: 99.5
-    window: 30d
-    calculation: |
-      (sum(checkout_completed_total) / sum(checkout_attempted_total)) * 100
 ```
 
-## Cost Optimization Tips
+## Cost Optimization
 
-1. **Metric Retention:** Use tiered storage (hot: 15d, cold: 90d+)
-2. **Sampling:** Trace 10% of requests, 100% of errors
-3. **Cardinality:** Limit label values, avoid user IDs in metrics
-4. **Aggregation:** Use recording rules to pre-aggregate expensive queries
-5. **Open Source:** Prefer Prometheus + Grafana over DataDog for cost savings (10-50x cheaper)
+1. **Metric Retention** - Hot: 15d, Cold: 90d+
+2. **Trace Sampling** - 10% of requests, 100% of errors
+3. **Cardinality Control** - Limit label values, avoid high-cardinality IDs
+4. **Recording Rules** - Pre-aggregate expensive queries
+5. **Open Source** - Prometheus + Grafana is 10-50x cheaper than DataDog
+
+## Best Practices
+
+1. **Start with Golden Signals** - Rate, errors, duration, saturation
+2. **Alert on Symptoms, Not Causes** - User-facing issues, not server metrics
+3. **Multi-Window Burn Rates** - Fast (1h) and slow (6h) burn alerts
+4. **Runbooks for Every Alert** - Document diagnostic steps
+5. **Test Alerts** - Verify alert routing and escalation
 
 ## Next Steps
 
-After completing this monitoring setup:
+After completing monitoring setup:
 
 1. Run `/slo-implement` to define service-level objectives
-2. Implement chaos engineering experiments to validate observability
-3. Create team-specific dashboards for different stakeholders
+2. Implement chaos engineering to validate observability
+3. Create team-specific dashboards
 4. Set up automated reporting (daily/weekly summaries)
 5. Train team on dashboard usage and alert response
+
+## Supporting Documentation
+
+All supporting files are under 500 lines per Anthropic best practices:
+
+- **[examples/](examples/)** - Complete monitoring examples
+  - [prometheus-setup-example.md](examples/prometheus-setup-example.md) - Full Prometheus deployment
+  - [grafana-dashboard-example.md](examples/grafana-dashboard-example.md) - Complete dashboard JSON
+  - [otel-tracing-example.md](examples/otel-tracing-example.md) - OpenTelemetry tracing setup
+  - [INDEX.md](examples/INDEX.md) - Examples navigation
+
+- **[reference/](reference/)** - Configuration references
+  - [prometheus-operators.md](reference/prometheus-operators.md) - PromQL operators and functions
+  - [alertmanager-routing.md](reference/alertmanager-routing.md) - Alert routing patterns
+  - [grafana-variables.md](reference/grafana-variables.md) - Dashboard variables and templating
+  - [INDEX.md](reference/INDEX.md) - Reference navigation
+
+- **[templates/](templates/)** - Copy-paste ready templates
+  - [recording-rules-template.yaml](templates/recording-rules-template.yaml) - Recording rules template
+  - [alert-rules-template.yaml](templates/alert-rules-template.yaml) - Alert rules template
+  - [dashboard-template.json](templates/dashboard-template.json) - Grafana dashboard template
+
+- **[checklists/](checklists/)** - Monitoring setup checklists
+  - [monitoring-setup-checklist.md](checklists/monitoring-setup-checklist.md) - Complete setup checklist
 
 ## References
 
