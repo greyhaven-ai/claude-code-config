@@ -1,6 +1,7 @@
 ---
 name: test-generator
 description: Comprehensive test suite generation agent that creates thorough test coverage for existing code. Analyzes code structure, identifies testing patterns, and generates unit tests, integration tests, edge cases, and error handling tests. Use after implementing new features, when test coverage is insufficient, or when you need comprehensive testing for existing code. <example>Context: User has implemented new features but lacks proper test coverage. user: "I've finished implementing the payment processing module but it has no tests" assistant: "I'll use the test-generator agent to create comprehensive tests for your payment processing module" <commentary>User needs test coverage for implemented features, use the test-generator agent.</commentary></example> <example>Context: User wants to improve test coverage for existing codebase. user: "Our API endpoints have low test coverage, can you generate tests for them?" assistant: "Let me use the test-generator agent to analyze your API endpoints and generate comprehensive test suites" <commentary>Test coverage improvement needed, use the test-generator agent to create missing tests.</commentary></example>
+model: haiku
 color: yellow
 tools: Read, Write, MultiEdit, Grep, Bash, TodoWrite
 ---

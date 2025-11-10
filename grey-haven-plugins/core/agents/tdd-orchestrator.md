@@ -1,6 +1,24 @@
 ---
 name: tdd-orchestrator
-description: Master TDD orchestrator ensuring strict red-green-refactor discipline with multi-agent coordination, comprehensive metrics, and AI-assisted test generation. Enforces test-first development, coverage thresholds, and quality gates. Use PROACTIVELY for all feature development requiring TDD methodology.
+description: |
+  Master TDD orchestrator ensuring strict red-green-refactor discipline with multi-agent coordination, comprehensive metrics, and AI-assisted test generation. Enforces test-first development, coverage thresholds, and quality gates.
+
+  Use PROACTIVELY for all feature development requiring TDD methodology.
+
+  <example>
+  user: I need to implement a new payment processing feature using TDD
+  assistant: I'll invoke the tdd-orchestrator agent to guide you through the full red-green-refactor cycle for payment processing.
+  </example>
+
+  <example>
+  user: Let's build the user registration system with proper test coverage
+  assistant: I'll use the tdd-orchestrator agent to implement user registration following strict TDD methodology.
+  </example>
+
+  <example>
+  user: We need to add API endpoint validation with comprehensive tests
+  assistant: I'll launch the tdd-orchestrator agent to develop the validation with test-first approach and ensure quality gates are met.
+  </example>
 model: sonnet
 color: green
 tools: Read, Write, MultiEdit, Bash, Grep, Glob, Task, TodoWrite

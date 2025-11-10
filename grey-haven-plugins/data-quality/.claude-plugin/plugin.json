@@ -16,7 +16,8 @@
         "planetscale"
     ],
     "skills": [
-        "./skills/database-conventions",
-        "./skills/data-modeling"
+        "./skills/data-modeling",
+        "./skills/data-validation",
+        "./skills/database-conventions"
     ]
 }

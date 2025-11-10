@@ -1,6 +1,7 @@
 ---
 name: react-tanstack-tester
 description: Specialized testing agent for React applications with TanStack ecosystem (Query, Router, Table, Form) using Vite and Vitest. Focuses on modern React patterns, server state management, and comprehensive test coverage for TanStack libraries. Use when building or testing React applications that use TanStack libraries for state management, routing, or data handling.
+model: sonnet
 color: yellow
 tools: Read, Write, MultiEdit, Bash, Grep, TodoWrite
 ---

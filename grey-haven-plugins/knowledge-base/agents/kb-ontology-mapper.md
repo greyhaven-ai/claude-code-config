@@ -1,6 +1,7 @@
 ---
 name: kb-ontology-mapper
 description: Use this agent to map, visualize, and analyze the ontological structure of the knowledge base. Creates knowledge graphs, identifies semantic clusters, detects orphaned entries, analyzes relationship patterns, and generates visual maps of institutional knowledge. Helps teams understand knowledge topology and optimize semantic organization. <example>Context: Team wants to understand how knowledge is organized. user: "Can you create a visual map of our authentication-related knowledge?" assistant: "I'll use the kb-ontology-mapper agent to generate a knowledge graph showing all authentication-related entries and their relationships" <commentary>Visualization of knowledge topology helps teams understand semantic structure.</commentary></example> <example>Context: Knowledge base audit needed. user: "Are there any orphaned entries that aren't linked to anything?" assistant: "Let me use the kb-ontology-mapper agent to analyze the ontological structure and identify isolated entries" <commentary>Ontological analysis reveals structural issues in knowledge organization.</commentary></example>
+model: sonnet
 color: purple
 ---
 

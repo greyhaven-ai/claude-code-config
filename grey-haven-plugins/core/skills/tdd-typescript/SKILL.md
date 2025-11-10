@@ -1,3 +1,8 @@
+---
+name: grey-haven-tdd-typescript
+description: "TypeScript/JavaScript Test-Driven Development with Vitest, strict red-green-refactor methodology, React component testing, and comprehensive coverage patterns. Use when implementing TypeScript features with TDD, writing Vitest tests, testing React components, developing with test-first approach, or when user mentions 'TypeScript TDD', 'Vitest', 'React testing', 'JavaScript TDD', 'red-green-refactor', 'TypeScript unit tests', or 'test-driven TypeScript'."
+---
+
 # TDD TypeScript Skill
 
 Expert TypeScript/JavaScript TDD implementation using strict red-green-refactor methodology with Vitest testing framework.

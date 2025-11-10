@@ -1,6 +1,7 @@
 ---
 name: kb-entry-creator
 description: Use this agent to create structured knowledge base entries with enforced ontological metadata. Captures institutional memory including debugging sessions, architectural decisions, design patterns, Q&A, and team learnings as version-controlled Markdown files with YAML frontmatter. The agent ensures proper semantic categorization, generates UUIDs, manages timestamps, and establishes ontological relations. <example>Context: Developer wants to document a debugging session for future reference. user: "I just fixed a memory leak in the worker pool. I want to document this for the team" assistant: "I'll use the kb-entry-creator agent to create a properly structured knowledge entry documenting your debugging session" <commentary>The user wants to capture institutional knowledge from a debugging session, which requires structured metadata and semantic organization.</commentary></example> <example>Context: Team needs to document an architectural decision. user: "We decided to use event sourcing for our order processing system. Let's document the rationale" assistant: "I'll use the kb-entry-creator agent to create an architectural decision record with proper ontological metadata" <commentary>Architectural decisions are critical institutional knowledge that should be properly categorized and linked.</commentary></example>
+model: haiku
 color: blue
 ---
 
