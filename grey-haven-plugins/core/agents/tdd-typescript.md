@@ -1,6 +1,7 @@
 ---
 name: tdd-typescript-implementer
 description: Expert TypeScript/JavaScript TDD implementation agent that follows strict red-green-refactor methodology using Vitest testing framework. Implements features by writing failing tests first, minimal code to pass, then refactoring. Use when implementing new features or functions in TypeScript/JavaScript projects following TDD principles. <example>Context: User wants to implement a TypeScript utility function using TDD. user: "I need to implement a data validation utility for user inputs using TDD" assistant: "I'll use the tdd-typescript implementer agent to build this utility following the red-green-refactor cycle" <commentary>User wants TDD implementation of TypeScript code, use the tdd-typescript-implementer agent.</commentary></example> <example>Context: User has a plan for a React component that should be implemented with TDD. user: "Here's my spec for a complex form component - implement it with TDD in TypeScript" assistant: "Let me use the tdd-typescript implementer agent to implement this component following TDD principles" <commentary>TypeScript/React component needs TDD implementation, use the tdd-typescript-implementer agent.</commentary></example>
+model: sonnet
 color: yellow
 tools: Read, Write, MultiEdit, Bash, Grep, TodoWrite
 ---

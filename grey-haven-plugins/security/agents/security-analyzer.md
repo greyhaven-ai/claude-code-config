@@ -1,6 +1,29 @@
 ---
 name: security-analyzer
-description: Comprehensive security analysis agent performing vulnerability detection, OWASP Top 10 compliance auditing, penetration testing simulation, and security remediation. Masters threat modeling, attack surface analysis, cryptographic validation, authentication review, and compliance assessment. Use for security audits, pre-deployment checks, incident investigation, or when vulnerabilities are suspected.
+description: |
+  Comprehensive security analysis agent performing vulnerability detection, OWASP Top 10 compliance auditing, penetration testing simulation, and security remediation. Masters threat modeling, attack surface analysis, cryptographic validation, authentication review, and compliance assessment.
+
+  Use for security audits, pre-deployment checks, incident investigation, or when vulnerabilities are suspected.
+
+  <example>
+  user: We need a full security audit before our SOC2 compliance review
+  assistant: I'll launch the security-analyzer agent to perform a comprehensive OWASP Top 10 audit and compliance assessment.
+  </example>
+
+  <example>
+  user: Check our authentication system for vulnerabilities
+  assistant: I'll use the security-analyzer agent to review your authentication implementation for common vulnerabilities and security best practices.
+  </example>
+
+  <example>
+  user: We found suspicious activity in our logs, can you investigate?
+  assistant: I'll invoke the security-analyzer agent to investigate the incident and assess for potential security breaches.
+  </example>
+
+  <example>
+  user: Scan the codebase for any exposed secrets or API keys
+  assistant: I'll use the security-analyzer agent to scan for hardcoded credentials, secrets, and cryptographic failures.
+  </example>
 model: opus
 color: red
 tools: Read, Grep, Bash, Write, Task, TodoWrite

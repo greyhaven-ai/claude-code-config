@@ -1,3 +1,8 @@
+---
+name: grey-haven-tdd-orchestration
+description: "Master TDD orchestration with multi-agent coordination, strict red-green-refactor enforcement, automated test generation, coverage tracking, and >90% coverage quality gates. Coordinates tdd-python, tdd-typescript, and test-generator agents. Use when implementing features with TDD workflow, coordinating multiple TDD agents, enforcing test-first development, or when user mentions 'TDD workflow', 'test-first', 'TDD orchestration', 'multi-agent TDD', 'test coverage', or 'red-green-refactor'."
+---
+
 # TDD Orchestration Skill
 
 Master TDD orchestrator ensuring strict red-green-refactor discipline with multi-agent coordination and comprehensive metrics.

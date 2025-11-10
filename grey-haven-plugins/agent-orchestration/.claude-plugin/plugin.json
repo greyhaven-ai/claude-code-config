@@ -16,5 +16,8 @@
         "delegation",
         "handoff"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "skills": [
+        "./skills/context-management"
+    ]
 }

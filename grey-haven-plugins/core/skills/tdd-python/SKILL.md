@@ -1,3 +1,8 @@
+---
+name: grey-haven-tdd-python
+description: "Python Test-Driven Development expertise with pytest, strict red-green-refactor methodology, FastAPI testing patterns, and Pydantic model testing. Use when implementing Python features with TDD, writing pytest tests, testing FastAPI endpoints, developing with test-first approach, or when user mentions 'Python TDD', 'pytest', 'FastAPI testing', 'red-green-refactor', 'Python unit tests', 'test-driven Python', or 'Python test coverage'."
+---
+
 # TDD Python Skill
 
 Python Test-Driven Development following strict red-green-refactor cycle with pytest and comprehensive coverage.

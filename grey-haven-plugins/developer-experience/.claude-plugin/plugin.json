@@ -16,10 +16,12 @@
         "knowledge-base"
     ],
     "skills": [
-        "./skills/code-style",
-        "./skills/pr-template",
-        "./skills/project-structure",
         "./skills/api-design-standards",
-        "./skills/ontological-documentation"
+        "./skills/code-style",
+        "./skills/documentation-architecture",
+        "./skills/onboarding-coordination",
+        "./skills/ontological-documentation",
+        "./skills/pr-template",
+        "./skills/project-structure"
     ]
 }
