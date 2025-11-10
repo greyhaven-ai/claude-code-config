@@ -19,6 +19,7 @@
       "core@grey-haven-plugins",
       "developer-experience@grey-haven-plugins",
       "observability@grey-haven-plugins",
+      "cloudflare-deployment-observability@grey-haven-plugins",
       "cc-trace@grey-haven-plugins"
     ]
   }
