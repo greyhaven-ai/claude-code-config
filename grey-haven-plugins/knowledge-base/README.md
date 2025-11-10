@@ -1,285 +1,37 @@
 # Knowledge Base Plugin
 
-Ontological knowledge management system for capturing institutional memory, debugging sessions, architectural decisions, and team learnings in version-controlled Markdown with enforced metadata structure.
+Ontological knowledge management with long-term memory storage for Claude Code projects.
 
 ## Overview
 
-Inspired by [kb-claude](https://github.com/alchemiststudiosDOTai/kb-claude), this plugin provides a comprehensive knowledge management system designed for engineering teams. It transforms scattered knowledge into a structured, searchable, and semantically organized institutional memory.
+The **knowledge-base** plugin combines structured knowledge organization (inspired by [kb-claude](https://github.com/alchemiststudiosDOTai/kb-claude)) with long-term memory storage using [ContextFrame](https://github.com/autocontext/contextframe). It provides a comprehensive system for capturing, organizing, and retrieving project knowledge with semantic search capabilities.
 
-## Key Features
+### Key Features
 
-- **Ontological Organization**: 9 semantic types for knowledge categorization
-- **Enforced Metadata**: YAML frontmatter with UUIDs, timestamps, and relations
-- **Knowledge Graphs**: Visual relationship mapping and cluster analysis
-- **Semantic Search**: Multi-dimensional search with relationship traversal
-- **Validation**: Structural integrity and quality checks
-- **Manifest Generation**: Automated indexes and catalogs
-- **Git-Native**: Plain text Markdown for version control integration
+#### 📚 Structured Knowledge Base
+- **Type-based organization**: Categorize knowledge as metadata, patterns, code_index, qa, plans, concepts, or memory_anchors
+- **YAML frontmatter**: Rich metadata with UUIDs, tags, timestamps, and status tracking
+- **Cross-linking**: Wiki-style `[[slug]]` references and explicit relationship types
+- **Auto-generated manifests**: Comprehensive indexes of all knowledge
 
-## Semantic Types
+#### 🧠 Long-Term Memory Storage
+- **ContextFrame integration**: Version-controlled, columnar storage with Lance
+- **Semantic search**: Vector embeddings for intelligent memory recall
+- **Full-text search**: BM25 search across all memory content
+- **Memory commits**: Capture context at key moments (implementations, decisions, incidents, learnings, milestones)
+- **Relationship tracking**: Link memories to knowledge entries
 
-Knowledge entries are organized into these ontological categories:
+#### 🕸️ Ontological Visualization
+- **Knowledge graphs**: Visual maps of relationships using Graphviz or Mermaid
+- **Gap analysis**: Identify underdocumented areas and isolated entries
+- **Relationship discovery**: Suggest meaningful connections
+- **Density analysis**: Assess knowledge coverage by category and topic
 
-| Type | Directory | Purpose |
-|------|-----------|---------|
-| **metadata** | `.claude/kb/metadata/` | Component summaries, system overviews |
-| **debug_history** | `.claude/kb/debug_history/` | Debugging sessions, investigations |
-| **qa** | `.claude/kb/qa/` | Questions, answers, learning notes |
-| **code_index** | `.claude/kb/code_index/` | File/module references, API docs |
-| **patterns** | `.claude/kb/patterns/` | Reusable design patterns, best practices |
-| **plans** | `.claude/kb/plans/` | Project plans, roadmaps |
-| **cheatsheets** | `.claude/kb/cheatsheets/` | Quick references, command guides |
-| **memory_anchors** | `.claude/kb/memory_anchors/` | Core concepts with persistent UUIDs |
-| **other** | `.claude/kb/other/` | Uncategorized entries |
+## Installation
 
-## Agents
+### 1. Install the Plugin
 
-### kb-entry-creator
-
-Creates structured knowledge entries with proper metadata and semantic categorization.
-
-**Use when**:
-- Documenting debugging sessions
-- Recording architectural decisions
-- Capturing design patterns
-- Creating Q&A entries
-- Building code indexes
-
-**Example**:
-```
-User: "I just fixed a memory leak in the worker pool. Document this for the team"
-→ Uses kb-entry-creator to create structured debug_history entry
-```
-
-### kb-search-analyzer
-
-Searches and synthesizes information across the knowledge base with relationship traversal.
-
-**Use when**:
-- Looking for past solutions
-- Understanding system architecture
-- Finding related knowledge
-- Researching problem domains
-
-**Example**:
-```
-User: "How does our authentication system work?"
-→ Uses kb-search-analyzer to find and synthesize auth-related entries
-```
-
-### kb-ontology-mapper
-
-Maps and visualizes knowledge base topology with graph analysis.
-
-**Use when**:
-- Understanding knowledge structure
-- Finding orphaned entries
-- Visualizing relationships
-- Analyzing knowledge clusters
-
-**Example**:
-```
-User: "Create a visual map of our authentication knowledge"
-→ Uses kb-ontology-mapper to generate knowledge graph
-```
-
-### kb-validator
-
-Validates knowledge base integrity with structural and metadata checks.
-
-**Use when**:
-- Before committing changes
-- During knowledge base audits
-- Ensuring quality standards
-- Fixing structural issues
-
-**Example**:
-```
-User: "Validate all KB entries before commit"
-→ Uses kb-validator to check structure and metadata
-```
-
-### kb-manifest-generator
-
-Generates comprehensive indexes, catalogs, and statistics.
-
-**Use when**:
-- Creating KB documentation
-- Building searchable indexes
-- Tracking knowledge growth
-- Generating reports
-
-**Example**:
-```
-User: "Generate an index of all knowledge entries"
-→ Uses kb-manifest-generator to create comprehensive manifest
-```
-
-## Slash Commands
-
-### /kb-create
-
-Create a new knowledge base entry with guided prompts.
-
-```bash
-/kb-create                           # Interactive creation
-/kb-create patterns                  # Create pattern entry
-/kb-create debug_history "Fix timeout issue"  # Create with title
-```
-
-### /kb-search
-
-Search knowledge base with semantic analysis.
-
-```bash
-/kb-search authentication            # Search for auth-related knowledge
-/kb-search "timeout issues"          # Search phrase
-/kb-search performance optimization  # Multi-keyword search
-```
-
-### /kb-list
-
-List knowledge base entries with filtering.
-
-```bash
-/kb-list                            # Overview of all types
-/kb-list patterns                   # List all patterns
-/kb-list --recent                   # Recently updated entries
-/kb-list --orphaned                 # Entries with no relations
-```
-
-### /kb-validate
-
-Validate knowledge base structure and metadata.
-
-```bash
-/kb-validate                        # Comprehensive validation
-/kb-validate --fix                  # Auto-fix issues when possible
-```
-
-### /kb-manifest
-
-Generate knowledge base indexes and statistics.
-
-```bash
-/kb-manifest                        # Full index
-/kb-manifest --type patterns        # Patterns manifest only
-/kb-manifest --tags                 # Tag-based index
-/kb-manifest --stats                # Statistics dashboard
-```
-
-## Knowledge Entry Structure
-
-Every entry follows this structure:
-
-```markdown
----
-title: "Concise, descriptive title (60-80 chars)"
-slug: "kebab-case-unique-identifier"
-type: "semantic-category"
-ontological_relations:
-  - "[[related-entry-slug]]"
-  - "[[another-related-entry]]"
-tags:
-  - "searchable-keyword"
-  - "technology-name"
-created_at: "2025-01-15T10:30:00Z"
-updated_at: "2025-01-15T10:30:00Z"
-uuid: "550e8400-e29b-41d4-a716-446655440000"
-author: "team-member-name"
-status: "draft | active | archived"
----
-
-## Context
-[Background and motivation]
-
-## Problem/Question
-[What is being addressed]
-
-## Solution/Answer
-[The knowledge being captured]
-
-## Code Examples
-\`\`\`language
-// Relevant code snippets
-\`\`\`
-
-## References
-- [External links]
-
-## Lessons Learned
-[Key takeaways]
-```
-
-## Workflow Examples
-
-### Documenting a Bug Fix
-
-```bash
-# 1. Fix the bug
-git commit -m "fix: resolve memory leak in worker pool"
-
-# 2. Create knowledge entry
-/kb-create debug_history
-
-# Agent guides through:
-# - Title: "Fixing Memory Leak in Worker Pool Using Weak References"
-# - Tags: memory-leak, python, worker-pool, debugging
-# - Relations: [[worker-pool-architecture]], [[python-memory-management]]
-# - Content: Context, problem, solution, lessons learned
-
-# 3. Entry created at:
-# .claude/kb/debug_history/worker-pool-memory-leak-weak-refs.md
-```
-
-### Finding Past Solutions
-
-```bash
-# Search for timeout-related knowledge
-/kb-search "timeout issues payment service"
-
-# Agent returns:
-# - 3 debug_history entries about timeouts
-# - 2 patterns for timeout handling
-# - 1 qa entry about timeout configuration
-# - Synthesis of common solutions
-# - Relationship graph showing connections
-```
-
-### Knowledge Base Audit
-
-```bash
-# Validate entire knowledge base
-/kb-validate
-
-# Report shows:
-# - 8 issues found
-# - 3 broken links
-# - 1 duplicate slug
-# - 2 type mismatches
-# - 12 orphaned entries
-# - Actionable fix recommendations
-```
-
-### Creating Knowledge Map
-
-```bash
-# Generate authentication knowledge graph
-# User: "Map all authentication-related knowledge"
-
-# Agent:
-# 1. Searches for auth entries
-# 2. Extracts ontological relations
-# 3. Generates Mermaid diagram
-# 4. Shows hub entries and clusters
-# 5. Identifies knowledge gaps
-```
-
-## Integration with Claude Code
-
-### Plugin Installation
-
-Add to `.claude/settings.json`:
+Add to your `.claude/settings.json`:
 
 ```json
 {
@@ -295,122 +47,380 @@ Add to `.claude/settings.json`:
 }
 ```
 
-### Pre-Commit Hook
-
-Validate KB entries before commit:
+### 2. Optional: Install ContextFrame (for long-term memory)
 
 ```bash
-#!/usr/bin/env python3
-# .claude/hooks/kb-validator.py
+# Basic installation
+pip install contextframe
 
-import subprocess
-import sys
+# With full features (embeddings, extraction, enhancement)
+pip install contextframe[embed,extract,enhance]
 
-result = subprocess.run(
-    ["claude", "validate-kb"],
-    capture_output=True
-)
-
-if result.returncode != 0:
-    print("❌ KB validation failed:")
-    print(result.stdout.decode())
-    sys.exit(1)
+# Individual extras:
+# pip install contextframe[embed]    # OpenAI/Anthropic embeddings
+# pip install contextframe[extract]  # Document extraction
+# pip install contextframe[enhance]  # LLM enhancement
+# pip install contextframe[serve]    # MCP server
 ```
+
+**Note**: Knowledge base features work without ContextFrame. Memory features require ContextFrame installation.
+
+### 3. Optional: Install Graphviz (for visualization)
+
+```bash
+# macOS
+brew install graphviz
+
+# Ubuntu/Debian
+sudo apt-get install graphviz
+
+# Or use pip
+pip install graphviz
+```
+
+## Quick Start
+
+### Creating Knowledge Entries
+
+```bash
+# Add a design pattern
+/kb-add patterns "Retry Pattern for API Calls"
+
+# Add architectural metadata
+/kb-add metadata "Event Sourcing Architecture Decision"
+
+# Add Q&A
+/kb-add qa "How to Handle Database Migrations"
+
+# Add code documentation
+/kb-add code_index "Authentication Service API"
+```
+
+### Searching Knowledge
+
+```bash
+# Search across all entries
+/kb-search "authentication"
+
+# Search within a category
+/kb-search "patterns:retry"
+
+# Search by tags
+/kb-search "tag:security"
+```
+
+### Creating Relationships
+
+```bash
+# Link entries together
+/kb-relate auth-architecture oauth2-pattern implements
+
+# Show hierarchy
+/kb-relate user-service auth-architecture part-of
+
+# Reference related concepts
+/kb-relate rate-limiting auth-endpoints references
+```
+
+### Committing to Long-Term Memory
+
+```bash
+# After implementing a feature
+/kb-memory-commit "Completed OAuth2 authentication with JWT tokens"
+
+# After making a decision
+/kb-memory-commit "Decided on PostgreSQL over MongoDB for user data"
+
+# After resolving an incident
+/kb-memory-commit "Fixed race condition in payment processing"
+```
+
+### Recalling Memories
+
+```bash
+# Semantic search across memories
+/kb-memory-recall "authentication decisions"
+
+# Find past implementations
+/kb-memory-recall "type:implementation payment"
+
+# Recall incidents
+/kb-memory-recall "type:incident database"
+```
+
+### Generating Manifests and Visualizations
+
+```bash
+# Generate comprehensive manifest
+/kb-manifest
+
+# Visualize entire knowledge graph
+/kb-visualize
+
+# Visualize specific category
+/kb-visualize patterns
+```
+
+## Directory Structure
+
+After initialization, your project will have:
+
+```
+.claude/
+├── knowledge/              # Structured knowledge base
+│   ├── metadata/          # System metadata, architectural decisions
+│   ├── qa/                # Questions & answers, troubleshooting
+│   ├── code_index/        # Code references, API documentation
+│   ├── patterns/          # Design patterns, best practices
+│   ├── plans/             # Project plans, roadmaps
+│   ├── concepts/          # Domain concepts, terminology
+│   ├── memory_anchors/    # Critical learnings, important context
+│   ├── ontology/          # Generated graphs and visualizations
+│   └── manifest.md        # Auto-generated index
+└── memory/                # Long-term memory storage (requires ContextFrame)
+    ├── contextframe.lance/  # Lance dataset
+    ├── embeddings/         # Embedding cache
+    └── config.json         # Memory configuration
+```
+
+## Knowledge Entry Format
+
+Each entry is a Markdown file with YAML frontmatter:
+
+```markdown
+---
+uuid: 550e8400-e29b-41d4-a716-446655440000
+type: patterns
+title: Retry Pattern for API Calls
+tags: [api, resilience, retry, error-handling]
+created: 2025-11-10T10:30:00Z
+updated: 2025-11-10T10:30:00Z
+status: active
+relations:
+  - slug: circuit-breaker-pattern
+    type: references
+  - slug: api-error-handling
+    type: implements
+---
+
+# Retry Pattern for API Calls
+
+## Overview
+Implements automatic retry logic for failed API requests with exponential backoff.
+
+## Implementation
+[Your content here]
+
+## Related Concepts
+- [[circuit-breaker-pattern]]
+- [[api-error-handling]]
+```
+
+## Memory Record Format
+
+Memories stored in ContextFrame:
+
+```json
+{
+  "uuid": "770e8400-e29b-41d4-a716-446655440222",
+  "type": "document",
+  "content": "Implemented OAuth2 authentication system with JWT tokens...",
+  "metadata": {
+    "author": "claude-code",
+    "project": "my-project",
+    "commit_type": "implementation",
+    "tags": ["authentication", "oauth2", "jwt", "security"],
+    "component": "auth-service"
+  },
+  "relationships": [
+    {
+      "target_uuid": "knowledge-entry-uuid",
+      "rel_type": "references"
+    }
+  ],
+  "status": "active",
+  "embedding": [0.1, 0.2, ...],
+  "created_at": "2025-11-10T10:30:00Z",
+  "modified_at": "2025-11-10T10:30:00Z"
+}
+```
+
+## Available Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/kb-add` | Create new knowledge entry | `/kb-add patterns "Retry Pattern"` |
+| `/kb-search` | Search knowledge base | `/kb-search "authentication"` |
+| `/kb-relate` | Link two entries | `/kb-relate entry1 entry2 implements` |
+| `/kb-memory-commit` | Store context in memory | `/kb-memory-commit "Completed feature X"` |
+| `/kb-memory-recall` | Search memories | `/kb-memory-recall "caching decisions"` |
+| `/kb-manifest` | Generate manifest | `/kb-manifest` |
+| `/kb-visualize` | Create knowledge graph | `/kb-visualize patterns` |
+
+## Available Agents
+
+### knowledge-curator
+Expert at creating and organizing structured knowledge entries with ontological relationships.
+
+**Use when**: Documenting decisions, capturing patterns, indexing code, recording Q&A.
+
+### memory-architect
+Expert at long-term context storage and retrieval using ContextFrame with semantic search.
+
+**Use when**: Committing implementations, storing decisions, recalling past context, searching memories.
+
+### ontology-builder
+Expert at mapping and visualizing knowledge relationships with gap analysis.
+
+**Use when**: Understanding knowledge structure, identifying documentation gaps, creating visual graphs.
+
+## Configuration
+
+### Memory Configuration
+
+Create `.claude/memory/config.json`:
+
+```json
+{
+  "embedding_provider": "openai",
+  "embedding_model": "text-embedding-3-small",
+  "embedding_dimensions": 1536,
+  "search_default_k": 5,
+  "auto_embed": true,
+  "dataset_path": ".claude/memory/contextframe.lance"
+}
+```
+
+### Embedding Providers
+
+#### OpenAI
+```python
+export OPENAI_API_KEY="your-key"
+```
+
+#### Anthropic
+```python
+export ANTHROPIC_API_KEY="your-key"
+```
+
+## Relationship Types
+
+- **part-of**: Entry is component of another (e.g., "User Service" part-of "Service Architecture")
+- **implements**: Entry implements concept/pattern (e.g., "Auth Service" implements "OAuth2 Pattern")
+- **references**: Entry refers to another (e.g., "API Docs" references "Authentication")
+- **contradicts**: Entry conflicts with another (useful for tracking decision changes)
+- **supersedes**: Entry replaces older entry (e.g., "New Auth" supersedes "Old Auth")
+
+## Memory Commit Types
+
+- **implementation**: Feature or code implementation completed
+- **decision**: Architectural or design decision made
+- **incident**: Bug, issue, or incident resolved
+- **learning**: New knowledge or pattern discovered
+- **milestone**: Project milestone or major achievement
 
 ## Best Practices
 
-### Creating Entries
+### Knowledge Base
 
-- **Be descriptive**: Titles should be searchable and clear
-- **Tag generously**: Use 3-7 relevant tags
-- **Link actively**: Connect to at least 1 related entry
-- **Write for others**: Assume reader is unfamiliar with context
-- **Include code**: Provide specific examples
-- **Capture lessons**: What would you tell your future self?
+1. **Create entries early**: Document decisions when they're made, not later
+2. **Use descriptive titles**: Make entries discoverable through search
+3. **Tag comprehensively**: Include all relevant searchable terms
+4. **Cross-link liberally**: Connect related concepts for navigation
+5. **Update, don't duplicate**: Keep single source of truth
+6. **Use appropriate types**: Choose the right category for findability
+7. **Mark status**: Archive or deprecate outdated entries
 
-### Maintaining Quality
+### Long-Term Memory
 
-- **Run validation regularly**: Before commits and weekly audits
-- **Fix broken links**: Update or remove stale references
-- **Archive obsolete entries**: Mark with `status: archived`
-- **Update timestamps**: When making significant edits
-- **Review orphans**: Link isolated entries or archive them
+1. **Commit at milestones**: After implementations, decisions, or resolutions
+2. **Comprehensive context**: Capture enough detail for future understanding
+3. **Rich metadata**: Tag thoroughly for future retrieval
+4. **Link to knowledge**: Connect memories to knowledge base entries
+5. **Use embeddings**: Enable semantic search for better recall
+6. **Regular commits**: Don't wait until project end
+7. **Status management**: Archive outdated memories
 
-### Organizing Knowledge
+## Workflow Integration
 
-- **Choose type carefully**: Semantic categorization is critical
-- **Use memory_anchors**: For foundational concepts
-- **Create patterns**: Extract reusable solutions
-- **Document decisions**: Capture "why" in plans/metadata
-- **Build clusters**: Group related knowledge with ontological links
+### During Development
+1. Document architectural decisions → `/kb-add metadata`
+2. Capture design patterns → `/kb-add patterns`
+3. Link related concepts → `/kb-relate`
+4. Commit implementations → `/kb-memory-commit`
 
-### Searching Effectively
+### During Debugging
+1. Search for similar issues → `/kb-search`
+2. Recall past solutions → `/kb-memory-recall`
+3. Document resolution → `/kb-add qa`
+4. Commit incident details → `/kb-memory-commit`
 
-- **Start broad**: Search across all types first
-- **Follow relations**: Traverse knowledge graphs
-- **Use multiple keywords**: Combine terms for precision
-- **Check multiple types**: Patterns + debug_history often together
-- **Review manifests**: Browse indexes for discovery
+### During Planning
+1. Review existing knowledge → `/kb-manifest`
+2. Visualize architecture → `/kb-visualize`
+3. Identify gaps → Check gap analysis
+4. Document plans → `/kb-add plans`
 
-## Comparison to kb-claude
+## Troubleshooting
 
-| Feature | kb-claude (Rust CLI) | This Plugin |
-|---------|---------------------|-------------|
-| **Storage** | Plain Markdown + YAML | Plain Markdown + YAML |
-| **Semantic Types** | 9 types | Same 9 types |
-| **Metadata** | UUID, timestamps, relations | UUID, timestamps, relations |
-| **Search** | CLI commands | Claude Code agents |
-| **Validation** | Built-in validator | kb-validator agent |
-| **Manifests** | Auto-generated | kb-manifest-generator |
-| **Visualization** | Terminal output | Mermaid diagrams, graphs |
-| **Integration** | Standalone CLI | Claude Code native |
-| **Distribution** | Rust crates.io | Plugin marketplace |
+### ContextFrame Not Found
 
-**Advantages of this plugin**:
-- Native Claude Code integration
-- AI-powered search and synthesis
-- Interactive knowledge creation
-- Ontological graph analysis
-- Rich visualizations (Mermaid)
-- Contextual recommendations
+If you see "ContextFrame not installed":
 
-**When to use kb-claude CLI**:
-- Standalone knowledge management
-- Non-Claude Code workflows
-- Rust-based tooling preference
-- CLI-only environments
+```bash
+pip install contextframe[embed]
+```
 
-## Roadmap
+Memory features require ContextFrame. Knowledge base features work independently.
 
-- [ ] Auto-linking based on content similarity
-- [ ] Knowledge base statistics dashboard
-- [ ] Temporal knowledge graphs (evolution over time)
-- [ ] Export to various formats (PDF, HTML)
-- [ ] Integration with documentation systems
-- [ ] AI-suggested tags and relations
-- [ ] Knowledge health metrics
-- [ ] Collaborative editing workflows
+### Graphviz Not Available
 
-## Contributing
+If visualization fails:
 
-To extend this plugin:
+```bash
+# Install Graphviz
+brew install graphviz  # macOS
+sudo apt install graphviz  # Linux
 
-1. **Add new semantic types**: Update type enum and create directory
-2. **Enhance agents**: Extend existing agents with new capabilities
-3. **Create commands**: Add slash commands for workflows
-4. **Improve validation**: Add new quality checks
-5. **Build integrations**: Connect with external systems
+# Or the visualization will fall back to Mermaid diagrams
+```
+
+### No Embeddings Generated
+
+Check your API keys:
+
+```bash
+# For OpenAI
+export OPENAI_API_KEY="sk-..."
+
+# For Anthropic
+export ANTHROPIC_API_KEY="sk-ant-..."
+```
+
+Or install embedding extras:
+
+```bash
+pip install contextframe[embed]
+```
+
+## Examples
+
+See the `examples/` directory for:
+- Sample knowledge entries
+- Memory commit examples
+- Configuration templates
+- Visualization samples
+
+## Credits
+
+This plugin combines concepts from:
+- **[kb-claude](https://github.com/alchemiststudiosDOTai/kb-claude)**: Structured, ontological knowledge base management
+- **[ContextFrame](https://github.com/autocontext/contextframe)**: Long-term memory storage with semantic search
 
 ## License
 
 MIT License - Copyright (c) 2025 Grey Haven Studio
 
-## References
+## Contributing
 
-- [kb-claude GitHub](https://github.com/alchemiststudiosDOTai/kb-claude)
-- [Grey Haven Plugin Marketplace](../README.md)
-- [Claude Code Documentation](https://docs.claude.com/)
-
----
-
-**Transform scattered knowledge into structured institutional memory.**
+Issues and contributions welcome! This plugin is part of the Grey Haven Plugin Marketplace.

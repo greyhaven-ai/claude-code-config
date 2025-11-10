@@ -1,17 +1,28 @@
 {
     "name": "knowledge-base",
-    "description": "Ontological knowledge management system for capturing institutional memory, debugging sessions, architectural decisions, and team learnings in version-controlled Markdown with enforced metadata structure",
+    "description": "Ontological knowledge management with long-term memory storage. Combines structured knowledge entries with semantic search, version control, and relationship mapping for comprehensive project context management.",
     "version": "1.0.0",
     "author": {
         "name": "Grey Haven Studio"
     },
     "keywords": [
-        "knowledge-management",
+        "knowledge-base",
         "ontology",
+        "memory",
+        "context",
+        "semantic-search",
         "documentation",
-        "institutional-memory",
-        "semantic-organization",
-        "knowledge-graph"
+        "contextframe"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "python": ">=3.8",
+        "optional": [
+            "contextframe>=0.1.0",
+            "lance>=0.11.0",
+            "pyarrow>=14.0.0",
+            "rank-bm25>=0.2.2",
+            "graphviz>=0.20.0"
+        ]
+    }
 }
