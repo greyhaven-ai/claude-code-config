@@ -10,9 +10,16 @@ Checks:
 - Command structure
 - File naming conventions
 - Tool access patterns
+- Documentation quality (NEW!)
+- Cross-reference validation (NEW!)
 
 Usage:
-    python scripts/validate-plugins.py [--verbose] [--plugin=NAME]
+    python scripts/validate-plugins.py [--verbose] [--plugin=NAME] [--json]
+
+Options:
+    --verbose, -v    Show detailed validation results
+    --plugin=NAME    Validate specific plugin only
+    --json           Output results in JSON format (for CI/CD)
 """
 
 import json
@@ -56,6 +63,21 @@ class ValidationResult:
             return 0
         points = len(self.passed) - len(self.errors) * 2 - len(self.warnings)
         return max(0, min(100, int((points / total) * 100)))
+
+    def to_dict(self) -> Dict:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "plugin": self.plugin_name,
+            "score": self.score,
+            "errors": self.errors,
+            "warnings": self.warnings,
+            "passed": self.passed,
+            "totals": {
+                "errors": len(self.errors),
+                "warnings": len(self.warnings),
+                "passed": len(self.passed)
+            }
+        }
 
     def print_results(self, verbose: bool = False):
         print(f"\n{BOLD}{'='*60}{RESET}")
@@ -365,6 +387,105 @@ def validate_commands(plugin_dir: Path, result: ValidationResult):
     result.add_pass(f"Found {len(command_files)} command(s)")
 
 
+def validate_skill_documentation(skill_dir: Path, result: ValidationResult):
+    """Validate skill documentation structure and completeness."""
+    skill_name = skill_dir.name
+
+    # Check for standard documentation directories
+    standard_dirs = ['examples', 'reference', 'templates', 'checklists']
+    found_dirs = []
+
+    for dir_name in standard_dirs:
+        if (skill_dir / dir_name).exists():
+            found_dirs.append(dir_name)
+
+    if not found_dirs:
+        result.add_warning(f"Skill {skill_name}: No documentation directories (consider adding examples/, reference/)")
+        return
+
+    # Validate each documentation directory
+    for dir_name in found_dirs:
+        doc_dir = skill_dir / dir_name
+
+        # Check for INDEX.md
+        index_md = doc_dir / 'INDEX.md'
+        if not index_md.exists():
+            result.add_warning(f"Skill {skill_name}: {dir_name}/ missing INDEX.md")
+        else:
+            result.add_pass(f"Skill {skill_name}: {dir_name}/ has INDEX.md")
+
+        # Check for actual content files
+        md_files = list(doc_dir.glob('*.md'))
+        if dir_name != 'templates':  # Templates can be various formats
+            content_files = [f for f in md_files if f.name != 'INDEX.md']
+
+            if not content_files:
+                result.add_warning(f"Skill {skill_name}: {dir_name}/ has INDEX.md but no content files")
+            else:
+                result.add_pass(f"Skill {skill_name}: {dir_name}/ has {len(content_files)} content file(s)")
+
+    # Check for checklists in high-value categories
+    high_value_keywords = ['security', 'authentication', 'validation', 'profiling', 'observability', 'quality', 'performance', 'tdd']
+    is_high_value = any(keyword in skill_name.lower() for keyword in high_value_keywords)
+
+    if is_high_value and 'checklists' not in found_dirs:
+        result.add_warning(f"Skill {skill_name}: High-value skill should have checklists/")
+
+
+def validate_documentation_links(file_path: Path, result: ValidationResult):
+    """Validate that links in documentation point to existing files."""
+    try:
+        with open(file_path, 'r') as f:
+            content = f.read()
+    except:
+        return
+
+    # Find markdown links [text](path)
+    link_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
+    matches = re.findall(link_pattern, content)
+
+    broken_links = []
+    for text, link in matches:
+        # Skip external links (http, https, mailto)
+        if link.startswith(('http://', 'https://', 'mailto:', '#')):
+            continue
+
+        # Resolve relative path
+        link_path = (file_path.parent / link).resolve()
+
+        if not link_path.exists():
+            broken_links.append(f"{text} -> {link}")
+
+    if broken_links:
+        result.add_warning(f"{file_path.name}: {len(broken_links)} broken link(s): {', '.join(broken_links[:3])}")
+
+
+def validate_documentation_quality(plugin_dir: Path, result: ValidationResult, verbose: bool = False):
+    """Validate documentation quality for all skills."""
+    skills_dir = plugin_dir / 'skills'
+
+    if not skills_dir.exists():
+        return
+
+    skill_dirs = [d for d in skills_dir.iterdir() if d.is_dir()]
+
+    for skill_dir in skill_dirs:
+        if verbose:
+            validate_skill_documentation(skill_dir, result)
+
+            # Check links in SKILL.md
+            skill_md = skill_dir / 'SKILL.md'
+            if skill_md.exists():
+                validate_documentation_links(skill_md, result)
+
+            # Check links in documentation files
+            for doc_dir_name in ['examples', 'reference', 'checklists']:
+                doc_dir = skill_dir / doc_dir_name
+                if doc_dir.exists():
+                    for md_file in doc_dir.glob('*.md'):
+                        validate_documentation_links(md_file, result)
+
+
 def validate_plugin(plugin_dir: Path, verbose: bool = False) -> ValidationResult:
     """Run all validations on a plugin."""
     result = ValidationResult(plugin_dir.name)
@@ -386,79 +507,109 @@ def validate_plugin(plugin_dir: Path, verbose: bool = False) -> ValidationResult
     # 5. Validate commands
     validate_commands(plugin_dir, result)
 
+    # 6. Validate documentation quality (new!)
+    validate_documentation_quality(plugin_dir, result, verbose)
+
     return result
 
 
 def main():
     verbose = '--verbose' in sys.argv or '-v' in sys.argv
+    json_output = '--json' in sys.argv
     specific_plugin = None
 
     for arg in sys.argv[1:]:
         if arg.startswith('--plugin='):
             specific_plugin = arg.split('=')[1]
 
-    print(f"{BOLD}=== Claude Code Plugin Validator ==={RESET}\n")
+    if not json_output:
+        print(f"{BOLD}=== Claude Code Plugin Validator ==={RESET}\n")
 
     # Find the plugins directory
     base_dir = Path(__file__).parent.parent / 'grey-haven-plugins'
 
     if not base_dir.exists():
-        print(f"{RED}Error: grey-haven-plugins directory not found at {base_dir}{RESET}")
+        if json_output:
+            print(json.dumps({"error": "grey-haven-plugins directory not found"}, indent=2))
+        else:
+            print(f"{RED}Error: grey-haven-plugins directory not found at {base_dir}{RESET}")
         sys.exit(1)
 
     # Get plugins to validate
     if specific_plugin:
         plugin_dir = base_dir / specific_plugin
         if not plugin_dir.exists():
-            print(f"{RED}Error: Plugin '{specific_plugin}' not found{RESET}")
+            if json_output:
+                print(json.dumps({"error": f"Plugin '{specific_plugin}' not found"}, indent=2))
+            else:
+                print(f"{RED}Error: Plugin '{specific_plugin}' not found{RESET}")
             sys.exit(1)
         plugins = [plugin_dir]
     else:
         plugins = sorted([d for d in base_dir.iterdir() if d.is_dir() and (d / '.claude-plugin').exists()])
 
     if not plugins:
-        print(f"{RED}No plugins found{RESET}")
+        if json_output:
+            print(json.dumps({"error": "No plugins found"}, indent=2))
+        else:
+            print(f"{RED}No plugins found{RESET}")
         sys.exit(1)
 
-    print(f"Validating {len(plugins)} plugin(s)...\n")
+    if not json_output:
+        print(f"Validating {len(plugins)} plugin(s)...\n")
 
     results = []
     for plugin_dir in plugins:
         result = validate_plugin(plugin_dir, verbose)
         results.append(result)
-        result.print_results(verbose)
+        if not json_output:
+            result.print_results(verbose)
 
-    # Overall summary
-    print(f"\n{BOLD}{'='*60}{RESET}")
-    print(f"{BOLD}Overall Summary{RESET}")
-    print(f"{BOLD}{'='*60}{RESET}\n")
-
+    # Calculate summary
     total_errors = sum(len(r.errors) for r in results)
     total_warnings = sum(len(r.warnings) for r in results)
-    avg_score = sum(r.score for r in results) / len(results)
+    avg_score = sum(r.score for r in results) / len(results) if results else 0
 
-    print(f"Total Plugins: {len(results)}")
-    print(f"{RED}Total Errors: {total_errors}{RESET}")
-    print(f"{YELLOW}Total Warnings: {total_warnings}{RESET}")
-    print(f"Average Score: {avg_score:.1f}/100")
+    if json_output:
+        # JSON output for CI/CD
+        output = {
+            "summary": {
+                "total_plugins": len(results),
+                "total_errors": total_errors,
+                "total_warnings": total_warnings,
+                "average_score": round(avg_score, 1)
+            },
+            "plugins": [r.to_dict() for r in results]
+        }
+        print(json.dumps(output, indent=2))
+    else:
+        # Human-readable summary
+        print(f"\n{BOLD}{'='*60}{RESET}")
+        print(f"{BOLD}Overall Summary{RESET}")
+        print(f"{BOLD}{'='*60}{RESET}\n")
 
-    # List plugins by score
-    print(f"\n{BOLD}Plugins by Score:{RESET}")
-    sorted_results = sorted(results, key=lambda r: r.score, reverse=True)
+        print(f"Total Plugins: {len(results)}")
+        print(f"{RED}Total Errors: {total_errors}{RESET}")
+        print(f"{YELLOW}Total Warnings: {total_warnings}{RESET}")
+        print(f"Average Score: {avg_score:.1f}/100")
 
-    for result in sorted_results:
-        score = result.score
-        if score >= 90:
-            color = GREEN
-            icon = "🟢"
-        elif score >= 70:
-            color = YELLOW
-            icon = "🟡"
-        else:
-            color = RED
-            icon = "🔴"
+        # List plugins by score
+        print(f"\n{BOLD}Plugins by Score:{RESET}")
+        sorted_results = sorted(results, key=lambda r: r.score, reverse=True)
 
-        print(f"  {icon} {result.plugin_name:30} {color}{score:3d}/100{RESET}")
+        for result in sorted_results:
+            score = result.score
+            if score >= 90:
+                color = GREEN
+                icon = "🟢"
+            elif score >= 70:
+                color = YELLOW
+                icon = "🟡"
+            else:
+                color = RED
+                icon = "🔴"
+
+            print(f"  {icon} {result.plugin_name:30} {color}{score:3d}/100{RESET}")
 
     # Exit code
     if total_errors > 0:
