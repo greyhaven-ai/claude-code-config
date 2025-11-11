@@ -15,16 +15,12 @@
     "license": "MIT",
     "skills": [
         "./skills/code-quality-analysis",
-        "./skills/code-style",
-        "./skills/commit-format",
         "./skills/documentation-alignment",
         "./skills/performance-optimization",
-        "./skills/pr-template",
         "./skills/project-scaffolding",
         "./skills/prompt-engineering",
         "./skills/tdd-orchestration",
         "./skills/tdd-python",
-        "./skills/tdd-typescript",
-        "./skills/testing-strategy"
+        "./skills/tdd-typescript"
     ]
 }
