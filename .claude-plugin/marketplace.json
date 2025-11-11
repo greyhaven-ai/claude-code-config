@@ -5,8 +5,8 @@
     "url": "https://github.com/greyhaven-ai/claude-code-config"
   },
   "metadata": {
-    "description": "Grey Haven Studio's comprehensive plugin marketplace with 12 optimized plugins covering development, testing, deployment, security, observability, and team collaboration. Skills optimized to 1.6 MB (47% reduction) for maximum context efficiency.",
-    "version": "2.0.1",
+    "description": "Grey Haven Studio's comprehensive plugin marketplace with 16 plugins covering development, testing, deployment, security, observability, browser automation, knowledge management, and team collaboration. Skills optimized to 1.6 MB (47% reduction) for maximum context efficiency.",
+    "version": "2.1.0",
     "homepage": "https://github.com/greyhaven-ai/claude-code-config"
   },
   "plugins": [
@@ -301,6 +301,103 @@
       ],
       "commands": [
         "./commands/linear/"
+      ]
+    },
+    {
+      "name": "browser-automation",
+      "description": "Automate web browser interactions using natural language. Browse websites, navigate web pages, extract data from websites, take screenshots, fill forms, click buttons, and interact with web applications using Stagehand AI browser automation.",
+      "source": "./grey-haven-plugins/browser-automation",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "original": "Browserbase",
+        "url": "https://github.com/greyhaven-ai/claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/claude-code-config",
+      "license": "MIT",
+      "keywords": [
+        "browser",
+        "automation",
+        "web-scraping",
+        "stagehand",
+        "screenshots",
+        "testing",
+        "qa"
+      ]
+    },
+    {
+      "name": "cc-trace",
+      "description": "Interactive assistant for intercepting, debugging, analyzing and reviewing Claude Code API requests using mitmproxy. Capture HTTPS traffic, inspect system prompts and tool definitions, analyze token usage, and optimize API interactions.",
+      "source": "./grey-haven-plugins/cc-trace",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/claude-code-config",
+      "license": "MIT",
+      "keywords": [
+        "debugging",
+        "api-interception",
+        "mitmproxy",
+        "network-analysis",
+        "claude-code",
+        "traffic-capture",
+        "api-debugging",
+        "request-analysis",
+        "observability",
+        "diagnostics"
+      ]
+    },
+    {
+      "name": "cloudflare-deployment-observability",
+      "description": "Comprehensive observability for Cloudflare deployments with GitHub Actions CI/CD integration. Monitor deployment pipelines, track metrics, analyze logs, and receive alerts for Cloudflare Workers and Pages.",
+      "source": "./grey-haven-plugins/cloudflare-deployment-observability",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/claude-code-config",
+      "license": "MIT",
+      "keywords": [
+        "cloudflare",
+        "deployment",
+        "observability",
+        "monitoring",
+        "github-actions",
+        "ci-cd",
+        "workers",
+        "pages",
+        "metrics",
+        "logging",
+        "alerting"
+      ],
+      "commands": [
+        "./commands/deployment-status/",
+        "./commands/logs-analyze/",
+        "./commands/metrics-dashboard/"
+      ]
+    },
+    {
+      "name": "knowledge-base",
+      "description": "Ontological knowledge management with long-term memory storage. Combines structured knowledge entries with semantic search, version control, and relationship mapping for comprehensive project context management.",
+      "source": "./grey-haven-plugins/knowledge-base",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/claude-code-config",
+      "license": "MIT",
+      "keywords": [
+        "knowledge-base",
+        "ontology",
+        "memory",
+        "context",
+        "semantic-search",
+        "documentation",
+        "contextframe"
       ]
     }
   ]
