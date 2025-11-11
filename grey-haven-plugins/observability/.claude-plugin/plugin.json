@@ -20,7 +20,9 @@
     ],
     "license": "MIT",
     "skills": [
-        "./skills/observability-monitoring",
-        "./skills/performance-optimization"
+        "./skills/devops-troubleshooting",
+        "./skills/memory-profiling",
+        "./skills/observability-engineering",
+        "./skills/observability-monitoring"
     ]
 }
