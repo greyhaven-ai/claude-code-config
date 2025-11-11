@@ -31,6 +31,18 @@
           }
         ],
         "toolNames": ["Write", "Edit", "MultiEdit"]
+      },
+      {
+        "name": "test-coverage-protection",
+        "description": "Prevents test deletion and coverage reduction (Phase 3 - Code Quality)",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are a test coverage protection expert evaluating test file modifications.\n\nFile path: $ARGUMENTS.filePath\nOperation: $ARGUMENTS.toolName\n\n**Test File Patterns**:\n- **/*.test.{js,ts,py,jsx,tsx}\n- **/*.spec.{js,ts,py,jsx,tsx}\n- **/tests/**/*\n- **/__tests__/**/*\n- **/test_*.py\n\n**Evaluation Criteria**:\n\n1. **Test Deletion**\n   - Are test files being deleted?\n   - Is this part of feature removal? (OK if feature removed)\n   - Is replacement test being added? (OK if refactoring)\n\n2. **Test Content Modification**\n   - Are test assertions being removed?\n   - Are test cases being deleted without replacement?\n   - Is this test refactoring? (OK if coverage maintained)\n\n3. **Coverage Impact**\n   - Would this reduce overall test coverage?\n   - Are critical paths losing test coverage?\n   - Is this justified by feature removal?\n\n**Decision Logic**:\n\nHIGH RISK - BLOCK:\n{\n  \"decision\": \"block\",\n  \"reason\": \"Test coverage reduction detected\",\n  \"systemMessage\": \"⚠️ TEST COVERAGE PROTECTION\\n\\nTest file modification detected: [file]\\n\\nThis change appears to reduce test coverage.\\n\\nIf this is justified (feature removed, test refactored):\\n1. Ensure replacement tests exist\\n2. Verify coverage maintained: run coverage report\\n3. Document reason in commit message\\n\\nIf reducing coverage intentionally:\\n1. Get team approval\\n2. Update coverage thresholds if needed\"\n}\n\nMEDIUM RISK - WARN:\n{\n  \"decision\": \"approve\",\n  \"systemMessage\": \"⚠️ Test file modified: [file]\\n\\nPlease verify:\\n- Test coverage maintained or improved\\n- All tests still pass\\n- No critical paths lost coverage\\n\\nRun: coverage report before committing\"\n}\n\nLOW RISK - APPROVE:\n{\n  \"decision\": \"approve\",\n  \"systemMessage\": \"✅ Test enhancement detected. Good work improving test coverage!\"\n}\n\nNON-TEST FILE:\n{\n  \"decision\": \"approve\"\n}\n\nEvaluate if this is a test file and the impact of the modification. Respond with JSON only.",
+            "timeout": 20
+          }
+        ],
+        "toolNames": ["Write", "Edit", "MultiEdit"]
       }
     ],
     "SubagentStop": [
@@ -69,6 +81,31 @@
           }
         ],
         "agentNames": ["smart-debug"]
+      },
+      {
+        "name": "code-quality-completion",
+        "description": "Validates comprehensive code quality analysis completion (Phase 3 - Code Quality)",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are a code quality expert validating analysis completion.\n\nAgent: $ARGUMENTS.agentName\nMode: $ARGUMENTS.taskDescription\nFindings: Analyze the code quality analysis output\n\n**Mode-Specific Requirements**:\n\n**Security Review Mode**:\n✓ Vulnerabilities identified with severity (Critical/High/Medium/Low)\n✓ OWASP coverage mentioned\n✓ Specific fixes provided\n✓ Security scorecard present\n\n**Clarity Refactoring Mode**:\n✓ Complexity analysis (cyclomatic complexity, code smells)\n✓ Before/after code examples\n✓ Refactoring patterns applied (guard clauses, symmetry, cohesion)\n✓ Readability improvements documented\n\n**Synthesis Analysis Mode**:\n✓ Cross-file dependencies mapped\n✓ API consistency checked\n✓ Architectural patterns validated\n✓ Integration issues identified\n\n**General Quality Checks** (All Modes):\n\n1. **Issue Identification**\n   - All critical issues have file location + line numbers\n   - Issues prioritized by severity (Critical → Low)\n   - Specific, not vague descriptions\n\n2. **Fix Recommendations**\n   - Every issue has specific fix recommendation\n   - Before/after examples provided for clarity issues\n   - Fixes preserve functionality (tests mentioned)\n\n3. **Metrics & Scoring**\n   - Complexity metrics provided (if relevant)\n   - Security scores calculated (if security mode)\n   - Quality assessment quantified\n\n4. **Validation**\n   - Tests mentioned (if fixes applied)\n   - No regressions introduced\n   - Code quality maintained or improved\n\n**Decision Logic**:\n\nBLOCK if:\n- No issues identified when obvious problems exist\n- Critical issues without specific fixes\n- No file locations or line numbers\n- No prioritization (everything \"Critical\" or no severity)\n- Mode-specific requirements not met\n\nAPPROVE if:\n- Comprehensive analysis delivered\n- All critical issues have fixes\n- Prioritization clear\n- Mode-specific requirements met\n- Actionable recommendations provided\n\n**Response Format**:\n\nIncomplete analysis:\n{\n  \"decision\": \"block\",\n  \"reason\": \"Code quality analysis incomplete\",\n  \"stopReason\": \"❌ Code Quality Analysis Incomplete\\n\\nMissing:\\n- [Mode-specific requirements not met]\\n- [Critical issues without fixes]\\n- [Missing file locations/line numbers]\\n\\nRequired actions:\\n1. Complete [Security/Clarity/Synthesis] analysis\\n2. Provide specific fixes for all critical issues\\n3. Include file locations and line numbers\\n4. Prioritize issues by severity\\n\\nCurrent: [What's incomplete]\"\n}\n\nComplete analysis:\n{\n  \"decision\": \"approve\",\n  \"reason\": \"Comprehensive code quality analysis complete\",\n  \"systemMessage\": \"✅ Code Quality Analysis Complete\\n\\nMode: [Security/Clarity/Synthesis]\\nIssues Found: X Critical, X High, X Medium, X Low\\nFixes Provided: Complete ✅\\nPrioritization: Clear ✅\\n\\nQuality Score: XX/100\\nRecommendation: [Specific next steps]\"\n}\n\nAnalyze the code quality review and respond with JSON only.",
+            "timeout": 30
+          }
+        ],
+        "agentNames": ["code-quality-analyzer"]
+      }
+    ],
+    "Stop": [
+      {
+        "name": "work-completion-validator",
+        "description": "Context-aware work completion validation (Phase 3 - Code Quality)",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are a work completion expert providing context-aware quality assessment.\n\n**Context-Aware Evaluation**:\n\n1. **Intent Alignment**\n   - Did we actually accomplish what the user requested?\n   - Is the work functionally complete?\n   - Are there obvious gaps in the solution?\n\n2. **Quality Assessment**\n   - Is the code/solution production-ready?\n   - Are TODOs acceptable?\n     * \"TODO: future feature XYZ\" = OK (not current scope)\n     * \"TODO: fix this hack\" = NOT OK (current work incomplete)\n     * \"TODO: optimize later\" = OK if working correctly\n   - Are uncommitted changes intentional?\n     * \"WIP: experimenting with approach\" = OK (documented)\n     * \"Forgot to commit working code\" = NOT OK (should commit)\n\n3. **Testing & Validation**\n   - Did tests run and pass? (required for production code)\n   - Is code formatted/linted? (required for team standards)\n   - Are there obvious bugs or issues?\n\n4. **Documentation**\n   - Is documentation updated? (required if APIs/interfaces changed)\n   - Are breaking changes documented?\n   - Is usage clear for future developers?\n\n5. **Risk Evaluation**\n   - Are there unaddressed edge cases?\n   - Is error handling sufficient?\n   - Are security implications considered?\n\n**Decision Logic**:\n\nBLOCK if:\n- User request not actually fulfilled\n- Critical TODOs remain (\"fix this hack\", \"security issue\", \"broken\")\n- Tests failing\n- Production code without any tests\n- Obvious quality/functionality issues\n- Breaking changes without documentation\n\nWARN (approve with recommendations) if:\n- Minor improvements possible\n- Documentation could be better (but APIs unchanged)\n- Test coverage could be higher (but meets minimum)\n- Future TODOs present (not blocking)\n\nAPPROVE if:\n- User request fulfilled\n- Quality acceptable for context\n- No critical issues\n- Future TODOs clearly marked as future work\n- Tests pass (if code changed)\n\n**Response Format**:\n\nIncomplete work:\n{\n  \"decision\": \"block\",\n  \"reason\": \"Work incomplete or quality issues\",\n  \"stopReason\": \"❌ Work Incomplete\\n\\n[Specific issues with context]\\n\\nThe work doesn't fully address: [user request]\\n\\nRequired actions:\\n- [Specific action 1]\\n- [Specific action 2]\\n\\nContext: [Why this matters]\"\n}\n\nComplete with recommendations:\n{\n  \"decision\": \"approve\",\n  \"systemMessage\": \"✅ Work Complete\\n\\n⚠️ Recommendations for future:\\n- [Optional improvement 1]\\n- [Optional improvement 2]\\n\\nThese can be addressed in future PRs if needed.\"\n}\n\nComplete:\n{\n  \"decision\": \"approve\",\n  \"reason\": \"Work complete and quality verified\",\n  \"systemMessage\": \"✅ Work Complete\\n\\n[Brief summary of accomplishments]\\nQuality: Good\\nTests: Passing\\nDocumentation: Updated\"\n}\n\nNow evaluate work completion with context awareness. Respond with JSON only.",
+            "timeout": 30
+          }
+        ]
       }
     ]
   }
