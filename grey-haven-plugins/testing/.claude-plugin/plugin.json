@@ -15,7 +15,6 @@
     ],
     "license": "MIT",
     "skills": [
-        "./skills/memory-profiling",
         "./skills/react-tanstack-testing",
         "./skills/test-generation",
         "./skills/testing-strategy"
