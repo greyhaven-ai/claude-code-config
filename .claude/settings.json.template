@@ -9,5 +9,18 @@
     "security-validator": {"enabled": true},
     "prompt-enhancer": {"enabled": true},
     "work-completion-assistant": {"enabled": true}
+  },
+  "plugin": {
+    "marketplaces": [{
+      "name": "grey-haven-plugins",
+      "source": "/absolute/path/to/grey-haven-plugins"
+    }],
+    "install": [
+      "core@grey-haven-plugins",
+      "developer-experience@grey-haven-plugins",
+      "observability@grey-haven-plugins",
+      "cloudflare-deployment-observability@grey-haven-plugins",
+      "cc-trace@grey-haven-plugins"
+    ]
   }
 }

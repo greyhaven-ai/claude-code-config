@@ -1,3 +1,8 @@
+---
+name: grey-haven-performance-optimization
+description: "Comprehensive performance analysis and optimization for algorithms (O(n²)→O(n)), databases (N+1 queries, indexes), React (memoization, virtual lists), bundles (code splitting), API caching, and memory leaks. 85%+ improvement rate. Use when application is slow, response times exceed SLA, high CPU/memory usage, performance budgets needed, or when user mentions 'performance', 'slow', 'optimization', 'bottleneck', 'speed up', 'latency', 'memory leak', or 'performance tuning'."
+---
+
 # Performance Optimization Skill
 
 Comprehensive performance analysis and optimization techniques for identifying bottlenecks and improving application speed.

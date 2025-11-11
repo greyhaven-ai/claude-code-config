@@ -1,0 +1,388 @@
+# Cloudflare Deployment with Full Observability
+#
+# This workflow demonstrates best practices for Cloudflare deployments
+# with comprehensive observability and monitoring integration.
+
+name: Deploy to Cloudflare with Observability
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # Quality checks run in parallel for speed
+  quality-checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        check: [lint, test, type-check]
+      fail-fast: false  # Continue other checks even if one fails
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: Run ${{ matrix.check }}
+        run: npm run ${{ matrix.check }}
+
+      - name: Report Results to Datadog
+        if: always()
+        run: |
+          curl -X POST "https://api.datadoghq.com/api/v1/events" \
+            -H "DD-API-KEY: ${{ secrets.DATADOG_API_KEY }}" \
+            -d '{
+              "title": "Quality Check: ${{ matrix.check }}",
+              "text": "Status: ${{ job.status }}",
+              "tags": ["env:ci", "check:${{ matrix.check }}", "status:${{ job.status }}"]
+            }'
+        continue-on-error: true
+
+  # Build once, deploy multiple times
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      bundle-size: ${{ steps.bundle.outputs.size }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: Build
+        id: build
+        run: |
+          npm run build
+          echo "build_time=$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: Check Bundle Size
+        id: bundle
+        run: |
+          SIZE=$(wc -c < dist/worker.js)
+          echo "size=$SIZE" >> $GITHUB_OUTPUT
+          echo "Bundle size: $SIZE bytes"
+
+          # Alert if bundle size increased significantly
+          if [ -f .bundle-size-baseline ]; then
+            BASELINE=$(cat .bundle-size-baseline)
+            INCREASE=$(( (SIZE - BASELINE) * 100 / BASELINE ))
+            if [ $INCREASE -gt 10 ]; then
+              echo "::warning::Bundle size increased by $INCREASE%"
+            fi
+          fi
+
+          # Save current size as baseline
+          echo $SIZE > .bundle-size-baseline
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+      - name: Report Build Metrics
+        if: always()
+        run: |
+          BUILD_DURATION=$(($(date +%s) - ${{ steps.build.outputs.build_time }}))
+          curl -X POST "https://api.datadoghq.com/api/v1/series" \
+            -H "DD-API-KEY: ${{ secrets.DATADOG_API_KEY }}" \
+            -d '{
+              "series": [{
+                "metric": "cloudflare.build.duration",
+                "points": [['$(date +%s)', '$BUILD_DURATION']],
+                "type": "gauge",
+                "tags": ["env:ci", "branch:${{ github.ref_name }}"]
+              }, {
+                "metric": "cloudflare.build.bundle_size",
+                "points": [['$(date +%s)', '${{ steps.bundle.outputs.size }}']],
+                "type": "gauge",
+                "tags": ["env:ci", "branch:${{ github.ref_name }}"]
+              }]
+            }'
+        continue-on-error: true
+
+  # Deploy to staging on develop branch
+  deploy-staging:
+    needs: [quality-checks, build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Deploy to Cloudflare Staging
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          environment: staging
+
+      - name: Health Check
+        run: |
+          # Wait for deployment to propagate
+          sleep 10
+
+          # Check health endpoint
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://staging.example.com/health)
+          if [ $RESPONSE -ne 200 ]; then
+            echo "::error::Health check failed with status $RESPONSE"
+            exit 1
+          fi
+          echo "Health check passed"
+
+      - name: Performance Test
+        run: |
+          # Quick performance test
+          for i in {1..10}; do
+            curl -w "@curl-format.txt" -o /dev/null -s https://staging.example.com/
+            sleep 1
+          done
+
+      - name: Report Deployment Success
+        if: success()
+        run: |
+          curl -X POST "https://api.datadoghq.com/api/v1/events" \
+            -H "DD-API-KEY: ${{ secrets.DATADOG_API_KEY }}" \
+            -d '{
+              "title": "Deployment to Staging Successful",
+              "text": "Deployed ${{ github.sha }} to staging",
+              "tags": ["env:staging", "deployment:success", "service:workers"],
+              "alert_type": "success"
+            }'
+
+      - name: Report Deployment Failure
+        if: failure()
+        run: |
+          curl -X POST "https://api.datadoghq.com/api/v1/events" \
+            -H "DD-API-KEY: ${{ secrets.DATADOG_API_KEY }}" \
+            -d '{
+              "title": "Deployment to Staging Failed",
+              "text": "Failed to deploy ${{ github.sha }} to staging",
+              "tags": ["env:staging", "deployment:failure", "service:workers"],
+              "alert_type": "error"
+            }'
+
+  # Deploy to production on main branch
+  deploy-production:
+    needs: [quality-checks, build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://app.example.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Pre-Deployment Validation
+        run: |
+          # Validate bundle
+          node -c dist/worker.js
+
+          # Dry run
+          wrangler deploy --dry-run
+
+      - name: Deploy to Cloudflare Production
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          environment: production
+
+      - name: Post-Deployment Health Check
+        id: health
+        run: |
+          # Wait for deployment to propagate globally
+          sleep 30
+
+          # Check health endpoint
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://app.example.com/health)
+          if [ $RESPONSE -ne 200 ]; then
+            echo "::error::Health check failed with status $RESPONSE"
+            echo "health_status=failed" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "health_status=passed" >> $GITHUB_OUTPUT
+          echo "Health check passed"
+
+      - name: Smoke Tests
+        id: smoke
+        run: |
+          # Run critical path smoke tests
+          npm run test:smoke -- --url=https://app.example.com
+          echo "smoke_status=passed" >> $GITHUB_OUTPUT
+
+      - name: Monitor Error Rate
+        id: monitor
+        run: |
+          # Monitor error rate for 2 minutes
+          sleep 120
+
+          # Check Cloudflare analytics
+          ERROR_RATE=$(curl -s -X GET \
+            "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/workers/scripts/production-worker/analytics" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" | \
+            jq '.result.error_rate')
+
+          if (( $(echo "$ERROR_RATE > 0.01" | bc -l) )); then
+            echo "::warning::Error rate elevated: $ERROR_RATE"
+            echo "monitor_status=warning" >> $GITHUB_OUTPUT
+          else
+            echo "monitor_status=passed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Rollback on Failure
+        if: failure() && (steps.health.outputs.health_status == 'failed' || steps.smoke.outputs.smoke_status == 'failed')
+        run: |
+          echo "::error::Deployment validation failed, initiating rollback"
+          wrangler rollback --env production
+
+          # Report rollback
+          curl -X POST "https://api.datadoghq.com/api/v1/events" \
+            -H "DD-API-KEY: ${{ secrets.DATADOG_API_KEY }}" \
+            -d '{
+              "title": "Production Rollback Executed",
+              "text": "Rolled back deployment ${{ github.sha }} due to failed validation",
+              "tags": ["env:production", "deployment:rollback", "service:workers"],
+              "alert_type": "error"
+            }'
+
+      - name: Create Sentry Release
+        if: success()
+        run: |
+          npx @sentry/cli releases new "${{ github.sha }}"
+          npx @sentry/cli releases set-commits "${{ github.sha }}" --auto
+          npx @sentry/cli releases finalize "${{ github.sha }}"
+          npx @sentry/cli releases deploys "${{ github.sha }}" new -e production
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+
+      - name: Report Deployment Metrics
+        if: always()
+        run: |
+          curl -X POST "https://api.datadoghq.com/api/v1/events" \
+            -H "DD-API-KEY: ${{ secrets.DATADOG_API_KEY }}" \
+            -d '{
+              "title": "Production Deployment ${{ job.status }}",
+              "text": "Deployed ${{ github.sha }} to production\nHealth: ${{ steps.health.outputs.health_status }}\nSmoke: ${{ steps.smoke.outputs.smoke_status }}\nMonitor: ${{ steps.monitor.outputs.monitor_status }}",
+              "tags": [
+                "env:production",
+                "deployment:${{ job.status }}",
+                "service:workers",
+                "commit:${{ github.sha }}"
+              ],
+              "alert_type": "${{ job.status == 'success' && 'success' || 'error' }}"
+            }'
+
+          # Send deployment metrics
+          curl -X POST "https://api.datadoghq.com/api/v1/series" \
+            -H "DD-API-KEY: ${{ secrets.DATADOG_API_KEY }}" \
+            -d '{
+              "series": [{
+                "metric": "cloudflare.deployment.status",
+                "points": [['$(date +%s)', '${{ job.status == 'success' && 1 || 0 }}']],
+                "type": "gauge",
+                "tags": ["env:production", "service:workers"]
+              }]
+            }'
+
+      - name: Notify Team
+        if: always()
+        run: |
+          STATUS_EMOJI="${{ job.status == 'success' && '✅' || '❌' }}"
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "text": "'"$STATUS_EMOJI"' Production Deployment '"${{ job.status }}"'",
+              "blocks": [{
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Production Deployment '"${{ job.status }}"'*\n\n*Commit:* `${{ github.sha }}`\n*Author:* ${{ github.actor }}\n*Branch:* ${{ github.ref_name }}\n*Health:* ${{ steps.health.outputs.health_status }}\n*Smoke Tests:* ${{ steps.smoke.outputs.smoke_status }}\n\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow>"
+                }
+              }]
+            }'
+
+  # Preview deployments for pull requests
+  deploy-preview:
+    needs: [quality-checks, build]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Deploy Preview
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --branch=pr-${{ github.event.pull_request.number }}
+
+      - name: Comment PR with Preview URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deploymentUrl = 'https://pr-${{ github.event.pull_request.number }}.pages.dev';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Preview Deployment Ready! 🚀\n\n**URL:** ${deploymentUrl}\n\n### Quick Links\n- [Preview Site](${deploymentUrl})\n- [Deployment Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n---\n*This preview will be automatically updated with new commits.*`
+            })
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            https://pr-${{ github.event.pull_request.number }}.pages.dev
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+# Reusable curl format file for performance testing
+# Save as curl-format.txt:
+#
+# time_namelookup:  %{time_namelookup}s\n
+# time_connect:  %{time_connect}s\n
+# time_appconnect:  %{time_appconnect}s\n
+# time_pretransfer:  %{time_pretransfer}s\n
+# time_redirect:  %{time_redirect}s\n
+# time_starttransfer:  %{time_starttransfer}s\n
+# time_total:  %{time_total}s\n

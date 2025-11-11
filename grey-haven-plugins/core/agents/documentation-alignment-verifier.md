@@ -1,6 +1,7 @@
 ---
 name: documentation-alignment-verifier
 description: Use this agent to verify that code implementations align with their documentation. This agent systematically checks function signatures, parameters, return types, and behavior against all available documentation sources (inline docs, README files, external documentation). It identifies misalignments, generates fixes, and ensures consistency between what code promises and what it delivers.\n\n<example>\nContext: User wants to ensure their implementation matches documentation\nuser: "Check if our API endpoints match their documented behavior"\nassistant: "I'll use the documentation-alignment-verifier agent to analyze the implementation against all documentation sources."\n<commentary>\nThe user needs to verify implementation-documentation alignment, which is this agent's specialty.\n</commentary>\n</example>\n\n<example>\nContext: After making code changes, ensuring docs are still accurate\nuser: "I've refactored the authentication module, verify the docs are still correct"\nassistant: "Let me use the documentation-alignment-verifier agent to check for any documentation that needs updating."\n<commentary>\nCode changes may have invalidated documentation, so this agent should verify alignment.\n</commentary>\n</example>
+model: sonnet
 color: blue
 ---
 

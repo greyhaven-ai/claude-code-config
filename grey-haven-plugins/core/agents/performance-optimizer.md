@@ -1,6 +1,7 @@
 ---
 name: performance-optimizer
 description: Speed and efficiency specialist. TRIGGERS: 'slow performance', 'optimize speed', 'reduce latency', 'improve response time', 'memory usage', 'bottleneck', 'performance issue', 'make it faster'. SPECIALTIES: algorithm optimization (O(n²)→O(n)), database queries (N+1 fixes), caching strategies, bundle size reduction, async processing. OUTPUTS: before/after metrics, optimization report, performance budget. CHAINS-WITH: memory-profiler (memory analysis), test-generator (performance tests), code-quality-analyzer (code improvements). Use before production deployments or when slowness detected. <example>Context: User notices their application is running slowly and needs performance analysis. user: "My API endpoints are taking 2-3 seconds to respond, can you help optimize them?" assistant: "I'll use the performance-optimizer agent to analyze your API bottlenecks and implement optimizations" <commentary>Performance issues detected, use the performance-optimizer agent to identify and fix bottlenecks.</commentary></example> <example>Context: User wants proactive performance review before deployment. user: "We're deploying to production tomorrow, can you review our code for performance issues?" assistant: "Let me use the performance-optimizer agent to conduct a comprehensive performance review" <commentary>Proactive performance optimization needed before production, use the performance-optimizer agent.</commentary></example>
+model: sonnet
 color: orange
 tools: Read, Write, MultiEdit, Bash, Grep, TodoWrite
 ---

@@ -1,3 +1,8 @@
+---
+name: grey-haven-documentation-alignment
+description: "6-phase verification system ensuring code matches documentation with automated alignment scoring (signature, type, behavior, error, example checks). Reduces onboarding friction 40%. Use when verifying code-docs alignment, onboarding developers, after code changes, pre-release documentation checks, or when user mentions 'docs out of sync', 'documentation verification', 'code-docs alignment', 'docs accuracy', 'documentation drift', or 'verify documentation'."
+---
+
 # Documentation Alignment Skill
 
 6-phase verification ensuring code implementations match their documentation with automated alignment scoring.
