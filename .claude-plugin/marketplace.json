@@ -5,8 +5,8 @@
     "url": "https://github.com/greyhaven-ai/claude-code-config"
   },
   "metadata": {
-    "description": "Grey Haven Studio's comprehensive plugin marketplace with 16 plugins covering development, testing, deployment, security, observability, browser automation, knowledge management, and team collaboration. Skills optimized to 1.6 MB (47% reduction) for maximum context efficiency.",
-    "version": "2.1.0",
+    "description": "Grey Haven Studio's comprehensive plugin marketplace with 15 plugins covering development, testing, deployment, security, observability, browser automation, knowledge management, and team collaboration. Skills optimized to 1.6 MB (47% reduction) for maximum context efficiency.",
+    "version": "2.1.1",
     "homepage": "https://github.com/greyhaven-ai/claude-code-config"
   },
   "plugins": [
@@ -155,25 +155,6 @@
       "commands": [
         "./commands/context7/",
         "./commands/firecrawl/"
-      ]
-    },
-    {
-      "name": "hooks",
-      "description": "Comprehensive hook system with 37 automation hooks for validation, formatting, testing, and workflow enhancement",
-      "source": "./grey-haven-plugins/hooks",
-      "version": "1.0.0",
-      "author": {
-        "name": "Grey Haven Studio",
-        "url": "https://github.com/greyhaven-ai/claude-code-config"
-      },
-      "repository": "https://github.com/greyhaven-ai/claude-code-config",
-      "license": "MIT",
-      "keywords": [
-        "hooks",
-        "automation",
-        "validation",
-        "workflow",
-        "pre-commit"
       ]
     },
     {
