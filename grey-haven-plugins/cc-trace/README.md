@@ -163,15 +163,31 @@ Common issues and solutions:
 
 For detailed troubleshooting, invoke the `cc-trace` agent and describe your issue.
 
+## Bundled Scripts
+
+This plugin includes utility scripts from the original repository in the `scripts/` directory:
+
+- **`verify-setup.sh`** - Automated setup verification
+  - Checks mitmproxy installation, certificate trust, shell configuration
+  - Run: `bash scripts/verify-setup.sh`
+
+- **`parse-streamed-response.ts`** - Parse Server-Sent Events
+  - TypeScript parser for Anthropic's SSE format
+  - Run: `pbpaste | npx tsx scripts/parse-streamed-response.ts`
+
+- **`extract-slash-commands.py`** - Extract command expansions
+  - Python script to extract user messages from captured flows
+  - Requires: Python 3.x and captured flow file
+
+- **`show-last-prompt.sh`** - Display recent prompts
+  - Bash script to quickly view most recent user prompt
+  - Requires: Saved flow file path as argument
+
 ## References
 
 This plugin is based on [alexfazio/cc-trace](https://github.com/alexfazio/cc-trace), an interactive debugging tool for Claude Code API requests.
 
-Original repository includes additional scripts and reference documentation:
-- `verify-setup.sh` - Automated setup verification
-- `parse-streamed-response.ts` - Parse Server-Sent Events
-- `extract-slash-commands.py` - Extract command expansions
-- `show-last-prompt.sh` - Display recent prompts
+The original repository includes additional reference documentation covering detailed setup guides, usage patterns, and advanced features.
 
 ## License
 
