@@ -1,0 +1,28 @@
+{
+  "description": "Cloudflare deployment monitoring and CI/CD pipeline observability",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "☁️ CLOUDFLARE DEPLOYMENT HEALTH CHECK\n\nContext: $ARGUMENTS\n\nValidate Cloudflare deployment health and CI/CD pipeline status:\n\n1️⃣ DEPLOYMENT STATUS\n   - Was a Cloudflare deployment performed?\n   - Deployment completed successfully?\n   - No deployment errors or warnings?\n   - Pages/Workers deployed correctly?\n   ⚠️ BLOCK if deployment failed\n\n2️⃣ CLOUDFLARE METRICS\n   - Origin server healthy?\n   - Cache hit ratio normal?\n   - Error rate acceptable (<1%)?\n   - Response times normal?\n   ⚠️ WARN if metrics degraded\n\n3️⃣ WORKERS & PAGES\n   - Workers executing without errors?\n   - Pages rendering correctly?\n   - Edge functions working?\n   - KV/Durable Objects accessible?\n   ⚠️ BLOCK if critical failures\n\n4️⃣ DNS & SSL\n   - DNS records correct?\n   - SSL certificates valid?\n   - HTTPS redirects working?\n   - DNSSEC configured if needed?\n   ⚠️ WARN if configuration issues\n\n5️⃣ CDN PERFORMANCE\n   - Edge locations responding?\n   - Global latency acceptable?\n   - Bandwidth usage normal?\n   - No region-specific issues?\n\n6️⃣ SECURITY POSTURE\n   - WAF rules active?\n   - DDoS protection enabled?\n   - Bot protection configured?\n   - Security level appropriate?\n   ⚠️ WARN if security gaps\n\n7️⃣ CI/CD PIPELINE\n   - Latest build successful?\n   - All tests passed in pipeline?\n   - Deployment automation working?\n   - No failed pipeline stages?\n   ⚠️ BLOCK if pipeline broken\n\n8️⃣ MONITORING & ALERTS\n   - Cloudflare Analytics tracking?\n   - Error monitoring configured?\n   - Alert rules set up?\n   - Webhook integrations working?\n\n💡 For non-Cloudflare work, approve immediately.\n💡 Only validate if Cloudflare deployment or configuration changes were made.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Cloudflare deployment health summary with any issues or approval confirmation\"\n}",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-cloudflare-status.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

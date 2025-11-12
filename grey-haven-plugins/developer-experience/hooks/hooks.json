@@ -1,0 +1,28 @@
+{
+  "description": "Developer experience and documentation quality - ensures documentation stays current with code changes",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "📚 DOCUMENTATION CURRENCY VALIDATOR\n\nContext: $ARGUMENTS\n\nYou are ensuring documentation remains accurate and helpful. Evaluate if documentation updates are needed:\n\n1️⃣ API CHANGES\n   - Were API endpoints added/modified/removed?\n   - Request/response schemas changed?\n   - Authentication/authorization changed?\n   - Rate limits or quotas changed?\n   ⚠️ BLOCK if API docs need updates\n\n2️⃣ NEW FEATURES\n   - New user-facing features added?\n   - New configuration options?\n   - New CLI commands or flags?\n   - New environment variables?\n   ⚠️ BLOCK if feature docs missing\n\n3️⃣ CONFIGURATION CHANGES\n   - New config files or settings?\n   - Changed default values?\n   - New required configuration?\n   - Deprecated configuration options?\n   ⚠️ BLOCK if config docs outdated\n\n4️⃣ BREAKING CHANGES\n   - Backward incompatible changes?\n   - Migration guide needed?\n   - Deprecation notices required?\n   - Version upgrade instructions?\n   ⚠️ BLOCK if breaking changes not documented\n\n5️⃣ INSTALLATION & SETUP\n   - New dependencies added?\n   - Setup steps changed?\n   - System requirements changed?\n   - Installation commands updated?\n   ⚠️ WARN if setup docs need review\n\n6️⃣ CODE EXAMPLES\n   - Code examples still accurate?\n   - New examples needed?\n   - Outdated examples removed?\n   - Example code follows best practices?\n   ⚠️ WARN if examples need updates\n\n7️⃣ DEVELOPER GUIDES\n   - Architecture docs reflect changes?\n   - Development workflow docs current?\n   - Testing guide accurate?\n   - Contribution guide up to date?\n   ⚠️ WARN if guides need updates\n\n8️⃣ README & GETTING STARTED\n   - README accurately describes project?\n   - Quick start guide works?\n   - Feature list complete?\n   - Links not broken?\n\n9️⃣ CHANGELOG\n   - Changes documented in CHANGELOG?\n   - Version bumped appropriately?\n   - Release notes prepared?\n   - Migration notes included?\n   ⚠️ BLOCK if changelog not updated\n\n🔟 INLINE DOCUMENTATION\n   - Code comments accurate?\n   - JSDoc/docstrings updated?\n   - Type definitions current?\n   - Function signatures documented?\n\n💡 Common documentation files to check:\n   - README.md\n   - CHANGELOG.md\n   - docs/ directory\n   - API documentation\n   - User guides\n   - Developer guides\n   - Configuration examples\n\n🚫 BLOCK if critical documentation is missing or outdated.\n🚫 BLOCK if API/configuration changes are undocumented.\n⚠️ WARN for minor documentation gaps.\n\n💡 For internal refactoring without user-facing changes, approve immediately.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Documentation assessment with specific files that need updates if blocking, or confirmation that docs are current if approving\"\n}",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-docs-sync.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
