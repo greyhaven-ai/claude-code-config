@@ -26,8 +26,8 @@
         "./agents/performance-tracker.md"
     ],
     "commands": [
-        "./commands/deployment-status",
-        "./commands/logs-analyze",
-        "./commands/metrics-dashboard"
+        "./commands/deployment-status.md",
+        "./commands/logs-analyze.md",
+        "./commands/metrics-dashboard.md"
     ]
 }
