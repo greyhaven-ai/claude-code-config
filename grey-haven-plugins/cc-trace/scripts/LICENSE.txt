@@ -1,0 +1,19 @@
+Scripts License Information
+============================
+
+The scripts in this directory are adapted from the original cc-trace repository:
+https://github.com/alexfazio/cc-trace
+
+Original Author: Alex Fazio
+Original License: Microsoft Reference Source License (MS-RSL)
+
+These scripts are included in this Grey Haven Studio plugin for reference and
+convenience purposes. The original MS-RSL license restricts use to "reference use"
+within your organization in read-only form, specifically for "debugging your
+products, maintaining your products, or enhancing interoperability with the software."
+
+For the complete original license, see:
+https://github.com/alexfazio/cc-trace/blob/main/LICENSE.txt
+
+The Grey Haven cc-trace plugin itself (excluding these scripts) is licensed under
+the MIT License - see the parent directory's LICENSE or repository root.

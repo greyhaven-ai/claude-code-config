@@ -171,17 +171,33 @@ mitmweb --web-port 8081 \
 
 ### Bundled Resources
 
-**Scripts** (Reference - not included in plugin)
-- `verify-setup.sh` - Automated setup verification and diagnostics
-- `parse-streamed-response.ts` - Parse Server-Sent Events from captured flows
-- `extract-slash-commands.py` - Extract slash command expansions from API traffic
-- `show-last-prompt.sh` - Display most recent system prompt sent to API
+**Scripts** (Included in `scripts/` directory)
+- `scripts/verify-setup.sh` - Automated setup verification and diagnostics
+  - Checks mitmproxy installation, certificate trust, shell configuration
+  - Verifies port availability and optional dependencies
+  - Run: `bash ~/.claude/plugins/marketplaces/grey-haven-plugins/cc-trace/scripts/verify-setup.sh`
+
+- `scripts/parse-streamed-response.ts` - Parse Server-Sent Events from captured flows
+  - TypeScript parser for Anthropic's SSE format
+  - Extracts text responses and tool calls from streamed API responses
+  - Run: `pbpaste | npx tsx ~/.claude/plugins/marketplaces/grey-haven-plugins/cc-trace/scripts/parse-streamed-response.ts`
+
+- `scripts/extract-slash-commands.py` - Extract slash command expansions from API traffic
+  - Python script to extract all user messages from captured flows
+  - Shows exactly what prompts were sent to API with arguments populated
+  - Requires: Python 3.x and captured flow file
+
+- `scripts/show-last-prompt.sh` - Display most recent system prompt sent to API
+  - Bash script to quickly view the most recent user prompt
+  - Useful for verifying slash command argument substitution
+  - Requires: Saved flow file path as argument
 
 **Reference Documentation** (From original cc-trace repo)
 - Setup guides: Installation, certificates, shell configuration
 - Usage guides: Web interface, CLI interface, programmatic access
 - Workflows: Daily patterns, discovery techniques, analysis strategies
 - Advanced: Python scripting, flow replay, security considerations
+- Original repo: https://github.com/alexfazio/cc-trace
 
 ## Quick Start Guide
 
