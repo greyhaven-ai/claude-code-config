@@ -15,6 +15,28 @@
         "contextframe"
     ],
     "license": "MIT",
+    "agents": [
+        "./agents/kb-entry-creator.md",
+        "./agents/kb-manifest-generator.md",
+        "./agents/kb-ontology-mapper.md",
+        "./agents/kb-search-analyzer.md",
+        "./agents/kb-validator.md",
+        "./agents/knowledge-curator.md",
+        "./agents/memory-architect.md",
+        "./agents/ontology-builder.md"
+    ],
+    "commands": [
+        "./commands/kb-add.md",
+        "./commands/kb-create.md",
+        "./commands/kb-list.md",
+        "./commands/kb-manifest.md",
+        "./commands/kb-memory-commit.md",
+        "./commands/kb-memory-recall.md",
+        "./commands/kb-relate.md",
+        "./commands/kb-search.md",
+        "./commands/kb-validate.md",
+        "./commands/kb-visualize.md"
+    ],
     "dependencies": {
         "python": ">=3.8",
         "optional": [
