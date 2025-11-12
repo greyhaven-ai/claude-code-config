@@ -1,0 +1,28 @@
+{
+  "description": "Security validation for all code changes - prevents vulnerabilities before code is written",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "🔒 SECURITY REVIEW - Critical vulnerability scan\n\nContext: $ARGUMENTS\n\nPerform comprehensive security analysis for:\n\n1. SQL INJECTION\n   - Are queries parameterized?\n   - Any string concatenation in SQL?\n   - ORM/query builder used properly?\n\n2. CROSS-SITE SCRIPTING (XSS)\n   - Is user input properly escaped?\n   - HTML sanitization present?\n   - Content-Security-Policy headers?\n\n3. HARDCODED SECRETS\n   - Passwords, API keys, tokens in code?\n   - Check for: password=, api_key=, token=, secret=\n   - Are secrets in environment variables?\n\n4. PATH TRAVERSAL\n   - User input in file paths?\n   - Proper path sanitization?\n   - Directory traversal prevention (../)?\n\n5. AUTHENTICATION/AUTHORIZATION\n   - Auth checks present before sensitive operations?\n   - Role-based access control enforced?\n   - Session management secure?\n\n6. COMMAND INJECTION\n   - User input in shell commands?\n   - Proper escaping/validation?\n   - Using safe APIs instead of shell?\n\n7. INSECURE DEPENDENCIES\n   - Known vulnerable packages?\n   - Outdated versions?\n\n8. CSRF PROTECTION\n   - CSRF tokens present for state-changing operations?\n   - SameSite cookie attributes?\n\n9. INSECURE DESERIALIZATION\n   - Untrusted data deserialization?\n   - Type validation present?\n\n10. INSUFFICIENT LOGGING\n    - Security events logged?\n    - Authentication failures tracked?\n\n⚠️ BLOCK IMMEDIATELY if ANY security vulnerability found.\n⚠️ Be thorough and strict - security cannot be compromised.\n⚠️ Include CWE numbers for any issues found.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Detailed security findings with CWE numbers, line references, and remediation steps\"\n}",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "🔒 FINAL SECURITY AUDIT\n\nContext: $ARGUMENTS\n\nPerform final security review:\n\n✅ MUST VERIFY:\n1. No security vulnerabilities introduced\n2. Security tests added for all changes\n3. Secure-by-default principles followed\n4. No exposure of sensitive data\n5. Authentication/authorization properly implemented\n6. Input validation comprehensive\n7. Error messages don't leak sensitive info\n8. Security logging adequate\n\n🚫 BLOCK if:\n- Any security issue remains unaddressed\n- Security tests are missing\n- Vulnerabilities found during review\n- Best practices not followed\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Security audit summary with any remaining concerns or approval confirmation\"\n}",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

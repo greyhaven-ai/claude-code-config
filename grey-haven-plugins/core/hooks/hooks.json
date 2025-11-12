@@ -1,0 +1,39 @@
+{
+  "description": "TDD enforcement and code quality validation - ensures tests-first discipline and quality standards",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "🧪 TDD DISCIPLINE ENFORCER - Strict Quality Gate\n\nContext: $ARGUMENTS\n\nYou are enforcing Test-Driven Development discipline. Evaluate if work meets TDD standards:\n\n1️⃣ TESTS WRITTEN FIRST (CRITICAL)\n   - Were tests written BEFORE implementation?\n   - Red-Green-Refactor cycle followed?\n   - Tests fail first, then pass?\n   ⚠️ BLOCK if implementation came before tests\n\n2️⃣ ALL TESTS PASSING\n   - Are all tests passing (no failures)?\n   - No skipped/ignored tests without justification?\n   - No flaky tests?\n   ⚠️ BLOCK if any tests failing\n\n3️⃣ CODE COVERAGE THRESHOLD\n   - Coverage ≥80% for new code?\n   - Critical paths covered?\n   - Edge cases tested?\n   ⚠️ BLOCK if coverage < 80%\n\n4️⃣ CODE QUALITY\n   - No code smells (long methods, high complexity)?\n   - No obvious duplication?\n   - Clean, maintainable code?\n   - Documentation updated?\n   ⚠️ BLOCK if quality issues present\n\n5️⃣ REFACTORING COMPLETE\n   - Code refactored after tests pass?\n   - Technical debt addressed?\n   - Code follows project conventions?\n\n🚫 BE STRICT: Block if ANY criterion fails.\n🚫 TDD discipline is non-negotiable.\n🚫 Quality gates must be met.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Detailed TDD assessment with specific failures if blocking, or confirmation of all criteria met if approving. Include line numbers and examples.\"\n}",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "🤖 SUBAGENT TDD COMPLIANCE CHECK\n\nContext: $ARGUMENTS\n\nVerify subagent followed TDD discipline:\n\n✅ REQUIRED:\n1. Subagent wrote tests BEFORE implementation\n2. All tests pass\n3. Code is clean and maintainable\n4. No technical debt introduced\n5. Task fully completed\n\n❌ BLOCK if:\n- Tests written after code\n- Any failing tests\n- Code quality issues\n- Task incomplete\n- Technical debt added\n\nBe strict on TDD enforcement for subagents.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Specific feedback on TDD compliance with actionable items if blocking\"\n}",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/format-and-lint.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
