@@ -159,5 +159,30 @@
         ]
       }
     ]
+  },
+  "extraKnownMarketplaces": {
+    "grey-haven-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "/home/user/claude-code-config/grey-haven-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "agent-orchestration@grey-haven-plugins": true,
+    "browser-automation@grey-haven-plugins": true,
+    "cc-trace@grey-haven-plugins": true,
+    "cloudflare-deployment-observability@grey-haven-plugins": true,
+    "core@grey-haven-plugins": true,
+    "data-quality@grey-haven-plugins": true,
+    "deployment@grey-haven-plugins": true,
+    "developer-experience@grey-haven-plugins": true,
+    "incident-response@grey-haven-plugins": true,
+    "knowledge-base@grey-haven-plugins": true,
+    "linear@grey-haven-plugins": true,
+    "observability@grey-haven-plugins": true,
+    "research@grey-haven-plugins": true,
+    "security@grey-haven-plugins": true,
+    "testing@grey-haven-plugins": true
   }
 }
