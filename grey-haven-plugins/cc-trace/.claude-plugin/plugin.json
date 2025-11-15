@@ -18,5 +18,13 @@
         "observability",
         "diagnostics"
     ],
-    "license": "MIT"
+    "license": "MIT",
+    "agents": [
+        "./agents/cc-trace.md"
+    ],
+    "commands": [
+        "./commands/cc-trace-setup.md",
+        "./commands/cc-trace-start.md",
+        "./commands/cc-trace-connect.md"
+    ]
 }

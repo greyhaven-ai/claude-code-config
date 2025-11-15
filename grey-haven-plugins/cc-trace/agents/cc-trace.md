@@ -46,6 +46,17 @@ Transform Claude Code from a black box into a transparent system by intercepting
 - Troubleshooting: Handle revoked/missing certificates
 
 **Shell Environment Configuration**
+
+**Option A: Use Bundled Proxy Script (Recommended)**
+- Run the proxy script directly without shell configuration:
+  ```bash
+  bash ~/.claude/plugins/marketplaces/grey-haven-plugins/grey-haven-plugins/cc-trace/scripts/proxy-claude.sh
+  ```
+- No shell profile modification needed
+- Automatic environment setup and cleanup
+- Best for first-time users and one-time debugging sessions
+
+**Option B: Create Persistent Shell Function**
 - Create proxy wrapper function for Claude Code:
   ```bash
   proxy_claude() {
@@ -57,6 +68,7 @@ Transform Claude Code from a black box into a transparent system by intercepting
   ```
 - Add to shell profile (~/.zshrc, ~/.bashrc)
 - Source and verify configuration
+- Best for daily development workflow
 - Security warnings about `NODE_TLS_REJECT_UNAUTHORIZED=0`
 
 **Automated Verification**
@@ -100,9 +112,11 @@ mitmweb --web-port 8081 \
 
 **Multi-Terminal Workflow**
 1. **Terminal 1**: Start mitmproxy with desired options
-2. **Terminal 2**: Run `proxy_claude` with your task
+2. **Terminal 2**: Run proxy script: `bash ~/.claude/plugins/marketplaces/grey-haven-plugins/grey-haven-plugins/cc-trace/scripts/proxy-claude.sh`
 3. **Browser**: Monitor http://127.0.0.1:8081 for live traffic
 4. **Terminal 3**: Run analysis scripts on saved flows
+
+**Alternative**: If you've set up the `proxy_claude` shell function, use that instead of the script path in Terminal 2.
 
 ### Analysis & Inspection
 
@@ -172,6 +186,12 @@ mitmweb --web-port 8081 \
 ### Bundled Resources
 
 **Scripts** (Included in `scripts/` directory)
+- `scripts/proxy-claude.sh` - Launch Claude Code through mitmproxy (RECOMMENDED)
+  - Automatically configures all proxy environment variables
+  - Runs Claude Code and cleans up environment on exit
+  - No shell profile modification needed
+  - Run: `bash ~/.claude/plugins/marketplaces/grey-haven-plugins/grey-haven-plugins/cc-trace/scripts/proxy-claude.sh`
+
 - `scripts/verify-setup.sh` - Automated setup verification and diagnostics
   - Checks mitmproxy installation, certificate trust, shell configuration
   - Verifies port availability and optional dependencies
@@ -212,24 +232,13 @@ sudo security add-trusted-cert -d -p ssl -p basic \
   -k /Library/Keychains/System.keychain \
   ~/.mitmproxy/mitmproxy-ca-cert.pem
 
-# Add proxy function to ~/.zshrc
-cat >> ~/.zshrc << 'EOF'
-proxy_claude() {
-    export HTTPS_PROXY=http://127.0.0.1:8080
-    export NODE_TLS_REJECT_UNAUTHORIZED=0
-    claude "$@"
-    unset HTTPS_PROXY NODE_TLS_REJECT_UNAUTHORIZED
-}
-EOF
-source ~/.zshrc
-
 # Start capture (Terminal 1)
 mitmweb --web-port 8081 \
   --set flow_filter='~d api.anthropic.com' \
   --save-stream-file ~/claude-flows.mitm
 
-# Run Claude Code (Terminal 2)
-proxy_claude
+# Run Claude Code through proxy (Terminal 2)
+bash ~/.claude/plugins/marketplaces/grey-haven-plugins/grey-haven-plugins/cc-trace/scripts/proxy-claude.sh
 ```
 
 Navigate to http://127.0.0.1:8081 to view captured traffic.
@@ -301,7 +310,9 @@ Trusting mitmproxy's CA certificate allows it to intercept **all** HTTPS traffic
 
 **Daily Development Pattern**
 1. Start mitmweb at beginning of session
-2. Use `proxy_claude` for all Claude Code interactions
+2. Run Claude Code through proxy for all interactions:
+   - Script: `bash ~/.claude/plugins/marketplaces/grey-haven-plugins/grey-haven-plugins/cc-trace/scripts/proxy-claude.sh`
+   - Or function: `proxy_claude` (if configured)
 3. Review captured traffic when unexpected behavior occurs
 4. Analyze patterns to improve prompt engineering
 
