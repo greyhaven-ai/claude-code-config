@@ -10,17 +10,23 @@
         "quality",
         "refactoring",
         "code-review",
-        "performance"
+        "performance",
+        "llm",
+        "pipelines"
     ],
     "license": "MIT",
     "skills": [
         "./skills/code-quality-analysis",
         "./skills/documentation-alignment",
+        "./skills/evaluation",
+        "./skills/llm-project-development",
         "./skills/performance-optimization",
         "./skills/project-scaffolding",
         "./skills/prompt-engineering",
+        "./skills/skill-creator",
         "./skills/tdd-orchestration",
         "./skills/tdd-python",
-        "./skills/tdd-typescript"
+        "./skills/tdd-typescript",
+        "./skills/tool-design"
     ]
 }

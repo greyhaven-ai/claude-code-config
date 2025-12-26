@@ -15,5 +15,7 @@
         "contextframe"
     ],
     "license": "MIT",
-    "skills": []
+    "skills": [
+        "./skills/memory-systems"
+    ]
 }

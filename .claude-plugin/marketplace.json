@@ -285,28 +285,6 @@
       ]
     },
     {
-      "name": "browser-automation",
-      "description": "Automate web browser interactions using natural language. Browse websites, navigate web pages, extract data from websites, take screenshots, fill forms, click buttons, and interact with web applications using Stagehand AI browser automation.",
-      "source": "./grey-haven-plugins/browser-automation",
-      "version": "1.0.0",
-      "author": {
-        "name": "Grey Haven Studio",
-        "original": "Browserbase",
-        "url": "https://github.com/greyhaven-ai/claude-code-config"
-      },
-      "repository": "https://github.com/greyhaven-ai/claude-code-config",
-      "license": "MIT",
-      "keywords": [
-        "browser",
-        "automation",
-        "web-scraping",
-        "stagehand",
-        "screenshots",
-        "testing",
-        "qa"
-      ]
-    },
-    {
       "name": "cc-trace",
       "description": "Interactive assistant for intercepting, debugging, analyzing and reviewing Claude Code API requests using mitmproxy. Capture HTTPS traffic, inspect system prompts and tool definitions, analyze token usage, and optimize API interactions.",
       "source": "./grey-haven-plugins/cc-trace",
@@ -379,6 +357,28 @@
         "semantic-search",
         "documentation",
         "contextframe"
+      ]
+    },
+    {
+      "name": "creative-writing",
+      "description": "Professional writing assistance for blogs, research articles, fiction, essays, and marketing copy. Includes genre-specific guides, templates, and revision checklists.",
+      "source": "./grey-haven-plugins/creative-writing",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/claude-code-config",
+      "license": "MIT",
+      "keywords": [
+        "writing",
+        "creative",
+        "blog",
+        "fiction",
+        "research",
+        "marketing",
+        "copywriting",
+        "content"
       ]
     }
   ]

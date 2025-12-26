@@ -1,3 +1,22 @@
+---
+name: grey-haven-context-management
+description: "Multi-agent workflow orchestration with state persistence, handoff patterns, and resumable workflows. Use when building multi-agent workflows, coordinating complex tasks, or implementing resumable processes. Triggers: 'orchestration', 'workflow', 'context save', 'handoff', 'multi-agent'."
+# v2.0.43: Skills to auto-load for orchestration work
+skills:
+  - grey-haven-code-style
+  - grey-haven-testing-strategy
+# v2.0.74: Tools for orchestration work
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
+  - Task
+---
+
 # Context Management Skill
 
 Multi-agent workflow orchestration with state persistence, handoff patterns, and resumable workflows.
@@ -5,6 +24,18 @@ Multi-agent workflow orchestration with state persistence, handoff patterns, and
 ## Description
 
 This skill enables sophisticated multi-agent workflows through context save/restore operations, supporting sequential handoffs, parallel execution, conditional routing, and long-running resumable workflows.
+
+## Token Efficiency Awareness
+
+Multi-agent architectures have significant token costs. Understand the multipliers:
+
+| Architecture | Token Multiplier | Example (10K input) |
+|--------------|------------------|---------------------|
+| Single agent | 1x | 10K tokens |
+| Agent + tools | 4x | 40K tokens |
+| Multi-agent | 15x | 150K tokens |
+
+**Key insight**: A 3-agent workflow costs ~15x more than a single agent. Design accordingly.
 
 ## What's Included
 
@@ -16,6 +47,7 @@ This skill enables sophisticated multi-agent workflows through context save/rest
 
 ### Reference Guides (`reference/`)
 - **Complete reference** - Save/restore operations, workflow patterns, performance optimization
+- **Token efficiency** - Token multipliers, attention budget, context optimization strategies
 - **Troubleshooting guide** - 6 issue categories with solutions (save failures, restore failures, performance, corruption)
 - **Best practices** - Context design, handoff patterns, error handling, security
 

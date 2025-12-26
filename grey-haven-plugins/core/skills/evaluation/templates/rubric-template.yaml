@@ -1,0 +1,94 @@
+# Rubric Template
+# Copy and customize for your evaluation needs
+
+name: your-rubric-name
+description: Brief description of what this rubric evaluates
+version: "1.0"
+
+# Scoring scale (applies to all dimensions)
+scale:
+  5:
+    label: "Excellent"
+    description: "Exceeds expectations, exemplary quality"
+  4:
+    label: "Good"
+    description: "Meets expectations with minor room for improvement"
+  3:
+    label: "Acceptable"
+    description: "Partially meets expectations, some issues"
+  2:
+    label: "Poor"
+    description: "Below expectations, significant issues"
+  1:
+    label: "Failing"
+    description: "Does not meet requirements"
+
+# Evaluation dimensions
+dimensions:
+  # --- REQUIRED: At least one dimension ---
+
+  - name: accuracy
+    weight: 0.30  # Weights should sum to 1.0
+    description: "Factual correctness of the output"
+    criteria:
+      5: "All information is factually correct and verifiable"
+      4: "Mostly accurate with very minor inaccuracies"
+      3: "Generally accurate but with some questionable claims"
+      2: "Several factual errors or unsupported claims"
+      1: "Major factual errors, misinformation, or hallucinations"
+    # Optional: anchor examples for calibration
+    anchors:
+      5:
+        input: "What year was Python created?"
+        output: "Python was created by Guido van Rossum and first released in 1991."
+      1:
+        input: "What year was Python created?"
+        output: "Python was created by Linus Torvalds in 2005."
+
+  - name: completeness
+    weight: 0.25
+    description: "Coverage of all requirements in the request"
+    criteria:
+      5: "All requirements addressed comprehensively"
+      4: "Main requirements met with minor omissions"
+      3: "Most requirements addressed but with notable gaps"
+      2: "Several requirements not addressed"
+      1: "Fails to address core requirements"
+
+  - name: clarity
+    weight: 0.25
+    description: "Readability and organization of the output"
+    criteria:
+      5: "Crystal clear, well-organized, easy to follow"
+      4: "Clear with good structure"
+      3: "Understandable but could be clearer"
+      2: "Confusing in places, poor organization"
+      1: "Very difficult to understand"
+
+  - name: format_compliance
+    weight: 0.20
+    description: "Adherence to specified output format"
+    criteria:
+      5: "Perfect format compliance"
+      4: "Mostly follows format with minor deviations"
+      3: "Some format deviations"
+      2: "Significant format issues"
+      1: "Ignores format requirements"
+
+# Optional: Custom thresholds
+thresholds:
+  pass: 3.0       # Minimum overall score to pass
+  good: 4.0       # Score considered "good"
+  excellent: 4.5  # Score considered "excellent"
+
+# Optional: Tags for categorization
+tags:
+  - general
+  - content-generation
+
+# Optional: Metadata
+metadata:
+  author: "Your Name"
+  created: "2025-01-15"
+  last_updated: "2025-01-15"
+  calibration_set: "./calibration/rubric-calibration.yaml"

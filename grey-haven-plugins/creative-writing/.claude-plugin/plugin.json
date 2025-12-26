@@ -1,0 +1,23 @@
+{
+    "name": "creative-writing",
+    "description": "Professional writing assistance for blogs, research articles, fiction, essays, and marketing copy. Includes genre-specific guides, templates, and quality checklists.",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "keywords": [
+        "writing",
+        "blog",
+        "article",
+        "fiction",
+        "novel",
+        "essay",
+        "research",
+        "content",
+        "copywriting"
+    ],
+    "license": "MIT",
+    "skills": [
+        "./skills/creative-writing"
+    ]
+}
