@@ -1,7 +1,7 @@
 {
     "name": "creative-writing",
-    "description": "Professional writing assistance for blogs, research articles, fiction, essays, and marketing copy. Includes genre-specific guides, templates, quality checklists, and specialized agents for research and character development.",
-    "version": "1.1.0",
+    "description": "Complete creative writing suite with 8 specialized agents covering the full writing process: research gathering, character development, story architecture, world-building, dialogue coaching, editing/review, outlining, and content strategy. Includes genre-specific guides, templates, and quality checklists.",
+    "version": "1.2.0",
     "author": {
         "name": "Grey Haven Studio"
     },
@@ -15,7 +15,12 @@
         "research",
         "content",
         "copywriting",
-        "character-development"
+        "character-development",
+        "editing",
+        "dialogue",
+        "world-building",
+        "plot",
+        "seo"
     ],
     "license": "MIT",
     "skills": [
@@ -23,6 +28,12 @@
     ],
     "agents": [
         "./agents/research-gatherer.md",
-        "./agents/character-developer.md"
+        "./agents/character-developer.md",
+        "./agents/story-architect.md",
+        "./agents/editor-reviewer.md",
+        "./agents/world-builder.md",
+        "./agents/dialogue-coach.md",
+        "./agents/outline-architect.md",
+        "./agents/content-strategist.md"
     ]
 }

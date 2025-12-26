@@ -361,9 +361,9 @@
     },
     {
       "name": "creative-writing",
-      "description": "Professional writing assistance for blogs, research articles, fiction, essays, and marketing copy. Includes genre-specific guides, templates, and revision checklists.",
+      "description": "Complete creative writing suite with 8 specialized agents covering the full writing process: research, character development, story architecture, world-building, dialogue, editing, outlining, and content strategy.",
       "source": "./grey-haven-plugins/creative-writing",
-      "version": "1.0.0",
+      "version": "1.2.0",
       "author": {
         "name": "Grey Haven Studio",
         "url": "https://github.com/greyhaven-ai/claude-code-config"
@@ -378,7 +378,12 @@
         "research",
         "marketing",
         "copywriting",
-        "content"
+        "content",
+        "editing",
+        "dialogue",
+        "world-building",
+        "plot",
+        "seo"
       ]
     }
   ]
