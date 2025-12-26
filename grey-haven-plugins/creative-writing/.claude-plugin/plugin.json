@@ -1,7 +1,7 @@
 {
     "name": "creative-writing",
-    "description": "Professional writing assistance for blogs, research articles, fiction, essays, and marketing copy. Includes genre-specific guides, templates, and quality checklists.",
-    "version": "1.0.0",
+    "description": "Professional writing assistance for blogs, research articles, fiction, essays, and marketing copy. Includes genre-specific guides, templates, quality checklists, and specialized agents for research and character development.",
+    "version": "1.1.0",
     "author": {
         "name": "Grey Haven Studio"
     },
@@ -14,10 +14,15 @@
         "essay",
         "research",
         "content",
-        "copywriting"
+        "copywriting",
+        "character-development"
     ],
     "license": "MIT",
     "skills": [
         "./skills/creative-writing"
+    ],
+    "agents": [
+        "./agents/research-gatherer.md",
+        "./agents/character-developer.md"
     ]
 }
