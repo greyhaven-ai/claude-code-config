@@ -126,23 +126,27 @@ In Claude Code:
 
 ## 📦 Available Plugins
 
-| Plugin | Agents | Commands | Description |
-|--------|--------|----------|-------------|
-| `grey-haven-core` | 3 | 5 | Core functionality (research, context, git) |
-| `grey-haven-developer-experience` | 5 | 8 | DX tools (TDD, code review, docs) |
-| `grey-haven-observability` | 2 | 3 | Monitoring, logging, metrics |
-| `cc-trace` | 1 | 0 | Claude Code API debugging with mitmproxy |
-| `grey-haven-infrastructure` | 3 | 4 | IaC, deployment, scaling |
-| `grey-haven-quality-assurance` | 2 | 3 | Testing, E2E, visual regression |
-| `grey-haven-security` | 2 | 2 | Security scanning, vulnerability analysis |
-| `grey-haven-data-engineering` | 2 | 2 | ETL, data pipelines, analytics |
-| `grey-haven-ai-ml` | 2 | 1 | AI/ML workflows, model training |
-| `grey-haven-mobile-development` | 2 | 1 | Mobile app development |
-| `grey-haven-cloudflare` | 1 | 1 | Cloudflare Workers/Pages deployment |
-| `grey-haven-linear-integration` | 1 | 1 | Linear project management |
-| `grey-haven-hooks` | 0 | 0 | Hook documentation |
+| Plugin | Description |
+|--------|-------------|
+| `core` | TDD implementation, code review, quality pipeline, debugging |
+| `developer-experience` | Documentation, onboarding, API design, code style |
+| `testing` | Playwright, Chrome E2E, visual regression testing |
+| `deployment` | Cloudflare Workers/Pages deployment and debugging |
+| `security` | OWASP security scanning, vulnerability analysis |
+| `research` | API research with Firecrawl, Context7, TanStack patterns |
+| `observability` | Monitoring, SLOs, metrics, performance tracking |
+| `incident-response` | Debugging, runbooks, postmortem generation |
+| `agent-orchestration` | Context management, workflow composition |
+| `data-quality` | Pydantic validation, schema contracts, data quality |
+| `linear` | Linear issue tracking, workflow integration |
+| `cc-trace` | Claude Code API debugging with mitmproxy |
+| `cloudflare-deployment-observability` | Deployment monitoring, CI/CD analytics |
+| `knowledge-base` | Ontological knowledge management, long-term memory |
+| `creative-writing` | 8 specialized agents for the complete writing process |
 
-**Total**: 27+ agents, 30+ commands across 13 plugins
+**Total**: 30+ agents, 40+ skills across 15 plugins
+
+**Install format**: `plugin-name@grey-haven-plugins` (e.g., `core@grey-haven-plugins`)
 
 ---
 

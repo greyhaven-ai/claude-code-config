@@ -16,11 +16,11 @@ Grey Haven Studio's comprehensive Claude Code configuration system - v2.0.0
 
 ```
 /
-├── grey-haven-plugins/              # Plugin marketplace (12 plugins)
-│   ├── grey-haven-core/
-│   ├── grey-haven-developer-experience/
-│   ├── grey-haven-observability/
-│   └── ... (9 more plugins)
+├── grey-haven-plugins/              # Plugin marketplace (15 plugins)
+│   ├── core/
+│   ├── developer-experience/
+│   ├── creative-writing/
+│   └── ... (12 more plugins)
 ├── .claude/
 │   ├── hooks/                       # Production hooks (4 hooks)
 │   │   ├── subagent-context-preparer.py
@@ -66,8 +66,8 @@ The repository includes plugin marketplace configuration for loading all Grey Ha
       "source": "/absolute/path/to/grey-haven-plugins"
     }],
     "install": [
-      "grey-haven-core@grey-haven-plugins",
-      "grey-haven-developer-experience@grey-haven-plugins"
+      "core@grey-haven-plugins",
+      "developer-experience@grey-haven-plugins"
     ]
   }
 }

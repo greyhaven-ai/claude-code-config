@@ -66,8 +66,8 @@ class ClaudeConfig < Formula
               "source": "~/grey-haven-plugins/grey-haven-plugins"
             }],
             "install": [
-              "grey-haven-core@grey-haven-plugins",
-              "grey-haven-developer-experience@grey-haven-plugins"
+              "core@grey-haven-plugins",
+              "developer-experience@grey-haven-plugins"
             ]
           }
         }
