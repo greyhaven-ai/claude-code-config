@@ -1,6 +1,20 @@
 ---
 name: grey-haven-tdd-python
 description: "Python Test-Driven Development expertise with pytest, strict red-green-refactor methodology, FastAPI testing patterns, and Pydantic model testing. Use when implementing Python features with TDD, writing pytest tests, testing FastAPI endpoints, developing with test-first approach, or when user mentions 'Python TDD', 'pytest', 'FastAPI testing', 'red-green-refactor', 'Python unit tests', 'test-driven Python', or 'Python test coverage'."
+# v2.0.43: Skills to auto-load for subagents spawned from this skill
+skills:
+  - grey-haven-code-style
+  - grey-haven-api-design-standards
+  - grey-haven-test-generation
+# v2.0.74: Restrict tools available when this skill is active
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # TDD Python Skill

@@ -1,3 +1,22 @@
+---
+name: grey-haven-data-validation
+description: "Comprehensive data validation using Pydantic v2 with data quality monitoring and schema alignment for PlanetScale PostgreSQL. Use when implementing API validation, database schema alignment, or data quality assurance. Triggers: 'validation', 'Pydantic', 'schema', 'data quality'."
+# v2.0.43: Skills to auto-load for data validation work
+skills:
+  - grey-haven-code-style
+  - grey-haven-api-design-standards
+  - grey-haven-database-conventions
+# v2.0.74: Tools for data validation work
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
+---
+
 # Data Validation Skill
 
 Comprehensive data validation using Pydantic v2 with data quality monitoring and schema alignment for PlanetScale PostgreSQL.

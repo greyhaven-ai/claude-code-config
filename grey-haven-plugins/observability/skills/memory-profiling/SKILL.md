@@ -1,6 +1,18 @@
 ---
 name: grey-haven-memory-profiling
 description: "Identify memory leaks, inefficient allocations, and optimization opportunities in JavaScript/TypeScript and Python applications. Analyze heap snapshots, allocation patterns, garbage collection, and memory retention. Use when memory grows over time, high memory consumption detected, performance degradation, or when user mentions 'memory leak', 'memory usage', 'heap analysis', 'garbage collection', 'memory profiling', or 'out of memory'."
+# v2.0.43: Skills to auto-load for memory profiling
+skills:
+  - grey-haven-code-style
+  - grey-haven-performance-optimization
+  - grey-haven-observability-monitoring
+# v2.0.74: Tools for memory profiling
+allowed-tools:
+  - Read
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Memory Profiling Skill

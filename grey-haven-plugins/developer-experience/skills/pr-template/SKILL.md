@@ -1,6 +1,18 @@
 ---
 name: grey-haven-pr-template
 description: Generate pull request descriptions following Grey Haven Studio standards with clear summary, motivation, implementation details, testing strategy, and comprehensive checklist. Use when creating or reviewing pull requests.
+# v2.0.43: Skills to auto-load for PR work
+skills:
+  - grey-haven-code-style
+  - grey-haven-linear-workflow
+  - grey-haven-testing-strategy
+# v2.0.74: Tools for PR creation
+allowed-tools:
+  - Read
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Grey Haven Pull Request Template

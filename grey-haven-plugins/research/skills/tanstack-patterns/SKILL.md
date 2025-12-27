@@ -1,6 +1,22 @@
 ---
 name: grey-haven-tanstack-patterns
-description: Apply Grey Haven's TanStack ecosystem patterns - Router file-based routing, Query data fetching with staleTime, and Start server functions. Use when building React applications with TanStack Start.
+description: "Apply Grey Haven's TanStack ecosystem patterns - Router file-based routing, Query data fetching with staleTime, and Start server functions. Use when building React applications with TanStack Start. Triggers: 'TanStack', 'TanStack Start', 'TanStack Query', 'TanStack Router', 'React Query', 'file-based routing', 'server functions'."
+# v2.0.43: Skills to auto-load for TanStack development
+skills:
+  - grey-haven-code-style
+  - grey-haven-react-tanstack-testing
+  - grey-haven-api-design-standards
+# v2.0.74: Restrict tools for development work
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
+  - WebFetch
+  - mcp__context7__*
 ---
 
 # Grey Haven TanStack Patterns

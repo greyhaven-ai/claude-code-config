@@ -1,6 +1,19 @@
 ---
 name: grey-haven-code-style
 description: "Apply Grey Haven Studio's TypeScript/React and Python/FastAPI coding standards from production templates. Use when writing code, reviewing PRs, fixing linting errors, formatting files, or when the user mentions 'code standards', 'Grey Haven style', 'linting', 'Prettier', 'ESLint', 'Ruff', 'formatting rules', or 'coding conventions'. Includes exact Prettier/ESLint/Ruff configs, naming conventions, project structure, and multi-tenant database patterns."
+# v2.0.43: Skills to auto-load with code style
+skills:
+  - grey-haven-api-design-standards
+  - grey-haven-project-structure
+# v2.0.74: Tools for code style work
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
 ---
 
 # Grey Haven Code Style Standards

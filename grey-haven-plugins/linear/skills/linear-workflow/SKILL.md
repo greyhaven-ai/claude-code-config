@@ -1,6 +1,19 @@
 ---
 name: grey-haven-linear-workflow
 description: Grey Haven's Linear issue workflow - creating well-documented issues, proper branch naming from issue IDs, commit message integration, PR linking, and status management. Use when creating issues, starting work, or managing project workflow.
+# v2.0.43: Skills to auto-load for Linear workflow
+skills:
+  - grey-haven-code-style
+  - grey-haven-commit-format
+# v2.0.74: Tools for workflow management
+allowed-tools:
+  - Read
+  - Write
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
+  - mcp__linear__*
 ---
 
 # Grey Haven Linear Workflow

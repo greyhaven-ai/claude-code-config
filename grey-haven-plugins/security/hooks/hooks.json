@@ -1,14 +1,52 @@
 {
-  "description": "Security validation for all code changes - prevents vulnerabilities before code is written",
+  "description": "Security validation for all code changes - prevents vulnerabilities before code is written. Updated for Claude Code v2.0.74+ with SubagentStart, PermissionRequest hooks, and model parameters.",
   "hooks": {
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "haiku",
+            "prompt": "🔐 SECURITY CONTEXT INJECTION\n\nContext: $ARGUMENTS\n\nPrepare security context for the starting subagent:\n\n1. THREAT AWARENESS\n   - What security risks apply to this task?\n   - What OWASP Top 10 categories are relevant?\n   - What attack vectors should be considered?\n\n2. SECURITY REQUIREMENTS\n   - What security controls must be implemented?\n   - What validation is required?\n   - What sanitization patterns apply?\n\nProvide security context:\n{\n  \"additionalContext\": \"Security requirements and reminders for this task\",\n  \"securityChecklist\": [\"Key security items to verify\"],\n  \"relevantCWEs\": [\"CWE numbers that may apply\"]\n}",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "haiku",
+            "prompt": "🔐 BASH SECURITY CHECK\n\nContext: $ARGUMENTS\n\nEvaluate bash command for security risks:\n- Command injection possible?\n- Dangerous commands (rm -rf, chmod 777, etc.)?\n- Network access that could exfiltrate data?\n- System modification commands?\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"deny\" or \"ask\",\n  \"reason\": \"Brief security assessment\"\n}",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "prompt",
+            "model": "haiku",
             "prompt": "🔒 SECURITY REVIEW - Critical vulnerability scan\n\nContext: $ARGUMENTS\n\nPerform comprehensive security analysis for:\n\n1. SQL INJECTION\n   - Are queries parameterized?\n   - Any string concatenation in SQL?\n   - ORM/query builder used properly?\n\n2. CROSS-SITE SCRIPTING (XSS)\n   - Is user input properly escaped?\n   - HTML sanitization present?\n   - Content-Security-Policy headers?\n\n3. HARDCODED SECRETS\n   - Passwords, API keys, tokens in code?\n   - Check for: password=, api_key=, token=, secret=\n   - Are secrets in environment variables?\n\n4. PATH TRAVERSAL\n   - User input in file paths?\n   - Proper path sanitization?\n   - Directory traversal prevention (../)?\n\n5. AUTHENTICATION/AUTHORIZATION\n   - Auth checks present before sensitive operations?\n   - Role-based access control enforced?\n   - Session management secure?\n\n6. COMMAND INJECTION\n   - User input in shell commands?\n   - Proper escaping/validation?\n   - Using safe APIs instead of shell?\n\n7. INSECURE DEPENDENCIES\n   - Known vulnerable packages?\n   - Outdated versions?\n\n8. CSRF PROTECTION\n   - CSRF tokens present for state-changing operations?\n   - SameSite cookie attributes?\n\n9. INSECURE DESERIALIZATION\n   - Untrusted data deserialization?\n   - Type validation present?\n\n10. INSUFFICIENT LOGGING\n    - Security events logged?\n    - Authentication failures tracked?\n\n⚠️ BLOCK IMMEDIATELY if ANY security vulnerability found.\n⚠️ Be thorough and strict - security cannot be compromised.\n⚠️ Include CWE numbers for any issues found.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Detailed security findings with CWE numbers, line references, and remediation steps\"\n}",
             "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "haiku",
+            "prompt": "🔐 SUBAGENT SECURITY COMPLIANCE CHECK\n\nContext: $ARGUMENTS\n\nVerify subagent followed security best practices:\n\n✅ REQUIRED:\n1. No security vulnerabilities introduced\n2. Input validation implemented\n3. Output encoding applied\n4. Authentication/authorization checked\n5. No hardcoded secrets\n\n❌ BLOCK if:\n- Any security vulnerability found\n- Missing input validation\n- Hardcoded credentials\n- Improper error handling\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Security compliance assessment with specific findings if blocking\"\n}",
+            "timeout": 20
           }
         ]
       }
@@ -18,6 +56,7 @@
         "hooks": [
           {
             "type": "prompt",
+            "model": "haiku",
             "prompt": "🔒 FINAL SECURITY AUDIT\n\nContext: $ARGUMENTS\n\nPerform final security review:\n\n✅ MUST VERIFY:\n1. No security vulnerabilities introduced\n2. Security tests added for all changes\n3. Secure-by-default principles followed\n4. No exposure of sensitive data\n5. Authentication/authorization properly implemented\n6. Input validation comprehensive\n7. Error messages don't leak sensitive info\n8. Security logging adequate\n\n🚫 BLOCK if:\n- Any security issue remains unaddressed\n- Security tests are missing\n- Vulnerabilities found during review\n- Best practices not followed\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Security audit summary with any remaining concerns or approval confirmation\"\n}",
             "timeout": 30
           }

@@ -1,11 +1,48 @@
 {
-  "description": "TDD enforcement and code quality validation - ensures tests-first discipline and quality standards",
+  "description": "TDD enforcement and code quality validation - ensures tests-first discipline and quality standards. Updated for Claude Code v2.0.74+ with SubagentStart, PermissionRequest hooks, and model parameters.",
   "hooks": {
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "haiku",
+            "prompt": "🚀 SUBAGENT CONTEXT PREPARATION\n\nContext: $ARGUMENTS\n\nPrepare context for the starting subagent:\n\n1️⃣ SKILL LOADING\n   - What skills should be auto-loaded based on the task?\n   - TDD context: Load test generation and code quality skills\n   - What testing patterns apply?\n\n2️⃣ CONTEXT INJECTION\n   - What project conventions apply?\n   - What file patterns to follow?\n   - What test framework to use?\n\n3️⃣ GUARDRAILS\n   - What tools should be restricted?\n   - What patterns should be avoided?\n   - What quality thresholds apply?\n\nProvide context enhancement:\n{\n  \"additionalContext\": \"Brief context to inject for this subagent based on the task\",\n  \"suggestedSkills\": [\"list\", \"of\", \"skill-names\"],\n  \"qualityReminders\": \"Key quality points for this task\"\n}",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "Read|Grep|Glob",
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "haiku",
+            "prompt": "🔐 AUTO-PERMISSION: READ OPERATIONS\n\nContext: $ARGUMENTS\n\nThis is a read-only operation request. Auto-approve unless:\n- Path contains sensitive patterns (.env, credentials, secrets)\n- Path is outside project directory\n- Path accesses system files\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"deny\",\n  \"reason\": \"Brief reason\"\n}",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "haiku",
+            "prompt": "🔐 PERMISSION CHECK: WRITE OPERATIONS\n\nContext: $ARGUMENTS\n\nEvaluate write permission request:\n- Is the target file within project scope?\n- Does the change align with TDD workflow (test files ok, source only after tests)?\n- No sensitive file modifications?\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"ask\",\n  \"reason\": \"Brief reason for decision\"\n}",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
           {
             "type": "prompt",
+            "model": "haiku",
             "prompt": "🧪 TDD DISCIPLINE ENFORCER - Strict Quality Gate\n\nContext: $ARGUMENTS\n\nYou are enforcing Test-Driven Development discipline. Evaluate if work meets TDD standards:\n\n1️⃣ TESTS WRITTEN FIRST (CRITICAL)\n   - Were tests written BEFORE implementation?\n   - Red-Green-Refactor cycle followed?\n   - Tests fail first, then pass?\n   ⚠️ BLOCK if implementation came before tests\n\n2️⃣ ALL TESTS PASSING\n   - Are all tests passing (no failures)?\n   - No skipped/ignored tests without justification?\n   - No flaky tests?\n   ⚠️ BLOCK if any tests failing\n\n3️⃣ CODE COVERAGE THRESHOLD\n   - Coverage ≥80% for new code?\n   - Critical paths covered?\n   - Edge cases tested?\n   ⚠️ BLOCK if coverage < 80%\n\n4️⃣ CODE QUALITY\n   - No code smells (long methods, high complexity)?\n   - No obvious duplication?\n   - Clean, maintainable code?\n   - Documentation updated?\n   ⚠️ BLOCK if quality issues present\n\n5️⃣ REFACTORING COMPLETE\n   - Code refactored after tests pass?\n   - Technical debt addressed?\n   - Code follows project conventions?\n\n🚫 BE STRICT: Block if ANY criterion fails.\n🚫 TDD discipline is non-negotiable.\n🚫 Quality gates must be met.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Detailed TDD assessment with specific failures if blocking, or confirmation of all criteria met if approving. Include line numbers and examples.\"\n}",
             "timeout": 30
           }
@@ -17,6 +54,7 @@
         "hooks": [
           {
             "type": "prompt",
+            "model": "haiku",
             "prompt": "🤖 SUBAGENT TDD COMPLIANCE CHECK\n\nContext: $ARGUMENTS\n\nVerify subagent followed TDD discipline:\n\n✅ REQUIRED:\n1. Subagent wrote tests BEFORE implementation\n2. All tests pass\n3. Code is clean and maintainable\n4. No technical debt introduced\n5. Task fully completed\n\n❌ BLOCK if:\n- Tests written after code\n- Any failing tests\n- Code quality issues\n- Task incomplete\n- Technical debt added\n\nBe strict on TDD enforcement for subagents.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Specific feedback on TDD compliance with actionable items if blocking\"\n}",
             "timeout": 30
           }

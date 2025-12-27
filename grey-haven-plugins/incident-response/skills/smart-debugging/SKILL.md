@@ -1,3 +1,22 @@
+---
+name: grey-haven-smart-debugging
+description: "AI-powered intelligent debugging with stack trace analysis, error pattern recognition, and automated fix suggestions. Use when debugging complex errors, analyzing stack traces, or performing root cause analysis. Triggers: 'debug', 'error analysis', 'stack trace', 'root cause', 'troubleshooting'."
+# v2.0.43: Skills to auto-load for debugging work
+skills:
+  - grey-haven-code-style
+  - grey-haven-testing-strategy
+  - grey-haven-incident-response
+# v2.0.74: Tools for debugging work
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
+---
+
 # Smart Debugging Skill
 
 AI-powered intelligent debugging with stack trace analysis, error pattern recognition, and automated fix suggestions.

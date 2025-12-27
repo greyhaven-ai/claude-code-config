@@ -1,6 +1,19 @@
 ---
 name: grey-haven-code-quality-analysis
 description: "Multi-mode code quality analysis covering security reviews (OWASP Top 10), clarity refactoring (readability rules), and synthesis analysis (cross-file issues). Use when reviewing code for security vulnerabilities, improving code readability, conducting quality audits, pre-deployment checks, or when user mentions 'code quality', 'code review', 'security review', 'refactoring', 'code smell', 'OWASP', 'code clarity', or 'quality audit'."
+# v2.0.43: Skills to auto-load for quality analysis subagents
+skills:
+  - grey-haven-code-style
+  - grey-haven-security-practices
+  - grey-haven-documentation-alignment
+# v2.0.74: Restrict tools for analysis-focused work
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - TodoWrite
+  - Write
+  - Edit
 ---
 
 # Code Quality Analysis Skill

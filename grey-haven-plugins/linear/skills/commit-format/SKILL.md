@@ -1,6 +1,15 @@
 ---
 name: grey-haven-commit-format
 description: Format commit messages according to Grey Haven Studio's actual commitlint configuration (100 char header, lowercase subject, conventional commits). Use when creating git commits or reviewing commit messages.
+# v2.0.43: Skills to auto-load for commit work
+skills:
+  - grey-haven-code-style
+# v2.0.74: Tools for commit formatting
+allowed-tools:
+  - Read
+  - Bash
+  - Grep
+  - TodoWrite
 ---
 
 # Grey Haven Commit Message Format

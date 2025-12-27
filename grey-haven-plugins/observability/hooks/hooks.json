@@ -1,11 +1,36 @@
 {
-  "description": "Performance and observability monitoring - prevents performance regressions and ensures proper instrumentation",
+  "description": "Performance and observability monitoring - prevents performance regressions and ensures proper instrumentation. Updated for Claude Code v2.0.74+ with SubagentStart hooks and model parameters.",
   "hooks": {
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "haiku",
+            "prompt": "📊 OBSERVABILITY CONTEXT INJECTION\n\nContext: $ARGUMENTS\n\nPrepare observability context for the starting subagent:\n\n1. PERFORMANCE BUDGET\n   - What latency thresholds apply?\n   - What complexity limits?\n\n2. MONITORING REQUIREMENTS\n   - What metrics should be instrumented?\n   - What logging patterns?\n\nProvide context:\n{\n  \"additionalContext\": \"Observability requirements for this task\",\n  \"performanceBudget\": \"p99 < 200ms\",\n  \"metricsToTrack\": [\"latency\", \"error_rate\"]\n}",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "haiku",
+            "prompt": "📊 SUBAGENT PERFORMANCE CHECK\n\nContext: $ARGUMENTS\n\nVerify subagent followed performance best practices:\n\n✅ REQUIRED:\n1. No N+1 queries\n2. Efficient algorithms (O(n) or better)\n3. Proper resource cleanup\n4. Database indices considered\n5. Caching where appropriate\n\n❌ BLOCK if:\n- N+1 queries detected\n- O(n²) or worse algorithms\n- Resource leaks possible\n- Missing critical indices\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Performance assessment with specific issues if blocking\"\n}",
+            "timeout": 20
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
           {
             "type": "prompt",
+            "model": "haiku",
             "prompt": "📊 PERFORMANCE REGRESSION DETECTOR\n\nContext: $ARGUMENTS\n\nAnalyze code changes for performance regressions and observability:\n\n1️⃣ N+1 QUERY DETECTION\n   - Queries inside loops?\n   - Multiple database calls for related data?\n   - Missing eager loading (JOIN/prefetch)?\n   - Should use batch queries?\n   ⚠️ BLOCK if N+1 queries detected\n\n2️⃣ ALGORITHMIC EFFICIENCY\n   - Nested loops over large datasets?\n   - O(n²) or worse complexity?\n   - More efficient algorithm available?\n   - Large array operations in tight loops?\n   ⚠️ BLOCK if inefficient algorithms\n\n3️⃣ MEMORY LEAKS & RESOURCE MANAGEMENT\n   - Proper cleanup in finally blocks?\n   - Context managers used (with statements)?\n   - File handles/connections closed?\n   - Event listeners removed?\n   - Cache expiration configured?\n   ⚠️ BLOCK if resource leaks possible\n\n4️⃣ DATABASE PERFORMANCE\n   - Missing indices for query filters?\n   - Full table scans likely?\n   - Proper use of indices?\n   - Query pagination for large results?\n   ⚠️ BLOCK if missing critical indices\n\n5️⃣ API EFFICIENCY\n   - Excessive API calls?\n   - Missing request batching?\n   - No caching for repeated requests?\n   - Missing rate limiting considerations?\n   ⚠️ WARN if API inefficiency\n\n6️⃣ OBSERVABILITY INSTRUMENTATION\n   - Critical operations have metrics?\n   - Error rates tracked?\n   - Latency metrics present?\n   - Proper log levels used?\n   - Distributed tracing IDs?\n   ✅ APPROVE if well-instrumented\n\n7️⃣ PERFORMANCE MONITORING\n   - Slow operations logged/tracked?\n   - Performance budgets considered?\n   - SLO/SLA compliance checked?\n   ⚠️ WARN if monitoring gaps\n\n8️⃣ CACHING STRATEGY\n   - Appropriate caching used?\n   - Cache invalidation correct?\n   - Cache keys well-designed?\n   - TTL values reasonable?\n\n9️⃣ ASYNC/PARALLEL OPTIMIZATION\n   - Async/await used for I/O?\n   - Parallel processing where applicable?\n   - Not blocking event loop?\n   - Worker pools sized appropriately?\n\n🔟 SCALABILITY CONCERNS\n   - Will scale to 10x current load?\n   - No hardcoded limits?\n   - Handles concurrent requests?\n   - Database connection pooling?\n\n🚫 BLOCK if performance regressions detected.\n🚫 BLOCK if critical monitoring missing.\n⚠️ WARN for minor performance concerns.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Detailed performance analysis with specific issues (line numbers, complexity estimates) if blocking, or performance confirmation if approving\"\n}",
             "timeout": 30
           }

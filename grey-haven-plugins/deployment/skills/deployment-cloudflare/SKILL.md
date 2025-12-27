@@ -1,6 +1,19 @@
 ---
 name: grey-haven-deployment-cloudflare
 description: Deploy TanStack Start applications to Cloudflare Workers/Pages with GitHub Actions, Doppler, Wrangler, database migrations, and rollback procedures. Use when deploying Grey Haven applications.
+# v2.0.43: Skills to auto-load for deployment work
+skills:
+  - grey-haven-code-style
+  - grey-haven-observability-monitoring
+# v2.0.74: Tools for deployment work
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Grey Haven Cloudflare Deployment

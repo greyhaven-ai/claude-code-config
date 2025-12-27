@@ -1,6 +1,19 @@
 ---
 name: grey-haven-performance-optimization
 description: "Comprehensive performance analysis and optimization for algorithms (O(n²)→O(n)), databases (N+1 queries, indexes), React (memoization, virtual lists), bundles (code splitting), API caching, and memory leaks. 85%+ improvement rate. Use when application is slow, response times exceed SLA, high CPU/memory usage, performance budgets needed, or when user mentions 'performance', 'slow', 'optimization', 'bottleneck', 'speed up', 'latency', 'memory leak', or 'performance tuning'."
+# v2.0.43: Skills to auto-load for performance work
+skills:
+  - grey-haven-code-style
+  - grey-haven-observability-monitoring
+# v2.0.74: Tools for performance optimization
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Performance Optimization Skill

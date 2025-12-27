@@ -1,6 +1,20 @@
 ---
 name: grey-haven-testing-strategy
 description: "Grey Haven's comprehensive testing strategy - Vitest unit/integration/e2e for TypeScript, pytest markers for Python, >80% coverage requirement, fixture patterns, and Doppler for test environments. Use when writing tests, setting up test infrastructure, running tests, debugging test failures, improving coverage, configuring CI/CD, or when user mentions 'test', 'testing', 'pytest', 'vitest', 'coverage', 'TDD', 'test-driven development', 'unit test', 'integration test', 'e2e', 'end-to-end', 'test fixtures', 'mocking', 'test setup', 'CI testing'."
+# v2.0.43: Skills to auto-load for testing work
+skills:
+  - grey-haven-code-style
+  - grey-haven-test-generation
+  - grey-haven-tdd-orchestration
+# v2.0.74: Tools for testing work
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Grey Haven Testing Strategy

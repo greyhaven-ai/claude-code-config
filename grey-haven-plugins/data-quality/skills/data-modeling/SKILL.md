@@ -1,6 +1,19 @@
 ---
 name: grey-haven-data-modeling
 description: Design database schemas for Grey Haven multi-tenant SaaS - SQLModel models, Drizzle schema, multi-tenant isolation with tenant_id and RLS, timestamp fields, foreign keys, indexes, migrations, and relationships. Use when creating database tables.
+# v2.0.43: Skills to auto-load for data modeling
+skills:
+  - grey-haven-code-style
+  - grey-haven-database-conventions
+# v2.0.74: Tools for data modeling
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Grey Haven Data Modeling Standards

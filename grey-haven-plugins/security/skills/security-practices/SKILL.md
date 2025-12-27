@@ -1,6 +1,20 @@
 ---
 name: grey-haven-security-practices
 description: Grey Haven's security best practices - input validation, output sanitization, multi-tenant RLS, secret management with Doppler, rate limiting, OWASP Top 10 for TanStack/FastAPI stack. Use when implementing security-critical features.
+# v2.0.43: Skills to auto-load for security work
+skills:
+  - grey-haven-code-style
+  - grey-haven-authentication-patterns
+  - grey-haven-api-design-standards
+# v2.0.74: Tools for security implementation
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Grey Haven Security Practices

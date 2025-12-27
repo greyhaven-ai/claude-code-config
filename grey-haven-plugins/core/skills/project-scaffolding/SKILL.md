@@ -1,6 +1,18 @@
 ---
 name: grey-haven-project-scaffolding
 description: "Generate production-ready project scaffolds for Grey Haven stack with Cloudflare Workers, React + TypeScript, Python + Pydantic, PlanetScale, proper structure, and configuration. Use when starting new projects, creating microservices, setting up monorepo workspaces, initializing projects, or when user mentions 'new project', 'project scaffold', 'project template', 'project setup', 'bootstrap project', 'project starter', or 'initialize project'."
+# v2.0.43: Skills to auto-load for scaffolding
+skills:
+  - grey-haven-code-style
+  - grey-haven-project-structure
+  - grey-haven-database-conventions
+# v2.0.74: Tools for project scaffolding
+allowed-tools:
+  - Read
+  - Write
+  - Bash
+  - Glob
+  - TodoWrite
 ---
 
 # Project Scaffolding Skill

@@ -1,6 +1,20 @@
 ---
 name: grey-haven-authentication-patterns
 description: Grey Haven's authentication patterns using better-auth - magic links, passkeys, OAuth providers, session management with Redis, JWT claims with tenant_id, and Doppler for auth secrets. Use when implementing authentication features.
+# v2.0.43: Skills to auto-load for auth implementation
+skills:
+  - grey-haven-code-style
+  - grey-haven-security-practices
+  - grey-haven-api-design-standards
+# v2.0.74: Tools for authentication implementation
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Grey Haven Authentication Patterns

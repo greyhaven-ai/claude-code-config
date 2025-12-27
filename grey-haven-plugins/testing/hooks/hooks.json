@@ -1,11 +1,37 @@
 {
-  "description": "Test quality and coverage enforcement - ensures comprehensive, high-quality tests",
+  "description": "Test quality and coverage enforcement - ensures comprehensive, high-quality tests. Updated for Claude Code v2.0.74+ with SubagentStart, PermissionRequest hooks, and model parameters.",
   "hooks": {
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "haiku",
+            "prompt": "🧪 TEST CONTEXT PREPARATION\n\nContext: $ARGUMENTS\n\nPrepare testing context for the starting subagent:\n\n1. TESTING FRAMEWORK\n   - What test framework should be used? (pytest, vitest, jest)\n   - What patterns apply to this project?\n\n2. COVERAGE REQUIREMENTS\n   - What coverage thresholds apply?\n   - What critical paths must be tested?\n\n3. TEST PATTERNS\n   - What naming conventions apply?\n   - What fixture patterns to use?\n\nProvide testing context:\n{\n  \"additionalContext\": \"Testing requirements for this task\",\n  \"testFramework\": \"pytest or vitest\",\n  \"coverageThreshold\": \"80%\"\n}",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "haiku",
+            "prompt": "🧪 TEST COMMAND CHECK\n\nContext: $ARGUMENTS\n\nEvaluate if this is a safe test command:\n- Is it a test runner command (pytest, vitest, jest, bun test)?\n- Is it a coverage command?\n- Auto-approve safe test commands.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"ask\",\n  \"reason\": \"Brief assessment\"\n}",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "SubagentStop": [
       {
         "hooks": [
           {
             "type": "prompt",
+            "model": "haiku",
             "prompt": "🧪 TEST QUALITY VALIDATOR\n\nContext: $ARGUMENTS\n\nEvaluate test quality and comprehensiveness:\n\n1️⃣ EDGE CASE COVERAGE\n   - Happy path tested?\n   - Error conditions tested?\n   - Boundary values tested?\n   - Null/empty inputs tested?\n   ⚠️ BLOCK if edge cases missing\n\n2️⃣ TEST NAMING\n   - Descriptive names (test_should_xxx_when_yyy)?\n   - Clear intent from name?\n   - Follows project conventions?\n   ⚠️ BLOCK if names unclear\n\n3️⃣ ASSERTION QUALITY\n   - Meaningful assertions (not just assert True)?\n   - Specific expected values?\n   - Clear failure messages?\n   - One concept per test?\n   ⚠️ BLOCK if assertions weak\n\n4️⃣ TEST RELIABILITY\n   - No flaky tests?\n   - No timing dependencies?\n   - No random data without seeding?\n   - Deterministic results?\n   ⚠️ BLOCK if tests flaky\n\n5️⃣ TEST PERFORMANCE\n   - Unit tests < 1s each?\n   - Integration tests reasonable?\n   - No unnecessary delays?\n   ⚠️ WARN if tests slow\n\n6️⃣ TEST MAINTENANCE\n   - No skipped/ignored tests without reason?\n   - Tests independent (no order dependency)?\n   - Clear setup/teardown?\n   - No test code duplication?\n\n7️⃣ MOCKING STRATEGY\n   - Appropriate use of mocks?\n   - Not over-mocked?\n   - Integration points tested?\n   - Mock behavior realistic?\n\n8️⃣ COVERAGE\n   - Critical paths covered?\n   - Error handling tested?\n   - All public APIs tested?\n\n🚫 BE STRICT on test quality.\n🚫 Poor tests are worse than no tests.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Detailed test quality assessment with specific improvements needed if blocking, or confirmation of excellent test quality if approving\"\n}",
             "timeout": 30
           }

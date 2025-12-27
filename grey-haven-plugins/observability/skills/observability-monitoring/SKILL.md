@@ -1,6 +1,19 @@
 ---
-name: observability-monitoring
+name: grey-haven-observability-monitoring
 description: Implement observability and monitoring using Cloudflare Workers Analytics, wrangler tail for logs, and health checks. Use when setting up monitoring, implementing logging, configuring alerts, or debugging production issues.
+# v2.0.43: Skills to auto-load for observability work
+skills:
+  - grey-haven-code-style
+  - grey-haven-deployment-cloudflare
+# v2.0.74: Tools for observability implementation
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Grey Haven Observability and Monitoring

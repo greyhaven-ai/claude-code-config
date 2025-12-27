@@ -1,6 +1,17 @@
 ---
 name: grey-haven-project-structure
 description: Organize Grey Haven projects following standard structures for TanStack Start (frontend) and FastAPI (backend). Use when creating new projects, organizing files, or refactoring project layout.
+# v2.0.43: Skills to auto-load for project work
+skills:
+  - grey-haven-code-style
+# v2.0.74: Tools for project organization
+allowed-tools:
+  - Read
+  - Write
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Grey Haven Project Structure

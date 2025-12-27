@@ -1,3 +1,21 @@
+---
+name: grey-haven-observability-engineering
+description: "Production-ready monitoring, logging, and tracing using Prometheus, Grafana, OpenTelemetry, DataDog, and Sentry. Use when setting up production monitoring, implementing SLOs, distributed tracing, or performance tracking."
+# v2.0.43: Skills to auto-load for observability work
+skills:
+  - grey-haven-code-style
+  - grey-haven-observability-monitoring
+# v2.0.74: Tools for observability setup
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
+---
+
 # Observability Engineering Skill
 
 Production-ready monitoring, logging, and tracing using Prometheus, Grafana, OpenTelemetry, DataDog, and Sentry.

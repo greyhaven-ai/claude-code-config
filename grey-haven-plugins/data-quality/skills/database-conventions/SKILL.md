@@ -1,6 +1,19 @@
 ---
 name: grey-haven-database-conventions
 description: "Apply Grey Haven database conventions - snake_case fields, multi-tenant with tenant_id and RLS, proper indexing, migrations for Drizzle (TypeScript) and SQLModel (Python). Use when designing schemas, writing database code, creating migrations, setting up RLS policies, or when user mentions 'database', 'schema', 'Drizzle', 'SQLModel', 'migration', 'RLS', 'tenant_id', 'snake_case', 'indexes', or 'foreign keys'."
+# v2.0.43: Skills to auto-load for database work
+skills:
+  - grey-haven-code-style
+  - grey-haven-data-validation
+# v2.0.74: Tools for database schema work
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Grey Haven Database Conventions

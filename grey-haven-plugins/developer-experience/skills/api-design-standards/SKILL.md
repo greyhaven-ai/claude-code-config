@@ -1,6 +1,20 @@
 ---
 name: grey-haven-api-design
 description: "Design RESTful APIs following Grey Haven standards - FastAPI routes, Pydantic schemas, HTTP status codes, pagination, filtering, error responses, OpenAPI docs, and multi-tenant patterns. Use when creating API endpoints, designing REST resources, implementing server functions, configuring FastAPI, writing Pydantic schemas, setting up error handling, implementing pagination, or when user mentions 'API', 'endpoint', 'REST', 'FastAPI', 'Pydantic', 'server function', 'OpenAPI', 'pagination', 'validation', 'error handling', 'rate limiting', 'CORS', or 'authentication'."
+# v2.0.43: Skills to auto-load for API design
+skills:
+  - grey-haven-code-style
+  - grey-haven-data-validation
+  - grey-haven-security-practices
+# v2.0.74: Tools for API implementation
+allowed-tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # Grey Haven API Design Standards
