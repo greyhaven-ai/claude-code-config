@@ -1,5 +1,5 @@
 {
-  "description": "Data validation and schema enforcement - prevents data corruption and validation errors. Updated for Claude Code v2.0.74+ with SubagentStart hooks and model parameters.",
+  "description": "Data validation and schema enforcement - prevents data corruption and validation errors. Stop hooks moved to agent-scoped (v2.1.0). Updated for Claude Code v2.0.74+.",
   "hooks": {
     "SubagentStart": [
       {
@@ -20,19 +20,7 @@
           {
             "type": "prompt",
             "model": "haiku",
-            "prompt": "📊 DATA VALIDATION ENFORCER\n\nContext: $ARGUMENTS\n\nYou are enforcing data quality and validation standards. Be thorough - data corruption is catastrophic.\n\n1️⃣ PYDANTIC MODEL VALIDATION\n   - Pydantic models have proper validators?\n   - Custom validators for business logic?\n   - Field validators comprehensive?\n   - Model validators for cross-field validation?\n   ⚠️ BLOCK if validators missing\n\n2️⃣ TYPE SAFETY\n   - All fields have explicit type hints?\n   - Proper use of Optional/Union types?\n   - No 'Any' types without justification?\n   - Type hints match database schema?\n   ⚠️ BLOCK if types unclear\n\n3️⃣ DATABASE SCHEMA ALIGNMENT\n   - Database constraints match model validators?\n   - NOT NULL constraints aligned?\n   - UNIQUE constraints defined?\n   - CHECK constraints present?\n   - Foreign key relationships valid?\n   ⚠️ BLOCK if schema mismatch\n\n4️⃣ DATA MIGRATION SAFETY\n   - Migrations handle existing data?\n   - No data loss in transformations?\n   - Backward compatibility considered?\n   - Rollback plan for migrations?\n   ⚠️ BLOCK if data loss risk\n\n5️⃣ NULL/OPTIONAL HANDLING\n   - Proper null handling?\n   - Optional fields clearly marked?\n   - Default values appropriate?\n   - None/null checks present?\n   ⚠️ BLOCK if null handling unclear\n\n6️⃣ VALIDATION COVERAGE\n   - Email/URL formats validated?\n   - String length constraints?\n   - Number ranges validated?\n   - Date/time validation?\n   - Enum values restricted?\n   ⚠️ BLOCK if validation gaps\n\n7️⃣ DATA INTEGRITY\n   - Foreign key relationships valid?\n   - Cascade behavior appropriate?\n   - Referential integrity maintained?\n   - No orphaned records possible?\n   ⚠️ BLOCK if integrity issues\n\n8️⃣ PERFORMANCE OPTIMIZATION\n   - Indices defined for queries?\n   - Composite indices for multi-column queries?\n   - No full table scans?\n   - Query optimization considered?\n   ⚠️ WARN if performance concerns\n\n9️⃣ ERROR MESSAGES\n   - Validation errors user-friendly?\n   - Error messages specific?\n   - Field names in error messages?\n   - Helpful error context?\n\n🔟 EDGE CASES\n   - Empty string vs None handled?\n   - Whitespace trimming?\n   - Case sensitivity addressed?\n   - Unicode/special characters?\n\n🚫 BLOCK if data corruption risk.\n🚫 BLOCK if validation incomplete.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Detailed data validation assessment with specific issues if blocking, or validation confirmation if approving\"\n}",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "prompt",
-            "model": "haiku",
-            "prompt": "📊 FINAL DATA QUALITY CHECK\n\nContext: $ARGUMENTS\n\nPerform final data quality audit:\n\n✅ CONFIRM:\n1. All data changes are reversible\n2. Validation is comprehensive\n3. No data corruption risks\n4. Tests cover data edge cases\n5. Schema changes documented\n6. Migration plan exists\n7. Backward compatibility maintained\n8. Performance acceptable\n\n❌ BLOCK if:\n- Data loss possible\n- Validation insufficient\n- Corruption risk exists\n- Edge cases not tested\n- Breaking changes without migration plan\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Data quality summary with any risks or approval confirmation\"\n}",
+            "prompt": "📊 DATA VALIDATION ENFORCER\n\nContext: $ARGUMENTS\n\nYou are enforcing data quality and validation standards. Be thorough - data corruption is catastrophic.\n\n1️⃣ PYDANTIC MODEL VALIDATION\n   - Pydantic models have proper validators?\n   - Custom validators for business logic?\n   ⚠️ BLOCK if validators missing\n\n2️⃣ TYPE SAFETY\n   - All fields have explicit type hints?\n   - Type hints match database schema?\n   ⚠️ BLOCK if types unclear\n\n3️⃣ DATABASE SCHEMA ALIGNMENT\n   - Database constraints match model validators?\n   - Foreign key relationships valid?\n   ⚠️ BLOCK if schema mismatch\n\n🚫 BLOCK if data corruption risk.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Data validation assessment\"\n}",
             "timeout": 30
           }
         ]

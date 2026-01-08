@@ -1,5 +1,5 @@
 {
-  "description": "Linear work tracking and issue management - ensures proper issue tracking and project management. Updated for Claude Code v2.0.74+ with SubagentStart hooks and model parameters.",
+  "description": "Linear work tracking and issue management - ensures proper issue tracking and project management. Stop hooks removed (v2.1.0). Updated for Claude Code v2.0.74+.",
   "hooks": {
     "SubagentStart": [
       {
@@ -9,18 +9,6 @@
             "model": "haiku",
             "prompt": "📋 LINEAR CONTEXT PREPARATION\n\nContext: $ARGUMENTS\n\nPrepare Linear work tracking context for the subagent:\n\n1. ISSUE CONTEXT\n   - Is this work related to a Linear issue?\n   - What issue ID should be referenced?\n   - What project/team does this belong to?\n\n2. TRACKING REQUIREMENTS\n   - What acceptance criteria apply?\n   - What status updates are needed?\n   - What documentation is required?\n\nProvide context:\n{\n  \"additionalContext\": \"Linear tracking requirements\",\n  \"issueId\": \"if known\",\n  \"trackingLevel\": \"standard\"\n}",
             "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "prompt",
-            "model": "haiku",
-            "prompt": "📋 LINEAR WORK TRACKING VALIDATOR\n\nContext: $ARGUMENTS\n\nYou are ensuring proper work tracking in Linear. Validate issue management practices:\n\n1️⃣ ISSUE LINKING\n   - Is this work related to a Linear issue?\n   - Issue ID referenced in commit messages?\n   - Work tracked in appropriate project/team?\n   - Epic/initiative linkage if applicable?\n   ⚠️ WARN if no issue reference for non-trivial work\n\n2️⃣ ISSUE STATUS UPDATES\n   - Should Linear issue status be updated?\n   - Work completed but issue still open?\n   - Progress reflected accurately?\n   - Blockers documented in Linear?\n   ⚠️ WARN if issue status may be stale\n\n3️⃣ WORK DESCRIPTION\n   - Changes align with issue description?\n   - Scope creep detected?\n   - Unrelated changes included?\n   - Original requirements met?\n   ⚠️ WARN if scope mismatch\n\n4️⃣ ACCEPTANCE CRITERIA\n   - Acceptance criteria met?\n   - All requirements addressed?\n   - Edge cases covered?\n   - Tests validate acceptance criteria?\n   ⚠️ BLOCK if acceptance criteria not met\n\n5️⃣ DOCUMENTATION\n   - Technical decisions documented?\n   - Implementation notes in Linear?\n   - Known issues/limitations noted?\n   - Future work captured as new issues?\n\n6️⃣ TIME TRACKING\n   - Estimate accuracy (actual vs estimated)?\n   - Time logged if required?\n   - Effort recorded in Linear?\n   ⚠️ WARN if time tracking expected\n\n7️⃣ DEPENDENCIES\n   - Blocked issues resolved?\n   - Blocking issues created for dependencies?\n   - Related issues linked?\n   - Dependency graph accurate?\n\n8️⃣ LABELS & METADATA\n   - Appropriate labels applied?\n   - Priority set correctly?\n   - Component/area tagged?\n   - Milestone/cycle assigned?\n\n9️⃣ COLLABORATION\n   - Stakeholders notified if needed?\n   - Reviewers assigned?\n   - Comments added for context?\n   - Mentions for involved parties?\n\n🔟 COMPLETION QUALITY\n   - Work fully complete (not partial)?\n   - No TODO comments left for later?\n   - All subtasks completed?\n   - Ready to move to Done?\n   ⚠️ BLOCK if work incomplete\n\n💡 Common Linear workflows:\n   - Move issue to \"In Progress\" when starting\n   - Update status to \"In Review\" when PR created\n   - Move to \"Done\" when merged\n   - Add comments with technical context\n   - Link commits/PRs to issues\n\n💡 For non-feature work (refactoring, fixes), lighter tracking acceptable.\n💡 For exploratory work, create follow-up issues for findings.\n\n⚠️ BLOCK if acceptance criteria not met or work incomplete.\n⚠️ WARN for tracking best practices.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Linear work tracking assessment with issue status recommendations if applicable, or approval confirmation\"\n}",
-            "timeout": 30
           }
         ]
       }

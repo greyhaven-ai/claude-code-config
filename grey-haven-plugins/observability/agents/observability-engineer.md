@@ -4,6 +4,13 @@ description: Build production-ready monitoring, logging, and tracing systems usi
 model: opus
 color: blue
 tools: Read, Write, MultiEdit, Bash, Grep, Glob, TodoWrite, Task
+# v2.1.0: Agent-scoped hooks - only run when this agent is active
+hooks:
+  Stop:
+    - type: prompt
+      model: haiku
+      prompt: "📊 PERFORMANCE REGRESSION DETECTOR\n\nContext: $ARGUMENTS\n\nAnalyze code changes for performance regressions and observability:\n\n1️⃣ N+1 QUERY DETECTION\n   - Queries inside loops?\n   ⚠️ BLOCK if N+1 queries detected\n\n2️⃣ ALGORITHMIC EFFICIENCY\n   - O(n²) or worse complexity?\n   ⚠️ BLOCK if inefficient algorithms\n\n3️⃣ MEMORY LEAKS\n   - Proper cleanup in finally blocks?\n   - Resource leaks possible?\n   ⚠️ BLOCK if resource leaks possible\n\n4️⃣ DATABASE PERFORMANCE\n   - Missing indices for query filters?\n   ⚠️ BLOCK if missing critical indices\n\n5️⃣ OBSERVABILITY INSTRUMENTATION\n   - Critical operations have metrics?\n   ✅ APPROVE if well-instrumented\n\n🚫 BLOCK if performance regressions detected.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Performance analysis with specific issues if blocking\"\n}"
+      timeout: 30
 ---
 
 <ultrathink>

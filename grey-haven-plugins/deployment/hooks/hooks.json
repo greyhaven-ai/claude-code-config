@@ -1,5 +1,5 @@
 {
-  "description": "Deployment safety validation - prevents bad deployments and production incidents. Updated for Claude Code v2.0.74+ with SubagentStart, PermissionRequest hooks, and model parameters.",
+  "description": "Deployment safety validation - prevents bad deployments and production incidents. Stop hooks removed (v2.1.0). Updated for Claude Code v2.0.74+.",
   "hooks": {
     "SubagentStart": [
       {
@@ -13,19 +13,6 @@
         ]
       }
     ],
-    "PermissionRequest": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "prompt",
-            "model": "haiku",
-            "prompt": "🚀 DEPLOYMENT COMMAND PERMISSION\n\nContext: $ARGUMENTS\n\nEvaluate if this is a safe deployment command:\n- Is it targeting the correct environment?\n- Is it a known safe deployment tool?\n- Are there destructive flags?\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\" or \"ask\",\n  \"reason\": \"Brief safety assessment\"\n}",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
@@ -33,19 +20,7 @@
           {
             "type": "prompt",
             "model": "haiku",
-            "prompt": "🚀 DEPLOYMENT SAFETY CHECK\n\nContext: $ARGUMENTS\n\nYou are validating deployment commands before execution. Be extremely strict - bad deployments can take down production.\n\n1️⃣ ENVIRONMENT VERIFICATION (CRITICAL)\n   - Is this targeting the correct environment?\n   - Not accidentally deploying to production?\n   - Environment variables set correctly?\n   - Deployment context clear?\n   ⚠️ BLOCK if environment unclear or wrong\n\n2️⃣ DEPLOYMENT COMMAND SAFETY\n   - Command is a known safe deployment tool?\n   - No destructive flags (--force, --delete, etc.)?\n   - Proper authentication in place?\n   - Command syntax correct?\n   ⚠️ BLOCK if command is unsafe\n\n3️⃣ ROLLBACK PLAN\n   - Can this deployment be rolled back?\n   - Previous version tagged/saved?\n   - Rollback procedure documented?\n   - Database migrations reversible?\n   ⚠️ BLOCK if no rollback plan\n\n4️⃣ BREAKING CHANGES\n   - Breaking changes properly handled?\n   - Backward compatibility maintained?\n   - Feature flags for gradual rollout?\n   - API versioning if needed?\n   ⚠️ BLOCK if breaking changes not handled\n\n5️⃣ DATABASE MIGRATIONS\n   - Migrations tested in staging?\n   - Migration rollback tested?\n   - No data loss risk?\n   - Migrations run before code deploy?\n   ⚠️ BLOCK if migrations risky\n\n6️⃣ DEPENDENCIES & BUILD\n   - Build successful?\n   - Dependencies up to date?\n   - No security vulnerabilities?\n   - Assets compiled/bundled?\n   ⚠️ BLOCK if build not ready\n\n7️⃣ PRE-DEPLOYMENT CHECKS\n   - All tests passing?\n   - Code reviewed and approved?\n   - CI/CD pipeline green?\n   - Security scans passed?\n   ⚠️ BLOCK if pre-checks failed\n\n8️⃣ PRODUCTION READINESS\n   - Health checks configured?\n   - Monitoring/alerting set up?\n   - Logging properly configured?\n   - Error tracking enabled?\n   ⚠️ WARN if monitoring missing\n\n9️⃣ DEPLOYMENT TIMING\n   - Deploying during safe hours (not Friday 5pm)?\n   - Team available for support?\n   - Low traffic period if possible?\n   ⚠️ WARN if timing risky\n\n🔟 CONFIGURATION\n   - Environment config reviewed?\n   - Secrets properly set?\n   - Feature flags correct?\n   - Service URLs correct?\n   ⚠️ BLOCK if config issues\n\n🚫 BE EXTREMELY STRICT on production deployments.\n🚫 When in doubt, BLOCK and ask for clarification.\n🚫 Production incidents are costly - prevent them here.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Detailed deployment risk assessment with specific concerns if blocking, or safety confirmation if approving. Include environment, command, and risk level.\"\n}",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "prompt",
-            "model": "haiku",
-            "prompt": "🚀 FINAL DEPLOYMENT VALIDATION\n\nContext: $ARGUMENTS\n\nPerform final deployment readiness check:\n\n✅ CONFIRM:\n1. Deployment was successful\n2. Health checks passing\n3. No errors in logs\n4. Metrics look normal\n5. Rollback plan ready if needed\n6. Team notified of deployment\n7. Documentation updated\n8. Monitoring alerts configured\n\n❌ BLOCK if:\n- Deployment appears to have failed\n- Health checks not passing\n- Errors detected in logs\n- Metrics show anomalies\n- Rollback needed but not ready\n- Production readiness concerns\n\n💡 For non-deployment work, approve immediately.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Deployment status summary with any issues or approval confirmation\"\n}",
+            "prompt": "🚀 DEPLOYMENT SAFETY CHECK\n\nContext: $ARGUMENTS\n\nValidate deployment commands before execution:\n\n1️⃣ ENVIRONMENT VERIFICATION\n   - Is this targeting the correct environment?\n   ⚠️ BLOCK if environment unclear or wrong\n\n2️⃣ COMMAND SAFETY\n   - Command is a known safe deployment tool?\n   - No destructive flags (--force, --delete)?\n   ⚠️ BLOCK if command is unsafe\n\n🚫 BE STRICT on production deployments.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Deployment safety assessment\"\n}",
             "timeout": 30
           }
         ]

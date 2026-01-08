@@ -20,6 +20,13 @@ tools:
   - grep
   - glob
   - bash
+# v2.1.0: Agent-scoped hooks - only run when this agent is active
+hooks:
+  Stop:
+    - type: prompt
+      model: haiku
+      prompt: "📚 DOCUMENTATION CURRENCY VALIDATOR\n\nContext: $ARGUMENTS\n\nEvaluate if documentation updates are needed:\n\n1️⃣ API CHANGES\n   - Were API endpoints added/modified/removed?\n   - Request/response schemas changed?\n   ⚠️ BLOCK if API docs need updates\n\n2️⃣ NEW FEATURES\n   - New user-facing features added?\n   - New configuration options?\n   ⚠️ BLOCK if feature docs missing\n\n3️⃣ BREAKING CHANGES\n   - Migration guide needed?\n   ⚠️ BLOCK if breaking changes not documented\n\n4️⃣ CHANGELOG\n   - Changes documented in CHANGELOG?\n   ⚠️ BLOCK if changelog not updated\n\n💡 For internal refactoring without user-facing changes, approve immediately.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Documentation assessment with specific updates needed or approval confirmation\"\n}"
+      timeout: 30
 ---
 
 <ultrathink>

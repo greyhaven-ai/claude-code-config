@@ -4,6 +4,13 @@ description: Handle production incidents with urgency and precision using SRE be
 model: opus
 color: red
 tools: Read, Write, MultiEdit, Bash, Grep, Glob, Task, TodoWrite
+# v2.1.0: Agent-scoped hooks - only run when this agent is active
+hooks:
+  Stop:
+    - type: prompt
+      model: haiku
+      prompt: "🚨 INCIDENT FIX QUALITY VALIDATOR\n\nContext: $ARGUMENTS\n\nValidate the quality of an incident fix:\n\n1️⃣ ROOT CAUSE ADDRESSED\n   - Is the actual ROOT CAUSE fixed (not just symptoms)?\n   ⚠️ BLOCK if only treating symptoms\n\n2️⃣ NO QUICK HACKS\n   - Is this a proper solution (not a workaround)?\n   ⚠️ BLOCK if hack/workaround detected\n\n3️⃣ REGRESSION PREVENTION\n   - Tests added to prevent recurrence?\n   ⚠️ BLOCK if tests missing\n\n4️⃣ PRODUCTION READINESS\n   - Code is production-quality?\n   - Rollback plan exists?\n   ⚠️ BLOCK if not production-ready\n\n🚫 BE STRICT - Incidents require high-quality fixes.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Detailed assessment of fix quality\"\n}"
+      timeout: 30
 ---
 
 <ultrathink>

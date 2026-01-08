@@ -1,5 +1,5 @@
 {
-  "description": "Incident fix quality validation - ensures proper fixes, not quick hacks or workarounds. Updated for Claude Code v2.0.74+ with SubagentStart hooks and model parameters.",
+  "description": "Incident fix quality validation - ensures proper fixes, not quick hacks or workarounds. Stop hooks moved to agent-scoped (v2.1.0). Updated for Claude Code v2.0.74+.",
   "hooks": {
     "SubagentStart": [
       {
@@ -13,18 +13,6 @@
         ]
       }
     ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "prompt",
-            "model": "haiku",
-            "prompt": "🚨 INCIDENT FIX QUALITY VALIDATOR\n\nContext: $ARGUMENTS\n\nYou are validating the quality of an incident fix. Be STRICT - production incidents require proper solutions, not band-aids.\n\n1️⃣ ROOT CAUSE ADDRESSED (CRITICAL)\n   - Is the actual ROOT CAUSE fixed (not just symptoms)?\n   - Was root cause analysis performed?\n   - Is the fix addressing the core problem?\n   ⚠️ BLOCK if only treating symptoms\n\n2️⃣ NO QUICK HACKS\n   - Is this a proper solution (not a workaround)?\n   - No TODO comments saying \"fix this later\"?\n   - No hardcoded values or magic numbers?\n   - No commented-out code?\n   ⚠️ BLOCK if hack/workaround detected\n\n3️⃣ REGRESSION PREVENTION\n   - Tests added to prevent recurrence?\n   - Both unit and integration tests?\n   - Tests actually reproduce the incident?\n   - Tests verify the fix?\n   ⚠️ BLOCK if tests missing\n\n4️⃣ MONITORING & ALERTING\n   - Monitoring added to detect recurrence?\n   - Alerts configured for similar issues?\n   - Logging enhanced for debugging?\n   - Metrics/dashboards updated?\n   ⚠️ WARN if monitoring inadequate\n\n5️⃣ DOCUMENTATION\n   - Runbook created or updated?\n   - Incident documented?\n   - Postmortem action items completed?\n   - Fix explained in comments/docs?\n   ⚠️ WARN if documentation missing\n\n6️⃣ PRODUCTION READINESS\n   - Code is production-quality (not temporary)?\n   - Rollback plan exists?\n   - Low risk of new issues?\n   - Performance impact considered?\n   ⚠️ BLOCK if not production-ready\n\n7️⃣ CODE QUALITY\n   - Follows coding standards?\n   - No technical debt introduced?\n   - Clean, maintainable code?\n   - Proper error handling?\n\n8️⃣ SCOPE APPROPRIATE\n   - Fix is surgical and targeted?\n   - No unrelated changes?\n   - Minimal blast radius?\n   - Changes are reviewable?\n\n🚫 BE VERY STRICT - Incidents require high-quality fixes.\n🚫 Quick hacks lead to more incidents.\n🚫 Block if fix is inadequate or risky.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Detailed assessment of fix quality. If blocking, provide specific improvements needed with examples. If approving, confirm all criteria met.\"\n}",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
       {
         "matcher": "Write|Edit",
@@ -32,7 +20,7 @@
           {
             "type": "prompt",
             "model": "haiku",
-            "prompt": "🚨 INCIDENT FIX APPROACH VALIDATOR\n\nContext: $ARGUMENTS\n\nValidate the proposed fix approach before implementation:\n\n✅ CHECK:\n1. Fix is surgical and targeted (not sweeping changes)\n2. No unrelated changes included\n3. Rollback plan is clear\n4. Low risk of introducing new issues\n5. Changes align with root cause analysis\n6. Appropriate scope (not over-engineering)\n\n❌ BLOCK if:\n- Fix is too broad or risky\n- Multiple unrelated changes\n- High chance of new issues\n- Approach doesn't address root cause\n- Over-complicated solution\n\nProvide risk assessment and recommendations.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Risk assessment with specific concerns or approval rationale\"\n}",
+            "prompt": "🚨 INCIDENT FIX APPROACH VALIDATOR\n\nContext: $ARGUMENTS\n\nValidate the proposed fix approach:\n\n✅ CHECK:\n1. Fix is surgical and targeted\n2. No unrelated changes included\n3. Rollback plan is clear\n\n❌ BLOCK if:\n- Fix is too broad or risky\n- Approach doesn't address root cause\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Risk assessment\"\n}",
             "timeout": 20
           }
         ]

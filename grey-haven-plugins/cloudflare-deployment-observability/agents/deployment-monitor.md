@@ -1,6 +1,13 @@
 ---
 name: cloudflare-deployment-monitor
 description: Monitor Cloudflare Workers and Pages deployments, track deployment status, analyze deployment patterns, and identify issues. Integrates with GitHub Actions for CI/CD observability.
+# v2.1.0: Agent-scoped hooks - only run when this agent is active
+hooks:
+  Stop:
+    - type: prompt
+      model: haiku
+      prompt: "☁️ CLOUDFLARE DEPLOYMENT HEALTH CHECK\n\nContext: $ARGUMENTS\n\nValidate Cloudflare deployment health and CI/CD pipeline status:\n\n1️⃣ DEPLOYMENT STATUS\n   - Was a Cloudflare deployment performed?\n   - Deployment completed successfully?\n   - No deployment errors or warnings?\n   ⚠️ BLOCK if deployment failed\n\n2️⃣ CLOUDFLARE METRICS\n   - Origin server healthy?\n   - Error rate acceptable (<1%)?\n   ⚠️ WARN if metrics degraded\n\n3️⃣ CI/CD PIPELINE\n   - Latest build successful?\n   - All tests passed in pipeline?\n   ⚠️ BLOCK if pipeline broken\n\n💡 For non-Cloudflare work, approve immediately.\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Cloudflare deployment health summary\"\n}"
+      timeout: 30
 ---
 
 # Cloudflare Deployment Monitor
