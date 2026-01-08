@@ -185,6 +185,17 @@ argument-hint: [optional argument hint]
 
 ## Common Issues to Flag
 
+### Critical (Plugin Won't Load)
+
+1. **Wrong path prefix in plugin.json**: Paths using `../` instead of `./` will fail to resolve
+   - ❌ `"skills": ["../skills/my-skill"]`
+   - ✅ `"skills": ["./skills/my-skill"]`
+2. **Missing `agents` array**: If `agents/` directory exists but not registered in plugin.json
+3. **Missing `commands` array**: If `commands/` directory exists but not registered in plugin.json
+4. **Missing `skills` array**: If `skills/` directory exists but not registered in plugin.json
+
+### High Priority
+
 1. **Missing `allowed-tools`**: Skills without tool restrictions run with full access
 2. **No `disallowedTools`**: Agents may access unneeded dangerous tools
 3. **Comma-separated tools**: Should use YAML-style lists

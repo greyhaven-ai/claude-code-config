@@ -44,16 +44,30 @@ my-plugin/
     ],
     "license": "MIT",
     "skills": [
-        "../skills/main-skill"
+        "./skills/main-skill"
+    ],
+    "agents": [
+        "./agents/my-agent.md"
+    ],
+    "commands": [
+        "./commands/my-command.md"
     ]
 }
 ```
 
+**Critical Path Rules:**
+
+- ✅ Always use `./` prefix for paths (relative to plugin root)
+- ❌ Never use `../` - paths won't resolve and plugin won't load
+- Register ALL directories: if `agents/` exists, add `"agents"` array
+- Register ALL directories: if `commands/` exists, add `"commands"` array
+- Register ALL directories: if `skills/` exists, add `"skills"` array
+
 **Tips:**
+
 - Keep `name` lowercase with hyphens
 - Description should be scannable
 - Keywords help discoverability
-- Reference skills with relative paths
 
 ## Agent Writing Best Practices
 

@@ -17,6 +17,12 @@
     ],
     "license": "MIT",
     "skills": [
-        "../skills/plugin-audit"
+        "./skills/plugin-audit"
+    ],
+    "agents": [
+        "./agents/plugin-auditor.md"
+    ],
+    "commands": [
+        "./commands/audit-plugins.md"
     ]
 }

@@ -5,12 +5,23 @@ Comprehensive checklist for auditing Claude Code plugins against best practices 
 ## Structure Validation
 
 ### Required Files
+
 - [ ] `.claude-plugin/plugin.json` exists and is valid JSON
 - [ ] `plugin.json` has `name`, `description`, `version` fields
 - [ ] `plugin.json` has `author` field with `name`
 - [ ] At least one of: `agents/`, `commands/`, or `skills/` directory exists
 
+### Critical: plugin.json Path Registration
+
+- [ ] All paths use `./` prefix (NOT `../`)
+  - ❌ `"skills": ["../skills/my-skill"]` - Will fail to load
+  - ✅ `"skills": ["./skills/my-skill"]` - Correct
+- [ ] `agents` array exists if `agents/` directory exists
+- [ ] `commands` array exists if `commands/` directory exists
+- [ ] `skills` array exists if `skills/` directory exists
+
 ### Recommended Structure
+
 - [ ] `README.md` exists with plugin documentation
 - [ ] `keywords` array in plugin.json for discoverability
 - [ ] `license` field specified
