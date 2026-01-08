@@ -21,5 +21,9 @@
     "skills": [
         "./skills/incident-response",
         "./skills/smart-debugging"
+    ],
+    "agents": [
+        "./agents/incident-responder.md",
+        "./agents/smart-debug.md"
     ]
 }

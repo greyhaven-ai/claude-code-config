@@ -17,5 +17,15 @@
     "license": "MIT",
     "skills": [
         "./skills/memory-systems"
+    ],
+    "agents": [
+        "./agents/kb-entry-creator.md",
+        "./agents/kb-manifest-generator.md",
+        "./agents/kb-ontology-mapper.md",
+        "./agents/kb-search-analyzer.md",
+        "./agents/kb-validator.md",
+        "./agents/knowledge-curator.md",
+        "./agents/memory-architect.md",
+        "./agents/ontology-builder.md"
     ]
 }

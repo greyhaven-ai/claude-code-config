@@ -24,5 +24,10 @@
         "./skills/memory-profiling",
         "./skills/observability-engineering",
         "./skills/observability-monitoring"
+    ],
+    "agents": [
+        "./agents/devops-troubleshooter.md",
+        "./agents/memory-profiler.md",
+        "./agents/observability-engineer.md"
     ]
 }

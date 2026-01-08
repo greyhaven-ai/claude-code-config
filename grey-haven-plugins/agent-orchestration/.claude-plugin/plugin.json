@@ -19,5 +19,8 @@
     "license": "MIT",
     "skills": [
         "./skills/context-management"
+    ],
+    "agents": [
+        "./agents/context-manager.md"
     ]
 }

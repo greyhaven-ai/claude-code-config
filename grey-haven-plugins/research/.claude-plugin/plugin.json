@@ -15,5 +15,11 @@
     "license": "MIT",
     "skills": [
         "./skills/tanstack-patterns"
+    ],
+    "agents": [
+        "./agents/multi-agent-synthesis-orchestrator.md",
+        "./agents/tech-docs-maintainer.md",
+        "./agents/tech-docs-orchestrator.md",
+        "./agents/web-docs-researcher.md"
     ]
 }

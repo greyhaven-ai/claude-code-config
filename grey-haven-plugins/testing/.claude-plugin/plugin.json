@@ -18,5 +18,10 @@
         "./skills/react-tanstack-testing",
         "./skills/test-generation",
         "./skills/testing-strategy"
+    ],
+    "agents": [
+        "./agents/bug-issue-creator.md",
+        "./agents/react-tanstack-tester.md",
+        "./agents/test-generator.md"
     ]
 }

@@ -23,5 +23,9 @@
         "./skills/ontological-documentation",
         "./skills/pr-template",
         "./skills/project-structure"
+    ],
+    "agents": [
+        "./agents/docs-architect.md",
+        "./agents/onboarding-coordinator.md"
     ]
 }

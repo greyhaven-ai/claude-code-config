@@ -17,5 +17,8 @@
         "./skills/authentication-patterns",
         "./skills/security-analysis",
         "./skills/security-practices"
+    ],
+    "agents": [
+        "./agents/security-analyzer.md"
     ]
 }
