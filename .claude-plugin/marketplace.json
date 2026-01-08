@@ -5,8 +5,8 @@
     "url": "https://github.com/greyhaven-ai/claude-code-config"
   },
   "metadata": {
-    "description": "Grey Haven Studio's comprehensive plugin marketplace with 15 plugins covering development, testing, deployment, security, observability, browser automation, knowledge management, and team collaboration. Skills optimized to 1.6 MB (47% reduction) for maximum context efficiency.",
-    "version": "2.1.1",
+    "description": "Grey Haven Studio's comprehensive plugin marketplace with 16 plugins covering development, testing, deployment, security, observability, browser automation, knowledge management, and team collaboration. Skills optimized to 1.6 MB (47% reduction) for maximum context efficiency.",
+    "version": "2.1.2",
     "homepage": "https://github.com/greyhaven-ai/claude-code-config"
   },
   "plugins": [
@@ -330,6 +330,28 @@
         "world-building",
         "plot",
         "seo"
+      ]
+    },
+    {
+      "name": "plugin-auditor",
+      "description": "Audit Claude Code plugins and skills for best practices, deprecations, and compatibility with the latest Claude Code changelog",
+      "source": "./grey-haven-plugins/plugin-auditor",
+      "version": "1.0.0",
+      "author": {
+        "name": "Grey Haven Studio",
+        "url": "https://github.com/greyhaven-ai/claude-code-config"
+      },
+      "repository": "https://github.com/greyhaven-ai/claude-code-config",
+      "license": "MIT",
+      "keywords": [
+        "audit",
+        "plugins",
+        "skills",
+        "best-practices",
+        "deprecation",
+        "changelog",
+        "validation",
+        "quality"
       ]
     }
   ]
