@@ -1,7 +1,7 @@
 {
     "name": "creative-writing",
-    "description": "Complete creative writing suite with 8 specialized agents covering the full writing process: research gathering, character development, story architecture, world-building, dialogue coaching, editing/review, outlining, and content strategy. Includes genre-specific guides, templates, and quality checklists.",
-    "version": "1.2.0",
+    "description": "Complete creative writing suite with 9 specialized agents covering the full writing process: research gathering, character development, story architecture, world-building, dialogue coaching, editing/review, outlining, content strategy, and believability auditing. Includes genre-specific guides, templates, and quality checklists.",
+    "version": "1.3.0",
     "author": {
         "name": "Grey Haven Studio"
     },
@@ -20,7 +20,14 @@
         "dialogue",
         "world-building",
         "plot",
-        "seo"
+        "seo",
+        "verisimilitude",
+        "consistency",
+        "plausibility",
+        "mimesis",
+        "believability",
+        "plot-holes",
+        "audit"
     ],
     "license": "MIT",
     "skills": [
@@ -34,6 +41,7 @@
         "./agents/world-builder.md",
         "./agents/dialogue-coach.md",
         "./agents/outline-architect.md",
-        "./agents/content-strategist.md"
+        "./agents/content-strategist.md",
+        "./agents/believability-auditor.md"
     ]
 }
