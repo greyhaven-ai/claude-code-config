@@ -1,0 +1,22 @@
+{
+    "name": "plugin-auditor",
+    "description": "Audit Claude Code plugins and skills for best practices, deprecations, and compatibility with the latest Claude Code changelog",
+    "version": "1.0.0",
+    "author": {
+        "name": "Grey Haven Studio"
+    },
+    "keywords": [
+        "audit",
+        "plugins",
+        "skills",
+        "best-practices",
+        "deprecation",
+        "changelog",
+        "validation",
+        "quality"
+    ],
+    "license": "MIT",
+    "skills": [
+        "../skills/plugin-audit"
+    ]
+}
