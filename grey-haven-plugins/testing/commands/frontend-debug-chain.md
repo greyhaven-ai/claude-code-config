@@ -1,5 +1,5 @@
 ---
-allowed-tools: Task, TodoWrite, Read, Write, MultiEdit, Bash, Grep
+allowed-tools: Task, TodoWrite, Read, Write, MultiEdit, Bash, Grep, Glob, Teammate, SendMessage, TaskCreate, TaskUpdate, TaskList, TaskGet
 description: Debug frontend issues using Chrome MCP with real browser context and agent analysis
 argument-hint: [URL or localhost:port to debug]
 ---
@@ -196,47 +196,114 @@ Will chain appropriate frontend framework agents
  }
  }
  ```
-9. **Chain to React/TanStack Testing Agent**:
- - Invoke react-tanstack-tester agent:
- ```
- Task: "Analyze and fix React/TanStack issues found:
- Console Errors:
- ${JSON.stringify(errors, null, 2)}
- Failed API Calls:
- ${JSON.stringify(failedRequests, null, 2)}
- Performance Issues:
- ${JSON.stringify(performance, null, 2)}
- Create fixes and tests for:
- 1. Component errors
- 2. API integration issues
- 3. Performance bottlenecks"
- ```
-10. **Chain to Code Quality Analyzer**:
- - Based on errors found, invoke code-quality-analyzer:
- ```
- Task: "Review frontend code for issues causing:
- ${errors.map(e => e.message).join('\n')}
- Focus on:
- - Event handler errors
- - State management issues
- - Async operation handling
- - Memory leaks"
- ```
-11. **Fix Implementation with TDD**:
- - Invoke tdd-typescript agent:
- ```
- Task: "Implement fixes for frontend issues:
- Issues to fix:
- 1. ${errors[0]?.message}
- 2. ${failedRequests[0]?.url} - ${failedRequests[0]?.status}
- Write tests first, then fixes for:
- - Error boundaries for runtime errors
- - Retry logic for failed requests
- - Performance optimizations"
- ```
+9. **Mode Detection**:
+   - Check if `Teammate` tool is available
+   - If available: use **Team Mode** for the agent chain phase (parallel analysis + fixing)
+   - Otherwise: use **Subagent Mode** (existing sequential agent chain)
+   - Announce: "Using **Team Mode** — parallel agent analysis and fixing." or "Using **Subagent Mode** — sequential agent chain."
+
+10. **Team Mode — Parallel Agent Chain** (replaces sequential steps 9-11 when in Team Mode):
+
+    a. **Create Team**:
+       ```
+       Teammate(spawnTeam) with name: frontend-debug-{url-slug}
+       ```
+
+    b. **Create Task Board**:
+       ```
+       Layer 0 (parallel analysis + fixing):
+         - react-fixer: Analyze and fix React/TanStack issues
+         - quality-rev: Review code quality for frontend patterns
+         - tdd-fixer: Implement fixes with TDD methodology
+
+       Layer 1 (synthesis — blocked by all Layer 0):
+         - Orchestrator merges findings and generates report
+       ```
+
+    c. **Spawn Teammates**:
+       | Teammate | Agent Type | File Ownership | Plan Required |
+       |----------|-----------|----------------|---------------|
+       | react-fixer | `testing:react-tanstack-tester` | Component files (`src/components/**`, `src/pages/**`) | No |
+       | quality-rev | `core:code-quality-analyzer` | None (read-only analysis) | No |
+       | tdd-fixer | `core:tdd-typescript-implementer` | Test files (`tests/**`, `*.test.*`, `*.spec.*`) | No |
+
+       Spawn prompt template:
+       ```
+       You are {role} on the frontend-debug-{url-slug} team.
+
+       FILE OWNERSHIP: You may ONLY create/modify files matching: {patterns}
+       Do NOT touch files outside your ownership boundary.
+
+       Browser debugging data collected:
+       - Console errors: {error summary}
+       - Failed network requests: {request summary}
+       - Performance issues: {performance summary}
+
+       Report findings via SendMessage to the orchestrator when complete.
+       Your current task: see TaskList for your assigned tasks.
+       ```
+
+    d. **Monitor & Synthesize**:
+       - Track task completion via `TaskList`
+       - Collect findings from all teammates
+       - Merge into unified debug report
+
+    e. **Cleanup**:
+       - Send `shutdown_request` to all teammates
+       - Call `Teammate(cleanup)`
+
+11. **Subagent Mode — Sequential Agent Chain** (fallback when Team Mode is unavailable):
+
+    a. **Chain to React/TanStack Testing Agent**:
+       - Invoke react-tanstack-tester agent:
+       ```
+       Task: "Analyze and fix React/TanStack issues found:
+       Console Errors:
+       ${JSON.stringify(errors, null, 2)}
+       Failed API Calls:
+       ${JSON.stringify(failedRequests, null, 2)}
+       Performance Issues:
+       ${JSON.stringify(performance, null, 2)}
+       Create fixes and tests for:
+       1. Component errors
+       2. API integration issues
+       3. Performance bottlenecks"
+       ```
+
+    b. **Chain to Code Quality Analyzer**:
+       - Based on errors found, invoke code-quality-analyzer:
+       ```
+       Task: "Review frontend code for issues causing:
+       ${errors.map(e => e.message).join('\n')}
+       Focus on:
+       - Event handler errors
+       - State management issues
+       - Async operation handling
+       - Memory leaks"
+       ```
+
+    c. **Fix Implementation with TDD**:
+       - Invoke tdd-typescript agent:
+       ```
+       Task: "Implement fixes for frontend issues:
+       Issues to fix:
+       1. ${errors[0]?.message}
+       2. ${failedRequests[0]?.url} - ${failedRequests[0]?.status}
+       Write tests first, then fixes for:
+       - Error boundaries for runtime errors
+       - Retry logic for failed requests
+       - Performance optimizations"
+       ```
+
 12. **Generate Debug Report**:
  ```markdown
 # Frontend Debug Report: $ARGUMENTS
+
+## Orchestration
+- Mode: Team Mode / Subagent Mode
+- Teammates spawned: X (if team mode)
+- File ownership enforced: react-fixer → components, tdd-fixer → tests, quality-rev → read-only
+
 ## [CRITICAL] Critical Issues (${errors.length})
  ${errors.map(e => `
 ### ${e.message}

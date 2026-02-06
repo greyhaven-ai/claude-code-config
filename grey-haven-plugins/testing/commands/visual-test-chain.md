@@ -1,5 +1,5 @@
 ---
-allowed-tools: Task, TodoWrite, Read, Write, MultiEdit, Bash
+allowed-tools: Task, TodoWrite, Read, Write, MultiEdit, Bash, Grep, Glob, Teammate, SendMessage, TaskCreate, TaskUpdate, TaskList, TaskGet
 description: Create visual regression tests with Playwright and chain analysis agents
 argument-hint: [URL or localhost:port to test]
 ---
@@ -34,7 +34,7 @@ Chaining agents for result analysis
    ```javascript
    // Check if Playwright is installed
    const isInstalled = await mcp__playwright__browser_install();
-   
+
    // Navigate to application
    await mcp__playwright__browser_navigate({
      url: "$ARGUMENTS"
@@ -45,10 +45,10 @@ Chaining agents for result analysis
    ```javascript
    // Get current page snapshot for context
    const snapshot = await mcp__playwright__browser_snapshot();
-   
+
    // Get console messages
    const consoleMessages = await mcp__playwright__browser_console_messages();
-   
+
    // Get network requests
    const networkRequests = await mcp__playwright__browser_network_requests();
    ```
@@ -63,25 +63,25 @@ Chaining agents for result analysis
      { name: "Mobile", width: 375, height: 667 },
      { name: "Mobile Small", width: 320, height: 568 }
    ];
-   
+
    const screenshots = [];
-   
+
    for (const viewport of viewports) {
      // Resize browser
      await mcp__playwright__browser_resize({
        width: viewport.width,
        height: viewport.height
      });
-     
+
      // Wait for responsive adjustments
      await mcp__playwright__browser_wait_for({ time: 1 });
-     
+
      // Capture screenshot
      await mcp__playwright__browser_take_screenshot({
        filename: `baseline-${viewport.name.replace(' ', '-')}.png`,
        fullPage: true
      });
-     
+
      screenshots.push({
        viewport: viewport,
        filename: `baseline-${viewport.name.replace(' ', '-')}.png`
@@ -101,14 +101,14 @@ Chaining agents for result analysis
      { name: "modals", selector: "[role='dialog']" },
      { name: "forms", selector: "form" }
    ];
-   
+
    for (const component of components) {
      // Check if component exists
      const exists = await mcp__playwright__browser_evaluate({
        function: `(selector) => !!document.querySelector('${component.selector}')`,
        element: component.name
      });
-     
+
      if (exists) {
        // Capture component screenshot
        await mcp__playwright__browser_take_screenshot({
@@ -138,20 +138,20 @@ Chaining agents for result analysis
        return elements.slice(0, 5); // Test first 5
      }`
    });
-   
+
    for (const element of hoverElements) {
      // Hover over element
      await mcp__playwright__browser_hover({
        element: element.text,
        ref: element.selector
      });
-     
+
      // Capture hover state
      await mcp__playwright__browser_take_screenshot({
        filename: `hover-${element.text.replace(/[^a-z0-9]/gi, '-')}.png`
      });
    }
-   
+
    // Test focus states
    await mcp__playwright__browser_press_key({ key: "Tab" });
    await mcp__playwright__browser_take_screenshot({
@@ -171,7 +171,7 @@ Chaining agents for result analysis
        }));
      }`
    });
-   
+
    for (const form of forms) {
      // Fill form with test data
      await mcp__playwright__browser_type({
@@ -179,24 +179,24 @@ Chaining agents for result analysis
        ref: "input[type='text']",
        text: "Test User"
      });
-     
+
      await mcp__playwright__browser_type({
        element: "Email field",
        ref: "input[type='email']",
        text: "test@example.com"
      });
-     
+
      // Capture filled form
      await mcp__playwright__browser_take_screenshot({
        filename: `form-filled-${form.id || 'unnamed'}.png`
      });
-     
+
      // Trigger validation
      await mcp__playwright__browser_click({
        element: "Submit button",
        ref: "button[type='submit']"
      });
-     
+
      // Capture validation state
      await mcp__playwright__browser_take_screenshot({
        filename: `form-validation-${form.id || 'unnamed'}.png`
@@ -215,72 +215,129 @@ Chaining agents for result analysis
        })).slice(0, 3);
      }`
    });
-   
+
    for (const link of links) {
      // Click link
      await mcp__playwright__browser_click({
        element: link.text,
        ref: `a[href="${link.href}"]`
      });
-     
+
      // Capture mid-transition
      await mcp__playwright__browser_wait_for({ time: 0.5 });
      await mcp__playwright__browser_take_screenshot({
        filename: `transition-${link.text.replace(/[^a-z0-9]/gi, '-')}.png`
      });
-     
+
      // Wait for transition complete
      await mcp__playwright__browser_wait_for({ time: 2 });
      await mcp__playwright__browser_take_screenshot({
        filename: `transitioned-${link.text.replace(/[^a-z0-9]/gi, '-')}.png`
      });
-     
+
      // Go back
      await mcp__playwright__browser_navigate_back();
    }
    ```
 
-8. **Chain to React Testing Agent**:
-   - Invoke react-tanstack-tester agent:
-     ```
-     Task: "Create visual regression tests for React components:
-           
-           Components found:
-           ${JSON.stringify(components, null, 2)}
-           
-           Screenshots captured:
-           ${screenshots.map(s => s.filename).join('\n')}
-           
-           Generate:
-           1. Playwright test suite for visual regression
-           2. Component-specific visual tests
-           3. Interaction visual tests
-           4. Cross-browser test matrix"
-     ```
+8. **Mode Detection**:
+   - Check if `Teammate` tool is available
+   - If available: use **Team Mode** for the agent chain phase (parallel test gen + perf optimization)
+   - Otherwise: use **Subagent Mode** (existing sequential agent chain)
+   - Announce: "Using **Team Mode** — parallel visual testing and performance analysis." or "Using **Subagent Mode** — sequential agent chain."
 
-9. **Chain to Performance Analysis**:
-   - Invoke performance-optimizer agent:
-     ```
-     Task: "Analyze visual performance metrics:
-           
-           Network requests: ${networkRequests.length}
-           Image requests: ${networkRequests.filter(r => r.url.match(/\.(png|jpg|jpeg|gif|webp)/)).length}
-           
-           Optimize:
-           1. Image loading strategies
-           2. Critical CSS extraction
-           3. Font loading optimization
-           4. Animation performance"
-     ```
+9. **Team Mode — Parallel Agent Chain** (replaces sequential steps 8-9 when in Team Mode):
 
-10. **Generate Visual Test Suite**:
+   a. **Create Team**:
+      ```
+      Teammate(spawnTeam) with name: visual-test-{url-slug}
+      ```
+
+   b. **Create Task Board**:
+      ```
+      Layer 0 (parallel — independent tasks):
+        - test-gen: Generate visual regression tests from captured data
+        - perf-opt: Optimize visual performance (images, CSS, fonts, animations)
+
+      Layer 1 (synthesis — blocked by all Layer 0):
+        - Orchestrator merges test suite and optimizations into report
+      ```
+
+   c. **Spawn Teammates**:
+      | Teammate | Agent Type | File Ownership | Plan Required |
+      |----------|-----------|----------------|---------------|
+      | test-gen | `testing:react-tanstack-tester` | Test files (`tests/**`, `*.spec.*`, `*.test.*`) | No |
+      | perf-opt | `core:performance-optimizer` | Source files (`src/**/*.ts`, `src/**/*.tsx`, `src/**/*.css`) | No |
+
+      Spawn prompt template:
+      ```
+      You are {role} on the visual-test-{url-slug} team.
+
+      FILE OWNERSHIP: You may ONLY create/modify files matching: {patterns}
+      Do NOT touch files outside your ownership boundary.
+
+      Visual testing data collected:
+      - Screenshots captured: {screenshot list}
+      - Components found: {component list}
+      - Network requests: {request count}
+
+      Report findings via SendMessage to the orchestrator when complete.
+      Your current task: see TaskList for your assigned tasks.
+      ```
+
+   d. **Monitor & Synthesize**:
+      - Track task completion via `TaskList`
+      - Collect test suite from test-gen
+      - Collect optimizations from perf-opt
+      - Merge into unified visual testing report
+
+   e. **Cleanup**:
+      - Send `shutdown_request` to all teammates
+      - Call `Teammate(cleanup)`
+
+10. **Subagent Mode — Sequential Agent Chain** (fallback when Team Mode is unavailable):
+
+    a. **Chain to React Testing Agent**:
+       - Invoke react-tanstack-tester agent:
+         ```
+         Task: "Create visual regression tests for React components:
+
+               Components found:
+               ${JSON.stringify(components, null, 2)}
+
+               Screenshots captured:
+               ${screenshots.map(s => s.filename).join('\n')}
+
+               Generate:
+               1. Playwright test suite for visual regression
+               2. Component-specific visual tests
+               3. Interaction visual tests
+               4. Cross-browser test matrix"
+         ```
+
+    b. **Chain to Performance Analysis**:
+       - Invoke performance-optimizer agent:
+         ```
+         Task: "Analyze visual performance metrics:
+
+               Network requests: ${networkRequests.length}
+               Image requests: ${networkRequests.filter(r => r.url.match(/\.(png|jpg|jpeg|gif|webp)/)).length}
+
+               Optimize:
+               1. Image loading strategies
+               2. Critical CSS extraction
+               3. Font loading optimization
+               4. Animation performance"
+         ```
+
+11. **Generate Visual Test Suite**:
     ```typescript
     // visual-regression.spec.ts
     import { test, expect } from '@playwright/test';
-    
+
     // Viewports to test
     const viewports = ${JSON.stringify(viewports, null, 2)};
-    
+
     test.describe('Visual Regression Tests: $ARGUMENTS', () => {
       // Test each viewport
       viewports.forEach(viewport => {
@@ -290,13 +347,13 @@ Chaining agents for result analysis
             width: viewport.width,
             height: viewport.height
           });
-          
+
           // Navigate
           await page.goto('$ARGUMENTS');
-          
+
           // Wait for content
           await page.waitForLoadState('networkidle');
-          
+
           // Visual assertion
           await expect(page).toHaveScreenshot(\`\${viewport.name}.png\`, {
             fullPage: true,
@@ -305,7 +362,7 @@ Chaining agents for result analysis
           });
         });
       });
-      
+
       // Component isolation tests
       test.describe('Component Visual Tests', () => {
         ${components.map(c => `
@@ -315,33 +372,33 @@ Chaining agents for result analysis
           await expect(component).toHaveScreenshot('${c.name}.png');
         });`).join('\n')}
       });
-      
+
       // Interaction visual tests
       test.describe('Interaction States', () => {
         test('Hover states', async ({ page }) => {
           await page.goto('$ARGUMENTS');
-          
+
           const button = page.locator('button').first();
           await button.hover();
           await expect(button).toHaveScreenshot('button-hover.png');
         });
-        
+
         test('Focus states', async ({ page }) => {
           await page.goto('$ARGUMENTS');
-          
+
           await page.keyboard.press('Tab');
           await expect(page).toHaveScreenshot('focus-state.png');
         });
-        
+
         test('Form validation states', async ({ page }) => {
           await page.goto('$ARGUMENTS');
-          
+
           // Submit empty form
           await page.locator('form').first().locator('button[type="submit"]').click();
           await expect(page.locator('form').first()).toHaveScreenshot('form-errors.png');
         });
       });
-      
+
       // Cross-browser tests
       ['chromium', 'firefox', 'webkit'].forEach(browserName => {
         test(\`Cross-browser visual - \${browserName}\`, async ({ page }) => {
@@ -352,36 +409,36 @@ Chaining agents for result analysis
     });
     ```
 
-11. **Generate Visual Diff Analysis**:
+12. **Generate Visual Diff Analysis**:
     ```javascript
     // visual-diff-analyzer.js
     const pixelmatch = require('pixelmatch');
     const fs = require('fs');
     const PNG = require('pngjs').PNG;
-    
+
     function compareScreenshots(baseline, current) {
       const img1 = PNG.sync.read(fs.readFileSync(baseline));
       const img2 = PNG.sync.read(fs.readFileSync(current));
       const {width, height} = img1;
       const diff = new PNG({width, height});
-      
+
       const numDiffPixels = pixelmatch(
         img1.data, img2.data, diff.data, width, height,
         {threshold: 0.1}
       );
-      
+
       return {
         diffPixels: numDiffPixels,
         diffPercentage: (numDiffPixels / (width * height)) * 100,
         diffImage: diff
       };
     }
-    
+
     // Analyze all screenshots
     const results = screenshots.map(s => {
       const baseline = \`baseline-\${s.filename}\`;
       const current = \`current-\${s.filename}\`;
-      
+
       if (fs.existsSync(baseline) && fs.existsSync(current)) {
         return {
           name: s.filename,
@@ -392,66 +449,71 @@ Chaining agents for result analysis
     }).filter(Boolean);
     ```
 
-12. **Generate Visual Testing Report**:
+13. **Generate Visual Testing Report**:
     ```markdown
     # Visual Regression Test Report: $ARGUMENTS
-    
+
+    ## Orchestration
+    - Mode: Team Mode / Subagent Mode
+    - Teammates spawned: X (if team mode)
+    - File ownership enforced: test-gen → test files, perf-opt → source files
+
     ## Test Coverage
     - Viewports Tested: ${viewports.length}
     - Components Tested: ${components.length}
     - Interaction States: ${hoverElements.length + forms.length}
     - Cross-browser: Chrome, Firefox, Safari
-    
+
     ## Visual Consistency Results
     ### Desktop (1920x1080)
     - Baseline: [OK] Captured
     - Difference: ${results.find(r => r.name.includes('Desktop'))?.diffPercentage || 0}%
     - Status: ${results.find(r => r.name.includes('Desktop'))?.diffPercentage < 1 ? '[OK] PASS' : '[X] FAIL'}
-    
+
     ### Tablet (768x1024)
     - Baseline: [OK] Captured
     - Difference: ${results.find(r => r.name.includes('Tablet'))?.diffPercentage || 0}%
     - Status: ${results.find(r => r.name.includes('Tablet'))?.diffPercentage < 1 ? '[OK] PASS' : '[X] FAIL'}
-    
+
     ### Mobile (375x667)
     - Baseline: [OK] Captured
     - Difference: ${results.find(r => r.name.includes('Mobile'))?.diffPercentage || 0}%
     - Status: ${results.find(r => r.name.includes('Mobile'))?.diffPercentage < 1 ? '[OK] PASS' : '[X] FAIL'}
-    
+
     ## Component Visual Tests
     ${components.map(c => `
     ### ${c.name}
     - Screenshot: [OK] Captured
     - Visual Consistency: [OK] PASS
-    - Accessibility: ${c.accessible ? '[OK]' : '⚠️'} 
+    - Accessibility: ${c.accessible ? '[OK]' : '⚠️'}
     `).join('\n')}
-    
+
     ## Interaction States
     - Hover Effects: [OK] Tested
     - Focus States: [OK] Tested
     - Active States: [OK] Tested
     - Form Validation: [OK] Tested
-    
+
     ## Performance Metrics
     - Total Image Requests: ${networkRequests.filter(r => r.url.match(/\.(png|jpg|jpeg|gif|webp)/)).length}
     - Image Load Time: ${imageLoadTime}ms
     - First Contentful Paint: ${fcp}ms
     - Layout Shifts: ${cls}
-    
+
     ## Accessibility Issues
     ${accessibilityIssues.map(issue => `- ${issue}`).join('\n') || '- None found'}
-    
+
     ## Recommendations
     1. ${recommendations[0] || 'Optimize image sizes for different viewports'}
     2. ${recommendations[1] || 'Implement lazy loading for below-fold images'}
     3. ${recommendations[2] || 'Add ARIA labels to interactive elements'}
-    
+
     ## Test Files Generated
     - visual-regression.spec.ts
     - component-visual.spec.ts
     - interaction-visual.spec.ts
     - cross-browser.spec.ts
-    
+
     ## CI/CD Integration
     \`\`\`yaml
     # .github/workflows/visual-tests.yml
