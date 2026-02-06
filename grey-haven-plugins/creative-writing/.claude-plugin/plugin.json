@@ -1,7 +1,7 @@
 {
     "name": "creative-writing",
     "description": "Complete creative writing suite with 10 specialized agents covering the full writing process: research gathering, character development, story architecture, world-building, dialogue coaching, editing/review, outlining, content strategy, believability auditing, and prose style/voice analysis. Includes genre-specific guides, templates, and quality checklists.",
-    "version": "1.4.0",
+    "version": "1.7.0",
     "author": {
         "name": "Grey Haven Studio"
     },
@@ -34,9 +34,32 @@
         "quality",
         "rhythm",
         "diction",
-        "craft"
+        "craft",
+        "teams",
+        "collaboration",
+        "audit",
+        "svq",
+        "revision",
+        "manuscript",
+        "pipeline",
+        "sop",
+        "novel-development",
+        "nrs",
+        "crs",
+        "synthesis",
+        "foundation",
+        "integration"
     ],
     "license": "MIT",
+    "commands": [
+        "./commands/writing-team.md",
+        "./commands/writing-review.md",
+        "./commands/content-team.md",
+        "./commands/writing-audit.md",
+        "./commands/prose-revision.md",
+        "./commands/revision-phase.md",
+        "./commands/novel-phase.md"
+    ],
     "skills": [
         "./skills/creative-writing"
     ],
