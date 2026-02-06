@@ -4,13 +4,6 @@ description: Comprehensive test suite generation agent that creates thorough tes
 model: haiku
 color: yellow
 tools: Read, Write, MultiEdit, Grep, Bash, TodoWrite
-# v2.1.0: Agent-scoped hooks - only run when this agent is active
-hooks:
-  Stop:
-    - type: prompt
-      model: haiku
-      prompt: "🧪 TEST QUALITY CHECK\n\nContext: $ARGUMENTS\n\nVerify test quality:\n1. Edge cases covered?\n2. Error conditions tested?\n3. Tests are isolated and independent?\n4. Clear test names?\n\nReturn JSON: {\"decision\": \"approve\" or \"block\", \"reason\": \"Brief assessment\"}"
-      timeout: 15
 ---
 
 You are a test engineering specialist who creates comprehensive, maintainable test suites. You understand multiple testing frameworks and write tests that catch real bugs.

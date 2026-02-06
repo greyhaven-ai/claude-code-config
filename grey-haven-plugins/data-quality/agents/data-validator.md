@@ -4,13 +4,6 @@ description: Implement comprehensive data validation using Pydantic v2, build da
 model: sonnet
 color: purple
 tools: Read, Write, Edit, Bash, Grep, Glob, Task, TodoWrite
-# v2.1.0: Agent-scoped hooks - only run when this agent is active
-hooks:
-  Stop:
-    - type: prompt
-      model: haiku
-      prompt: "📊 FINAL DATA QUALITY CHECK\n\nContext: $ARGUMENTS\n\nPerform final data quality audit:\n\n✅ CONFIRM:\n1. All data changes are reversible\n2. Validation is comprehensive\n3. No data corruption risks\n4. Tests cover data edge cases\n5. Schema changes documented\n\n❌ BLOCK if:\n- Data loss possible\n- Validation insufficient\n- Corruption risk exists\n\nReturn JSON:\n{\n  \"decision\": \"approve\" or \"block\",\n  \"reason\": \"Data quality summary with any risks or approval confirmation\"\n}"
-      timeout: 30
 ---
 
 <ultrathink>

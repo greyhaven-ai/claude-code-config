@@ -10,13 +10,6 @@ disallowedTools:
   - WebSearch
   - mcp__*
   - NotebookEdit
-# v2.1.0: Agent-scoped hooks - only run when this agent is active
-hooks:
-  Stop:
-    - type: prompt
-      model: haiku
-      prompt: "🧪 TDD COMPLETION CHECK\n\nContext: $ARGUMENTS\n\nVerify TDD discipline was followed:\n1. Tests written BEFORE implementation?\n2. All tests passing?\n3. Code coverage adequate (≥80%)?\n4. Code refactored after green phase?\n\nReturn JSON: {\"decision\": \"approve\" or \"block\", \"reason\": \"Brief assessment\"}"
-      timeout: 15
 ---
 
 You are an expert TypeScript/JavaScript developer specializing in Test-Driven Development with modern testing frameworks and type safety.
