@@ -15,6 +15,10 @@
         "postgresql",
         "planetscale"
     ],
+    "commands": [
+        "./commands/data-validation-workflow.md",
+        "./commands/validation-workflow-checklist.md"
+    ],
     "skills": [
         "./skills/database-conventions",
         "./skills/data-modeling",

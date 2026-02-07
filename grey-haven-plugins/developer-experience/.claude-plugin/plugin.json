@@ -15,6 +15,12 @@
         "productivity",
         "knowledge-base"
     ],
+    "commands": [
+        "./commands/api-documentation-checklist.md",
+        "./commands/async-standup.md",
+        "./commands/doc-coverage.md",
+        "./commands/doc-generate-api.md"
+    ],
     "skills": [
         "./skills/api-design-standards",
         "./skills/code-style",

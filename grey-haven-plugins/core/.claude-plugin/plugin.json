@@ -15,6 +15,30 @@
         "pipelines"
     ],
     "license": "MIT",
+    "commands": [
+        "./commands/code-review.md",
+        "./commands/debug-chain.md",
+        "./commands/doc-align.md",
+        "./commands/feature-full-cycle.md",
+        "./commands/performance-optimize-chain.md",
+        "./commands/pre-compact.md",
+        "./commands/proceed.md",
+        "./commands/quality-pipeline.md",
+        "./commands/refactor-clarity.md",
+        "./commands/tdd-implement.md",
+        "./commands/team-proceed.md"
+    ],
+    "agents": [
+        "./agents/code-quality-analyzer.md",
+        "./agents/documentation-alignment-verifier.md",
+        "./agents/git-diff-documentation-agent.md",
+        "./agents/performance-optimizer.md",
+        "./agents/project-scaffolder.md",
+        "./agents/prompt-engineer.md",
+        "./agents/tdd-orchestrator.md",
+        "./agents/tdd-python.md",
+        "./agents/tdd-typescript.md"
+    ],
     "skills": [
         "./skills/code-quality-analysis",
         "./skills/documentation-alignment",

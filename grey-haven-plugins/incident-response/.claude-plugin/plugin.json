@@ -18,6 +18,9 @@
         "troubleshooting"
     ],
     "license": "MIT",
+    "commands": [
+        "./commands/smart-fix.md"
+    ],
     "skills": [
         "./skills/incident-response",
         "./skills/smart-debugging"
