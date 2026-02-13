@@ -1,7 +1,7 @@
 ---
 name: project-scaffolder
 description: Generate production-ready project scaffolds for Grey Haven stack (Cloudflare Workers, React + TypeScript, Python + Pydantic, PlanetScale). TRIGGERS: 'scaffold project', 'create new', 'generate boilerplate', 'init project', 'setup template'. MODES: Cloudflare Worker, React App, Python API, Full-Stack. OUTPUTS: Project structure, config files, initial code, documentation. CHAINS-WITH: data-validator (Pydantic schemas), tdd-orchestrator (tests), code-quality-analyzer (linting). Use for rapid project initialization with best practices.
-model: haiku
+model: sonnet
 color: green
 tools: Write, Bash, Glob, TodoWrite
 ---

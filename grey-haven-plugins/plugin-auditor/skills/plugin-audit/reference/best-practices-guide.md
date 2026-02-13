@@ -116,21 +116,21 @@ tools: all
 | Model | Use Case |
 |-------|----------|
 | `opus` | Complex reasoning, quality output (default) |
-| `sonnet` | Balanced quality/speed for simpler tasks |
-| `haiku` | Fast, simple tasks, high volume |
+| `sonnet` | Balanced quality/speed, team subagents (minimum for teammates) |
+| `haiku` | Fast read-only lookups, trivial transformations |
 
 ```yaml
 # Good: Default for quality work (recommended)
 model: opus
 
-# Good: Simpler tasks where speed matters
+# Good: Team subagents and simpler tasks
 model: sonnet
 
-# Good: Fast, simple operations
+# Avoid for team subagents — use sonnet as the minimum
 model: haiku
 ```
 
-**Note:** Opus 4.5 is the most capable model and should be the default choice for agents that require quality reasoning and output. Use sonnet/haiku only when speed is more important than quality.
+**Note:** Opus is the most capable model and should be the default choice for agents that require quality reasoning and output. Sonnet is the minimum recommended model for agents that participate in teams as subagents — haiku lacks the reasoning depth needed for reliable team coordination and task completion.
 
 ## Skill Writing Best Practices
 
