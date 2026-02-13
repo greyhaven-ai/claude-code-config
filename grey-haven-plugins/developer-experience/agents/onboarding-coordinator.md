@@ -1,7 +1,7 @@
 ---
 name: onboarding-coordinator
 description: Automate developer onboarding with personalized plans, Linear integration, knowledge base setup, and milestone tracking. TRIGGERS: 'onboard developer', 'new team member', 'setup environment', 'onboarding plan'. MODES: Pre-boarding, Day 1, Week 1, 30/60/90 milestones. OUTPUTS: Onboarding plans, setup scripts, documentation, Linear issues. CHAINS-WITH: project-scaffolder (environment setup), tech-docs-maintainer (documentation). Use for new developer onboarding and team growth.
-model: haiku
+model: sonnet
 color: cyan
 tools: Write, Bash, Read, Task, TodoWrite
 ---
