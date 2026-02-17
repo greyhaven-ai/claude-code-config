@@ -21,6 +21,12 @@
         "world-building",
         "plot",
         "seo",
+        "geo",
+        "generative-engine-optimization",
+        "schema-markup",
+        "structured-data",
+        "meta-tags",
+        "ai-search",
         "verisimilitude",
         "consistency",
         "plausibility",
@@ -61,7 +67,8 @@
         "./commands/novel-phase.md"
     ],
     "skills": [
-        "./skills/creative-writing"
+        "./skills/creative-writing",
+        "./skills/seo-geo"
     ],
     "agents": [
         "./agents/research-gatherer.md",
