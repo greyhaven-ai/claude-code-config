@@ -15,11 +15,11 @@ from pathlib import Path
 from datetime import datetime
 
 SKILL_TEMPLATE = """---
-name: grey-haven-{skill_name}
+name: {skill_name}
 description: "[TODO: What this skill does. When to use it. Include trigger phrases like: 'Triggers: phrase1, phrase2, phrase3'.]"
 # v2.0.43: Skills to auto-load when this skill activates
 skills:
-  - grey-haven-code-style
+  - code-style
 # v2.0.74: Tools available when skill is active
 allowed-tools:
   - Read

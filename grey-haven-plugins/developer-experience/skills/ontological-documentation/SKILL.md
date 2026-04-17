@@ -1,11 +1,11 @@
 ---
-name: grey-haven-ontological-documentation
+name: ontological-documentation
 description: Create comprehensive ontological documentation for Grey Haven systems - extract domain concepts from TanStack Start and FastAPI codebases, model semantic relationships, generate visual representations of system architecture, and document business domains. Use when onboarding, documenting architecture, or analyzing legacy systems.
 # v2.0.43: Skills to auto-load for ontological documentation
 skills:
-  - grey-haven-code-style
-  - grey-haven-database-conventions
-  - grey-haven-project-structure
+  - code-style
+  - database-conventions
+  - project-structure
 # v2.0.74: Tools for documentation generation
 allowed-tools:
   - Read
@@ -384,11 +384,10 @@ Use ontological documentation when:
 ## Integration with Other Grey Haven Skills
 
 **Works Best With:**
-- `grey-haven-database-conventions` - Ensure proper schema design
-- `grey-haven-project-structure` - Understand codebase organization
-- `grey-haven-authentication-patterns` - Document Better-auth integration
-- `grey-haven-data-modeling` - Design Drizzle and SQLModel schemas
-- `grey-haven-api-design-standards` - Document API hierarchies
+- `database-conventions` - Ensure proper schema design
+- `project-structure` - Understand codebase organization
+- `data-modeling` - Design Drizzle and SQLModel schemas
+- `api-design-standards` - Document API hierarchies
 
 ## Critical Reminders
 

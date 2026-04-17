@@ -1,11 +1,11 @@
 ---
-name: grey-haven-incident-response
+name: incident-response
 description: "Handle production incidents with SRE best practices including detection, investigation, mitigation, recovery, and postmortems. Use when dealing with production outages, SEV1/SEV2 incidents, creating postmortems, or updating runbooks."
 # v2.0.43: Skills to auto-load for incident response
 skills:
-  - grey-haven-code-style
-  - grey-haven-observability-monitoring
-  - grey-haven-smart-debugging
+  - code-style
+  - observability-monitoring
+  - smart-debugging
 # v2.0.74: Tools for incident response
 allowed-tools:
   - Read

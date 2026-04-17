@@ -28,5 +28,5 @@ Methodology foundations and code patterns for LLM project development.
 
 ## Related Skills
 
-- [grey-haven-prompt-engineering](../../../core/skills/prompt-engineering/SKILL.md)
-- [grey-haven-data-validation](../../../data-quality/skills/data-validation/SKILL.md)
+- [prompt-engineering](../../../core/skills/prompt-engineering/SKILL.md)
+- [data-validation](../../../data-quality/skills/data-validation/SKILL.md)

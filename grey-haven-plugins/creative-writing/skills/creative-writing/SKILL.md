@@ -1,8 +1,8 @@
 ---
-name: grey-haven-creative-writing
+name: creative-writing
 description: "Professional writing assistance for blogs, research articles, fiction, essays, and marketing copy. Use when users want to write, edit, or improve any form of written content. Triggers: 'write a blog', 'write an article', 'help me write', 'write a story', 'write a chapter', 'draft an essay', 'creative writing', 'improve my writing', 'edit my writing', 'write copy', 'content writing'."
 skills:
-  - grey-haven-prompt-engineering
+  - prompt-engineering
 allowed-tools:
   - Read
   - Write

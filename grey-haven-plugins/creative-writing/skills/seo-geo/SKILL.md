@@ -1,8 +1,8 @@
 ---
-name: grey-haven-seo-geo-optimization
+name: seo-geo
 description: "Use when optimizing web content for search engine visibility, improving AI search engine citations (GEO), auditing website SEO, implementing structured data markup, or researching keyword strategy. Triggers: 'SEO', 'GEO', 'search optimization', 'schema markup', 'meta tags', 'AI search', 'Perplexity', 'search rankings', 'structured data', 'generative engine optimization', 'rich results', 'robots.txt', 'sitemap'."
 skills:
-  - grey-haven-creative-writing
+  - creative-writing
 allowed-tools:
   - Read
   - Write

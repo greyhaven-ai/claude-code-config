@@ -1,10 +1,10 @@
 ---
-name: grey-haven-tool-design
+name: tool-design
 description: "Design effective MCP tools and Claude Code integrations using the consolidation principle. Fewer, better-designed tools dramatically improve agent success rates. Use when creating MCP servers, designing tool interfaces, optimizing tool sets, or when user mentions 'tool design', 'MCP', 'fewer tools', 'tool consolidation', 'tool architecture', or 'tool optimization'."
 # v2.0.43: Skills to auto-load for tool design work
 skills:
-  - grey-haven-code-style
-  - grey-haven-api-design-standards
+  - code-style
+  - api-design-standards
 # v2.0.74: Tools for tool design work
 allowed-tools:
   - Read

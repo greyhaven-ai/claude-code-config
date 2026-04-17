@@ -1,8 +1,8 @@
 ---
-name: grey-haven-suite-audit
+name: suite-audit
 description: "Meta-level plugin suite auditor that uses subagents to analyze any plugin for usability improvements, missing agents, duplication, and workflow optimizations. Generates comprehensive reports with user-approved todo conversion. Triggers: 'audit suite', 'analyze plugin usability', 'find duplicate agents', 'suggest new agents', 'optimize plugin workflow', 'plugin gap analysis'."
 skills:
-  - grey-haven-plugin-audit
+  - plugin-audit
 allowed-tools:
   - Read
   - Glob
@@ -408,7 +408,7 @@ Action:
 
 ## Integration with Plugin Audit
 
-This skill complements the `grey-haven-plugin-audit` skill:
+This skill complements the `plugin-audit` skill:
 
 | Skill | Focus | Level |
 |-------|-------|-------|

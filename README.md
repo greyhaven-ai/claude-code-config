@@ -107,9 +107,9 @@ claude-config doctor
 Skills work automatically - just code naturally:
 
 ```
-"Write a React component"     → grey-haven-code-style applies
-"Create a commit message"     → grey-haven-commit-format applies
-"Generate a PR description"   → grey-haven-pr-template applies
+"Write a React component"     → code-style applies
+"Create a commit message"     → commit-format applies
+"Generate a PR description"   → pr-template applies
 ```
 
 Use plugins via commands:

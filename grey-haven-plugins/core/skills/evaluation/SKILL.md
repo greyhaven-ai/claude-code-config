@@ -1,10 +1,10 @@
 ---
-name: grey-haven-evaluation
+name: evaluation
 description: "Evaluate LLM outputs with multi-dimensional rubrics, handle non-determinism, and implement LLM-as-judge patterns. Essential for production LLM systems. Use when testing prompts, validating outputs, comparing models, or when user mentions 'evaluation', 'testing LLM', 'rubric', 'LLM-as-judge', 'output quality', 'prompt testing', or 'model comparison'."
 # v2.0.43: Skills to auto-load for evaluation work
 skills:
-  - grey-haven-prompt-engineering
-  - grey-haven-testing-strategy
+  - prompt-engineering
+  - testing-strategy
 # v2.0.74: Tools for evaluation work
 allowed-tools:
   - Read

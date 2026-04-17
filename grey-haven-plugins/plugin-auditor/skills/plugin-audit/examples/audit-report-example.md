@@ -112,7 +112,7 @@ disallowedTools: ❌ Not specified
 
 **Frontmatter:**
 ```yaml
-name: grey-haven-tdd-typescript ✅
+name: tdd-typescript ✅
 description: "TypeScript TDD..." ✅
 skills: ✅ (2 skills)
 allowed-tools: ✅ (YAML list, 7 tools)
@@ -133,7 +133,7 @@ allowed-tools: ✅ (YAML list, 7 tools)
 
 **Frontmatter:**
 ```yaml
-name: grey-haven-code-quality ✅
+name: code-quality-analysis ✅
 description: "..." ✅
 skills: ❌ Not configured
 allowed-tools: ⚠️ (comma-separated)

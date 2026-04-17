@@ -1,11 +1,11 @@
 ---
-name: grey-haven-onboarding-coordination
+name: onboarding-coordination
 description: "Automate developer onboarding with personalized plans, Linear integration, knowledge base setup, and milestone tracking. Use when onboarding new developers, planning team expansion, or managing role transitions."
 # v2.0.43: Skills to auto-load for onboarding
 skills:
-  - grey-haven-code-style
-  - grey-haven-project-structure
-  - grey-haven-linear-workflow
+  - code-style
+  - project-structure
+  - linear-workflow
 # v2.0.74: Tools for onboarding coordination
 allowed-tools:
   - Read

@@ -1,10 +1,10 @@
 ---
-name: grey-haven-test-generation
+name: test-generation
 description: "Comprehensive test suite generation with unit tests, integration tests, edge cases, and error handling. Use when generating tests for existing code, improving coverage, or creating systematic test suites. Triggers: 'generate tests', 'add tests', 'test coverage', 'write tests for', 'create test suite'."
 # v2.0.43: Skills to auto-load for test generation subagents
 skills:
-  - grey-haven-code-style
-  - grey-haven-testing-strategy
+  - code-style
+  - testing-strategy
 # v2.0.74: Restrict tools for test generation work
 allowed-tools:
   - Read

@@ -1,12 +1,12 @@
 ---
-name: grey-haven-tdd-orchestration
+name: tdd-orchestration
 description: "Master TDD orchestration with multi-agent coordination, strict red-green-refactor enforcement, automated test generation, coverage tracking, and >90% coverage quality gates. Supports Claude Teams for parallel TDD workflows with plan approval gates, or falls back to sequential subagent coordination. Coordinates tdd-python, tdd-typescript, and test-generator agents. Use when implementing features with TDD workflow, coordinating multiple TDD agents, enforcing test-first development, orchestrating TDD teams, or when user mentions 'TDD workflow', 'test-first', 'TDD orchestration', 'multi-agent TDD', 'test coverage', or 'red-green-refactor'."
 # v2.0.43: Skills to auto-load for subagents (TDD language specialists)
 skills:
-  - grey-haven-tdd-typescript
-  - grey-haven-tdd-python
-  - grey-haven-test-generation
-  - grey-haven-code-quality-analysis
+  - tdd-typescript
+  - tdd-python
+  - test-generation
+  - code-quality-analysis
 # v2.0.74: Orchestrator needs full tool access for coordination
 # v2.1.0: Added team tools for Claude Teams support
 allowed-tools:

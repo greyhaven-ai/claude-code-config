@@ -1,11 +1,11 @@
 ---
-name: grey-haven-llm-project-development
+name: llm-project-development
 description: "Build LLM-powered applications and pipelines using proven methodology - task-model fit analysis, pipeline architecture, structured outputs, file-based state, and cost estimation. Use when building AI features, data processing pipelines, agents, or any LLM-integrated system. Inspired by Karpathy's methodology and production case studies."
 # v2.0.43: Skills to auto-load for LLM project development
 skills:
-  - grey-haven-code-style
-  - grey-haven-data-validation
-  - grey-haven-prompt-engineering
+  - code-style
+  - data-validation
+  - prompt-engineering
 # v2.0.74: Tools for LLM project development
 allowed-tools:
   - Read

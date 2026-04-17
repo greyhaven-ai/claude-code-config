@@ -1,10 +1,10 @@
 ---
-name: grey-haven-documentation-architecture
+name: documentation-architecture
 description: "Comprehensive documentation systems design including structure, generation, maintenance, and automation. Use when designing documentation systems, automating documentation generation, or managing large-scale documentation projects."
 # v2.0.43: Skills to auto-load for documentation work
 skills:
-  - grey-haven-code-style
-  - grey-haven-project-structure
+  - code-style
+  - project-structure
 # v2.0.74: Tools for documentation architecture
 allowed-tools:
   - Read

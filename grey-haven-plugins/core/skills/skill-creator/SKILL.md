@@ -1,8 +1,8 @@
 ---
-name: grey-haven-skill-creator
+name: skill-creator
 description: "Guide for creating effective skills that extend Claude's capabilities. Use when users want to create a new skill, update an existing skill, or need guidance on skill structure and best practices. Triggers: 'create skill', 'new skill', 'skill template', 'build skill', 'skill structure', 'skill design'."
 skills:
-  - grey-haven-prompt-engineering
+  - prompt-engineering
 allowed-tools:
   - Read
   - Write
@@ -58,7 +58,7 @@ Every Grey Haven skill follows this structure:
 skill-name/
 ├── SKILL.md (required)
 │   ├── YAML frontmatter (required)
-│   │   ├── name: grey-haven-{skill-name}
+│   │   ├── name: {skill-name}
 │   │   ├── description: (comprehensive, includes triggers)
 │   │   ├── skills: (optional, v2.0.43)
 │   │   └── allowed-tools: (optional, v2.0.74)
@@ -75,12 +75,12 @@ skill-name/
 
 ```yaml
 ---
-name: grey-haven-your-skill
+name: your-skill
 description: "What the skill does. When to use it. Trigger phrases."
 # v2.0.43: Auto-load these skills when this skill activates
 skills:
-  - grey-haven-code-style
-  - grey-haven-testing-strategy
+  - code-style
+  - testing-strategy
 # v2.0.74: Restrict available tools when skill is active
 allowed-tools:
   - Read
@@ -163,7 +163,7 @@ This creates:
 - Prefer examples over explanations
 
 **Frontmatter:**
-- `name`: Use `grey-haven-` prefix
+- `name`: Short, unprefixed skill name (e.g., `tdd-python`, not `grey-haven-tdd-python`)
 - `description`: Include what + when + triggers
 - `skills`: Optional dependent skills
 - `allowed-tools`: Optional tool restrictions
@@ -202,9 +202,9 @@ The skill is for Claude, not humans. Include only what helps Claude do the job.
 
 ### Naming
 
-- Skill name: `grey-haven-{domain}-{function}`
+- Skill name: `{domain}-{function}` (short, unprefixed — the plugin provides the namespace)
 - Directory: `skills/{skill-name}/`
-- Examples: `grey-haven-tdd-python`, `grey-haven-api-design-standards`
+- Examples: `tdd-python`, `api-design-standards`
 
 ### Description Format
 

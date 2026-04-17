@@ -1,8 +1,8 @@
 ---
-name: grey-haven-plugin-audit
+name: plugin-audit
 description: "Comprehensive Claude Code plugin auditing skill for validating structure, detecting deprecated patterns, and recommending best practices based on the latest changelog. Use when auditing plugins, checking for deprecations, validating plugin structure, preparing plugins for release, or ensuring compatibility with recent Claude Code versions. Triggers: 'audit plugin', 'check plugin health', 'validate skill', 'plugin deprecation', 'changelog compatibility', 'plugin best practices'."
 skills:
-  - grey-haven-code-style
+  - code-style
 allowed-tools:
   - Read
   - Glob
