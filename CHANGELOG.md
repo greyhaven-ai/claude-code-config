@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Plugins 2.0.0] - 2026-04-17
+
+### Breaking Changes
+- **Skill names no longer carry the `grey-haven-` prefix.** Invoke skills as `tdd-python` instead of `grey-haven-tdd-python`; the plugin already provides the namespace (`core:tdd-python`, etc.). All 32 `SKILL.md` files and their `skills:` cross-references were updated. Any external documentation or `CLAUDE.md` that invokes skills by full name must be updated.
+
+### Fixed
+- **`research:tech-docs-orchestrator`**: reconstructed from a corrupted concatenation that had two agents' content (and `name: tdd-python-implementer`) spliced together since the initial hooks commit. Now has correct frontmatter (`name: tech-docs-orchestrator`, `model: sonnet`, declared `tools`) and clean body.
+- Stale cross-references to old `grey-haven-<name>` skills in `skill-creator/SKILL.md`, `skill-creator/scripts/init_skill.py` (was generating the deprecated template), `ontological-documentation/SKILL.md` (also removed nonexistent `authentication-patterns` ref), `suite-audit/SKILL.md`, `llm-project-development/references/INDEX.md`, `plugin-audit/examples/audit-report-example.md`, and top-level `README.md`.
+
+### Added
+- `maxTurns: 40` on `tdd-orchestrator`, `multi-agent-synthesis-orchestrator`, and `tech-docs-orchestrator` (v2.1.76 frontmatter field) — prevents runaway orchestration loops.
+- `grey-haven-plugins/docs/DOCUMENTATION_STANDARDS.md` relocated from the plugins root.
+
+### Changed
+- All plugin `version` fields bumped to `2.0.0` uniformly (previously mixed: `1.0.0`, `1.1.0`, `1.7.0`).
+
 ## [2.1.0] - 2025-10-20
 
 ### Added
