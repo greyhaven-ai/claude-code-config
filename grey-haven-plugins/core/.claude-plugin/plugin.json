@@ -1,7 +1,7 @@
 {
     "name": "core",
     "description": "Core development tools including quality pipeline, TDD implementation, code review, and refactoring capabilities",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "author": {
         "name": "Grey Haven Studio"
     },

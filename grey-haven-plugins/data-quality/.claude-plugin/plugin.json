@@ -1,7 +1,7 @@
 {
     "name": "data-quality",
     "description": "Data validation and quality assurance tools using Pydantic v2, schema validation, data contracts, and quality monitoring for PlanetScale PostgreSQL databases",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "author": {
         "name": "Grey Haven Studio"
     },

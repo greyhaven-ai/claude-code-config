@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Plugins 2.1.0] - 2026-04-19
+
+### Added
+- **DDD + DRY discipline layering** across the TDD and code-review chain. Two lenses applied at specific phases — Domain-Driven Design at Red (model before you test), principled DRY at Refactor (deduplicate only same-concept repetition at ≥3 sites). Never displaces red-green-refactor; sharpens it at plan-review boundaries.
+  - `core:tdd-python-implementer` and `core:tdd-typescript-implementer` (agents + skills): new "Domain-First Design" section, ubiquitous-language test-name enforcement, branded-type examples in TypeScript, primitive-obsession detection, DRY-with-discipline refactor rule. Skills bumped to 1.1.
+  - `core:tdd-orchestrator`: new **Layer 0 "Domain Model Plan"** gate that blocks all Red tasks until a short plan naming entities/value objects/aggregates, classifying them, auditing primitive obsession, and drawing the domain/infrastructure boundary is approved. Plan-review criteria strengthened at Red/Green/Refactor. Task board grew from 6 to 7 layers. Skill bumped to 2.1.
+  - `core:code-quality-analyzer` (agent + skill): two new workflow passes (Domain Lens, Duplication Lens) before cross-file analysis. Flags mechanical naming, primitive obsession, domain rules leaking into infrastructure, and premature DRY extractions. Skill bumped to 1.2.
+- **`/audit-refs` command** and `plugin-auditor/scripts/cross_ref_lint.py` — a stdlib-only linter that scans every `SKILL.md`, agent, workflow, and reference doc for broken `skills:` auto-loads, missing "Related Agents" entries, and legacy `grey-haven-<name>` references. Filters directory names, repo names, markdown link targets, and deliberate counter-examples to keep the signal clean. Exit 1 on errors for CI gating.
+- **`/release-plugins` command** and `plugin-auditor/scripts/bump_plugin_versions.py` — coordinates plugin releases: pre-flight cross-ref lint (blocks on dangling refs), lockstep version check, bumps all 8 `plugin.json` files, drafts a CHANGELOG entry from `git log`, previews before committing. Never auto-pushes.
+
+### Fixed
+- **Dangling cross-references eliminated.** The cross-ref linter surfaced 15 genuine issues on first run, all resolved:
+  - 6 broken `skills:` auto-loads referencing phantom skills `security-practices`, `linear-workflow`, `observability-monitoring` (across `api-design-standards`, `pr-template`, `onboarding-coordination`, `code-quality-analysis`, `performance-optimization`, `incident-response`).
+  - 3 "Related Agents" pointing at nonexistent agents (`security-analyzer`, `memory-profiler`, `observability-engineer`).
+  - 6 phantom plugin-integration blocks in `incident-response/workflows/incident-response.md` and `data-quality/agents/data-validator.md` promising integrations with plugins that don't exist. Repo now lint-clean.
+
+### Changed
+- All plugin `version` fields bumped from `2.0.0` to `2.1.0` uniformly.
+
 ## [Plugins 2.0.0] - 2026-04-17
 
 ### Breaking Changes

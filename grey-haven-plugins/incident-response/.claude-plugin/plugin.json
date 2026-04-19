@@ -1,7 +1,7 @@
 {
     "name": "incident-response",
     "description": "Production incident response system with incident management workflows, intelligent debugging, runbook automation, and postmortem generation. Handles incident detection, triage, mitigation, and learning.",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "author": {
         "name": "Grey Haven Studio",
         "url": "https://github.com/greyhaven-ai/claude-code-config"

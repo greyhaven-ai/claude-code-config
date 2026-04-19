@@ -1,7 +1,7 @@
 {
     "name": "plugin-auditor",
     "description": "Audit Claude Code plugins and skills for best practices, deprecations, compatibility, usability, coverage gaps, duplication, and workflow optimization",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "author": {
         "name": "Grey Haven Studio"
     },
