@@ -30,6 +30,7 @@
     ],
     "commands": [
         "./commands/audit-plugins.md",
-        "./commands/audit-refs.md"
+        "./commands/audit-refs.md",
+        "./commands/release-plugins.md"
     ]
 }
