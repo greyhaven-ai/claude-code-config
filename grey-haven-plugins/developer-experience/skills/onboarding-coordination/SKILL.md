@@ -5,7 +5,6 @@ description: "Automate developer onboarding with personalized plans, Linear inte
 skills:
   - code-style
   - project-structure
-  - linear-workflow
 # v2.0.74: Tools for onboarding coordination
 allowed-tools:
   - Read

@@ -29,6 +29,7 @@
         "./agents/plugin-auditor.md"
     ],
     "commands": [
-        "./commands/audit-plugins.md"
+        "./commands/audit-plugins.md",
+        "./commands/audit-refs.md"
     ]
 }

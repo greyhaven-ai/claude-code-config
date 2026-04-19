@@ -5,7 +5,6 @@ description: "Design RESTful APIs following Grey Haven standards - FastAPI route
 skills:
   - code-style
   - data-validation
-  - security-practices
 # v2.0.74: Tools for API implementation
 allowed-tools:
   - Read

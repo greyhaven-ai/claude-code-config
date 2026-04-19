@@ -4,7 +4,6 @@ description: Generate pull request descriptions following Grey Haven Studio stan
 # v2.0.43: Skills to auto-load for PR work
 skills:
   - code-style
-  - linear-workflow
   - testing-strategy
 # v2.0.74: Tools for PR creation
 allowed-tools:

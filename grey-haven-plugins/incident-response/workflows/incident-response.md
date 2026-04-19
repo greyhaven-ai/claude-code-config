@@ -255,23 +255,6 @@ Repeat Incidents: {count} (% of total)
 Action Items Created: {count}
 Action Items Completed: {count} ({percent}%)
 ```
-## Integration with Other Plugins
-### grey-haven-observability
-- Provides monitoring data for investigation
-- SLO metrics for impact assessment
-- Dashboards for root cause analysis
-### grey-haven-security
-- Security incident classification
-- Breach response procedures
-- Forensic analysis coordination
-### grey-haven-testing
-- Post-incident regression tests
-- Chaos engineering validation
-- Integration test improvements
-### grey-haven-deployment
-- Rollback procedures
-- Canary deployment coordination
-- Feature flag management
 ## Best Practices
 1. **Communicate Early and Often:** Over-communication is better than under-communication
 2. **Assign Clear Roles:** Single incident commander, no confusion on decision authority

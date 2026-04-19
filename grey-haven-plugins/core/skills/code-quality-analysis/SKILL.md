@@ -4,7 +4,6 @@ description: "Multi-mode code quality analysis covering security reviews (OWASP 
 # v2.0.43: Skills to auto-load for quality analysis subagents
 skills:
   - code-style
-  - security-practices
   - documentation-alignment
 # v2.0.74: Restrict tools for analysis-focused work
 allowed-tools:
@@ -54,7 +53,6 @@ Comprehensive code quality analysis including security vulnerability detection, 
 ## Related Agents
 
 - `code-quality-analyzer` - Automated quality analysis
-- `security-analyzer` - Deep security audits
 
 ---
 

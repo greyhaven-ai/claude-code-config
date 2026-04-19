@@ -341,10 +341,6 @@ def validate_with_metrics(model_class, data):
 - Database schema design
 - API endpoint planning
 
-**Complements:**
-- grey-haven-observability (validation metrics)
-- grey-haven-security (input sanitization)
-
 **Enables:**
 - Confident data persistence
 - Contract-driven API development

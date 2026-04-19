@@ -4,7 +4,6 @@ description: "Comprehensive performance analysis and optimization for algorithms
 # v2.0.43: Skills to auto-load for performance work
 skills:
   - code-style
-  - observability-monitoring
 # v2.0.74: Tools for performance optimization
 allowed-tools:
   - Read
@@ -58,8 +57,6 @@ This skill provides production-ready patterns, examples, and checklists for opti
 ## Related Agents
 
 - `performance-optimizer` - Automated performance analysis and optimization
-- `memory-profiler` - Memory leak detection and profiling
-- `observability-engineer` - Production monitoring setup
 
 ## Quick Start
 
