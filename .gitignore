@@ -121,13 +121,6 @@ site/
 .node_repl_history
 .yarn-integrity
 
-# Test files (optional - uncomment if you don't want test files committed)
-test_file.*
-test_*.py
-test_*.js
-test_*.ts
-*_test.*
-
 # Local development files
 index.ts
 *.local.*
